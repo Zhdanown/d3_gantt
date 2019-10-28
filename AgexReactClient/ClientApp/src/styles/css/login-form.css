@@ -1,0 +1,10 @@
+#loginForm {
+  height: 45%;
+  min-height: 25rem; }
+  #loginForm .modal-content {
+    height: 100%; }
+
+.login-form .row {
+  display: flex; }
+  .login-form .row .input-field {
+    margin-right: auto; }

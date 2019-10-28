@@ -1,0 +1,10 @@
+.toast {
+  &.success {
+  }
+  &.error {
+    background: firebrick;
+  }
+  &.warning {
+    background: orangered;
+  }
+}

@@ -1,0 +1,24 @@
+.machinery .machinery-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* height: 32px; */
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 32px;
+  padding: 0 12px;
+  border-radius: 16px;
+  background-color: #e4e4e4;
+  margin-bottom: 5px;
+  margin-right: 5px; }
+  .machinery .machinery-item span:last-child {
+    display: flex; }
+    .machinery .machinery-item span:last-child .productivity {
+      min-width: 5rem; }
+    .machinery .machinery-item span:last-child .close {
+      cursor: pointer;
+      float: right;
+      font-size: 16px;
+      line-height: 32px;
+      padding-left: 8px; }
