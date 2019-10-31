@@ -1,11 +1,8 @@
 import agex from "../apis/agex";
-import authHeader from "../apis/authHeader";
 import { GET_EQUIPMENT, GET_VEHICLES } from "./types";
 
 export const getVehicles = () => async dispatch => {
-  const response = await agex.get("/seasonplan/farm-vehicle-models", {
-    headers: authHeader()
-  });
+  const response = await agex.get("/seasonplan/farm-vehicle-models");
   if (response.status === 200)
     dispatch({
       type: GET_VEHICLES,
@@ -14,9 +11,7 @@ export const getVehicles = () => async dispatch => {
 };
 
 export const getEquipment = () => async dispatch => {
-  const response = await agex.get("/seasonplan/farm-work-equipment-models", {
-    headers: authHeader()
-  });
+  const response = await agex.get("/seasonplan/farm-work-equipment-models");
   if (response.status === 200)
     dispatch({
       type: GET_EQUIPMENT,

@@ -8,9 +8,7 @@ import {
   SHOW_DEFICIT
 } from "./types";
 import agex from "../apis/agex";
-import authHeader from "../apis/authHeader";
-// import history from "../history";
-// import alert from "../components/Alert";
+import alert from "../components/Alert";
 
 const getSeasons = seasons => ({
   type: GET_SEASONS,
@@ -23,16 +21,15 @@ const getTypes = types => ({
 });
 
 export const getPlanSeasons = () => async dispatch => {
-  const response = await agex.get("/agrofield/season", {
-    headers: authHeader()
-  });
+  var response = await agex.get("/agrofield/season");
+ 
   if (response.status === 200) dispatch(getSeasons(response.data));
+  else {
+  }
 };
 
 export const getPlanTypes = () => async dispatch => {
-  const response = await agex.get("/seasonplan/types", {
-    headers: authHeader()
-  });
+  const response = await agex.get("/seasonplan/types", );
   if (response.status === 200) dispatch(getTypes(response.data));
 };
 
@@ -45,18 +42,13 @@ export const createNewPlan = ({
     {
       SeasonId: seasonPlanId,
       SeasonPlanTypeId: typePlanId
-    },
-    {
-      headers: authHeader()
     }
   );
   if (response.status === 201) {
-    debugger;
     dispatch({
       type: CREATE_PLAN,
       payload: response.data
     });
-    // alert.success("Операция добавлена успешно");
   } else {
     // alert.error(response.statusText);
   }
@@ -69,11 +61,7 @@ export const loadPlan = ({
   end
 }) => async dispatch => {
   const response = await agex.get(
-    `/seasonplan/season-plan-list/${seasonId}/${typeId}/${start}/${end}`,
-    {
-      headers: authHeader()
-    }
-  );
+    `/seasonplan/season-plan-list/${seasonId}/${typeId}/${start}/${end}`);
   if (response.status === 200) {
     dispatch({
       type: LOAD_PLAN,
@@ -82,17 +70,8 @@ export const loadPlan = ({
   }
 };
 
-// export const setOperationData = data => {
-//   return {
-//     type: SET_OPERATION_DATA,
-//     payload: data
-//   };
-// };
-
 export const getAgrooperations = () => async dispatch => {
-  const response = await agex.get("/operation/agrooperations", {
-    headers: authHeader()
-  });
+  const response = await agex.get("/operation/agrooperations");
   if (response.status === 200) {
     dispatch({
       type: GET_AGROOPERATIONS,

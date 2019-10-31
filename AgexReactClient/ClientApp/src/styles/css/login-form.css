@@ -1,10 +1,21 @@
 #loginForm {
   height: 45%;
-  min-height: 25rem; }
-  #loginForm .modal-content {
-    height: 100%; }
+  min-height: 27rem;
+}
+#loginForm .modal-content {
+  height: 100%;
+}
 
 .login-form .row {
-  display: flex; }
-  .login-form .row .input-field {
-    margin-right: auto; }
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+.login-form .row .input-field {
+  margin-right: auto;
+}
+.login-form .error {
+  color: red;
+  text-align: center;
+}
+
+/*# sourceMappingURL=login-form.css.map */

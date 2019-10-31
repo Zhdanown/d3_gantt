@@ -1,5 +1,4 @@
 import agex from "../apis/agex";
-import authHeader from "../apis/authHeader";
 import alert from "../components/Alert";
 
 import {
@@ -27,9 +26,7 @@ export const addNewPeriod = ({
     SeasonPlanPeriodDays: newPeriod.days
   };
 
-  const response = await agex.post("/seasonplan/period", bodyRequest, {
-    headers: authHeader()
-  });
+  const response = await agex.post("/seasonplan/period", bodyRequest);
 
   if (response.status === 201) {
     const { id, plan } = operationData;
@@ -46,10 +43,7 @@ export const addNewPeriod = ({
 };
 
 export const deletePeriod = ({ operation, period }) => async dispatch => {
-  const response = await agex.delete("seasonplan/period", {
-    data: { Id: period.id },
-    headers: authHeader()
-  });
+  const response = await agex.delete("seasonplan/period");
 
   if (response.status === 200) {
     dispatch({
@@ -85,9 +79,7 @@ export const editPeriod = ({
     SeasonPlanPeriodDays: days
   };
 
-  const response = await agex.put("seasonplan/period", bodyRequest, {
-    headers: authHeader()
-  });
+  const response = await agex.put("seasonplan/period", bodyRequest);
 
   if (response.status === 200) {
     const { id, plan } = operationData;

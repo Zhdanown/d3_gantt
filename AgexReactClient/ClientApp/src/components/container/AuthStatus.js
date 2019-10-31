@@ -15,7 +15,7 @@ function AuthStatus({ user, ...props }) {
               Профиль пользователя
             </a>
           </li>
-          <li class="divider" tabindex="-1"></li>
+          <li className="divider" tabIndex="-1"></li>
           <li>
             <a href="#!" onClick={props.logout}>
               Выйти

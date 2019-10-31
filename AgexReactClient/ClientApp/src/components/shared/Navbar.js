@@ -37,7 +37,7 @@ const Navbar = ({ ...props }) => {
                 <li>
                   <Link to="/load_plan">Загрузить план</Link>
                 </li>
-                <li class="divider" tabindex="-1"></li>
+                <li className="divider" tabIndex="-1"></li>
                 <li>
                   <Link to="/create_plan">Создать план</Link>{" "}
                 </li>

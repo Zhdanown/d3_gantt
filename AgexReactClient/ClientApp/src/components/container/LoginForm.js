@@ -10,14 +10,26 @@ import { login } from "../../actions/auth";
 function LoginForm(props) {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
   const onClose = () => {
     history.push("/");
   };
 
-  const onFormSubmit = event => {
+  const onFormSubmit = async event => {
     event.preventDefault();
-    props.login(username, password);
+    const response = await props.login(username, password);
+
+    if (response.status === 200) {
+      // get modal instance
+      let elem = document.querySelector("#loginForm");
+      let instance = window.M.Modal.getInstance(elem);
+      instance.close();
+      setError(null)
+    } else {
+      setPassword("");
+      setError(response.data.message)
+    }
   };
 
   return (
@@ -47,24 +59,32 @@ function LoginForm(props) {
               <label htmlFor="password">Пароль</label>
             </div>
           </div>
+          <p className="error">{error}</p>
           <div className="row">
             <div className="col s12 center">
+
               <button
-                className="btn waves-effect waves-light modal-close"
+                className="btn waves-effect waves-light"
                 type="submit"
-                // onClick={fetchPlan}
               >
                 Войти
               </button>
             </div>
           </div>
+          
         </div>
       </form>
     </Modal>
   );
 }
 
+const mapStateToProps = state => {
+  return {
+    authError: state.auth.error
+  }
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   { login }
 )(LoginForm);

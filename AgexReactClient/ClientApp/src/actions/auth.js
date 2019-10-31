@@ -4,7 +4,7 @@
 import { LOGIN, LOGOUT } from "./types";
 import agex from "../apis/agex";
 import Cookies from "js-cookie";
-import authHeader from "../apis/authHeader";
+import history from "../history";
 
 /*
  ********** ACTION CREATORS ********
@@ -23,22 +23,32 @@ const logoutUser = () => ({ type: LOGOUT });
  ********** ACTIONS ********
  */
 export const login = (username, password) => async dispatch => {
-  const authResponse = await agex.post("/auth/logon", {
-    Login: username, // "unzhdan"
-    Password: password // "12345"
-  });
+  var authResponse;
+  try {
 
-  // clear unwanted properties (password, token, etc...)
-  const { password: pass, token, ...user } = authResponse.data;
+    authResponse = await agex.post("/auth/logon", {
+      Login: username,
+      Password: password
+    });
 
-  const expirationDate = new Date(authResponse.data.tokenExpiredTime);
-  // let expirationDate = new Date();
-  // expirationDate.setMinutes(expirationDate.getMinutes() + 15);
+    // clear unwanted properties (password, token, etc...)
+    const { password: pass, token, ...user } = authResponse.data;
 
-  Cookies.set("user", JSON.stringify(user), { expires: expirationDate });
-  Cookies.set("token", authResponse.data.token, { expires: expirationDate });
+    const expirationDate = new Date(authResponse.data.tokenExpiredTime);
+    // let expirationDate = new Date();
+    // expirationDate.setMinutes(expirationDate.getMinutes() + 15);
 
-  dispatch(loginUser(user));
+    Cookies.set("user", JSON.stringify(user), { expires: expirationDate });
+    Cookies.set("token", authResponse.data.token, { expires: expirationDate });
+
+    dispatch(loginUser(user));
+
+    return authResponse
+
+  } catch (error) {
+    return error.response
+  }
+  
 };
 
 export const logout = () => async dispatch => {
@@ -51,9 +61,7 @@ export const getUserProfile = () => async dispatch => {
   const token = Cookies.get("token");
   if (!token) return;
 
-  const response = await agex.get("/auth/info", {
-    headers: authHeader()
-  });
+  const response = await agex.get("/auth/info");
 
   if (response.status === 200) dispatch(loginUser(response.data));
 };

@@ -2,60 +2,70 @@
   flex: 1;
   display: grid;
   grid-template-columns: 300px 1fr;
-  overflow-y: overlay; }
-  .diagramm .legend {
-    min-width: 200px;
-    width: 300px;
-    box-shadow: 2px 0px 2px 0 rgba(0, 0, 0, 0.14), 3px 0px 1px -2px rgba(0, 0, 0, 0.12), 1px 0px 5px 0 rgba(0, 0, 0, 0.2);
-    position: sticky;
-    left: 0;
-    background-color: white;
-    z-index: 2;
-    transition: all 0.4s; }
-    .diagramm .legend.hidden {
-      transform-origin: left;
-      transform: translate(-250px);
-      max-width: 0;
-      min-width: 0; }
-    .diagramm .legend .legendNode {
-      position: absolute;
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center; }
-      .diagramm .legend .legendNode:first-child {
-        display: none; }
-      .diagramm .legend .legendNode.operation {
-        width: 100%;
-        padding-left: 50px;
-        padding-right: 5px;
-        text-align: right;
-        margin-left: 0; }
-      .diagramm .legend .legendNode .text {
-        white-space: nowrap;
-        overflow: hidden; }
-  .diagramm .chart {
-    flex: 1; }
-    .diagramm .chart .dates {
-      position: sticky;
-      top: 0;
-      background: white;
-      z-index: 1;
-      width: 100%;
-      height: 20px; }
-      .diagramm .chart .dates .wrapper .date {
-        position: absolute;
-        width: 40px;
-        height: 100%;
-        font-size: 0.8em;
-        font-weight: bold;
-        text-align: center;
-        box-shadow: 0 2px 2px 0px rgba(0, 0, 0, 0.14);
-        border: 1px solid lightgray; }
+  overflow-y: overlay;
+}
+.diagramm .legend {
+  min-width: 200px;
+  width: 300px;
+  box-shadow: 2px 0px 2px 0 rgba(0, 0, 0, 0.14), 3px 0px 1px -2px rgba(0, 0, 0, 0.12), 1px 0px 5px 0 rgba(0, 0, 0, 0.2);
+  position: sticky;
+  left: 0;
+  background-color: white;
+  z-index: 2;
+  transition: all 0.4s;
+}
+.diagramm .legend.hidden {
+  transform-origin: left;
+  transform: translate(-250px);
+  max-width: 0;
+  min-width: 0;
+}
+.diagramm .legend .legendNode {
+  position: absolute;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+}
+.diagramm .legend .legendNode:first-child {
+  display: none;
+}
+.diagramm .legend .legendNode.operation {
+  width: 100%;
+  padding-left: 50px;
+  padding-right: 5px;
+  text-align: right;
+  margin-left: 0;
+}
+.diagramm .legend .legendNode .text {
+  white-space: nowrap;
+  overflow: hidden;
+}
+.diagramm .chart {
+  flex: 1;
+}
+.diagramm .chart .dates {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+  width: 100%;
+  height: 20px;
+}
+.diagramm .chart .dates .wrapper .date {
+  position: absolute;
+  width: 40px;
+  height: 100%;
+  font-size: 0.8em;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 2px 0px rgba(0, 0, 0, 0.14);
+  border: 1px solid lightgray;
+}
 
 .dates text,
 .legendNode text {
-  font-size: 0.8rem; }
-
+  font-size: 0.8rem;
+}
 .dates .addOP,
 .dates .deleteOp,
 .legendNode .addOP,
@@ -63,17 +73,22 @@
   cursor: pointer;
   font-size: 1rem;
   position: absolute;
-  left: -20px; }
-  .dates .addOP:hover,
-  .dates .deleteOp:hover,
-  .legendNode .addOP:hover,
-  .legendNode .deleteOp:hover {
-    color: steelblue; }
-
+  left: -20px;
+}
+.dates .addOP:hover,
+.dates .deleteOp:hover,
+.legendNode .addOP:hover,
+.legendNode .deleteOp:hover {
+  color: steelblue;
+}
 .dates .deleteOp,
 .legendNode .deleteOp {
-  left: 30px; }
+  left: 30px;
+}
 
 .ctrl.left,
 .ctrl.right {
-  cursor: e-resize; }
+  cursor: e-resize;
+}
+
+/*# sourceMappingURL=diagramm.css.map */

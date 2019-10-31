@@ -1,7 +1,11 @@
 .season-plan {
   height: 100vh;
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+}
 
 nav {
-  z-index: 3; }
+  z-index: 3;
+}
+
+/*# sourceMappingURL=season-plan.css.map */

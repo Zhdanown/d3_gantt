@@ -1,6 +1,4 @@
 import agex from "../apis/agex";
-// import axios from "axios";
-import authHeader from "../apis/authHeader";
 import alert from "../components/Alert";
 
 import {
@@ -12,9 +10,7 @@ import { dateToString } from "../helpers/dateHelper";
 
 export async function loadOperations() {
   const response = await agex.get(
-    "https://agexdev2.agroterra.ru/api/operation/agrooperations",
-    { headers: authHeader() }
-  );
+    "https://agexdev2.agroterra.ru/api/operation/agrooperations");
   console.log(response.data);
 }
 
@@ -48,9 +44,7 @@ export const addNewOperation = newOperation => async (dispatch, getState) => {
     // IsManual: true
   };
 
-  const response = await agex.post("/seasonplan/operation", bodyRequest, {
-    headers: authHeader()
-  });
+  const response = await agex.post("/seasonplan/operation", bodyRequest);
 
   if (response.status === 201) {
     dispatch({
@@ -65,9 +59,7 @@ export const addNewOperation = newOperation => async (dispatch, getState) => {
 
 export const deleteOperation = operation => async dispatch => {
   const response = await agex.delete(`/seasonplan/operation`, {
-    data: { Id: operation.id },
-    headers: authHeader()
-  });
+    data: { Id: operation.id }});
   if (response.status === 200) {
     dispatch({
       type: DELETE_OPERATION,

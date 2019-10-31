@@ -1,7 +1,7 @@
 // Modal window
 #loginForm {
   height: 45%;
-  min-height: 25rem;
+  min-height: 27rem;
 
   .modal-content {
     height: 100%;
@@ -11,9 +11,15 @@
 .login-form {
   .row {
     display: flex;
+    margin-bottom: .5rem;
 
     .input-field {
       margin-right: auto;
     }
+  }
+
+  .error {
+    color: red;
+    text-align: center;
   }
 }
