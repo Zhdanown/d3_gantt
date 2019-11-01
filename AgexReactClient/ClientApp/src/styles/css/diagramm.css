@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .diagramm {
   flex: 1;
   display: grid;
@@ -25,20 +26,61 @@
   font-size: 0.8rem;
   display: flex;
   align-items: center;
+  width: 100%;
+  padding-right: 20px;
 }
 .diagramm .legend .legendNode:first-child {
   display: none;
 }
-.diagramm .legend .legendNode.operation {
-  width: 100%;
-  padding-left: 50px;
-  padding-right: 5px;
-  text-align: right;
-  margin-left: 0;
+.diagramm .legend .legendNode.completed .text {
+  color: green;
+}
+.diagramm .legend .legendNode.completed .text::before {
+  content: "✓";
+  position: absolute;
+  margin-left: -15px;
+  top: -4px;
+  font-size: 1rem;
+}
+.diagramm .legend .legendNode.manual .text {
+  font-style: italic;
 }
 .diagramm .legend .legendNode .text {
   white-space: nowrap;
   overflow: hidden;
+}
+.diagramm .legend .legendNode .drop-down,
+.diagramm .legend .legendNode .drop-up,
+.diagramm .legend .legendNode .add,
+.diagramm .legend .legendNode .delete {
+  position: absolute;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.diagramm .legend .legendNode .drop-down:hover,
+.diagramm .legend .legendNode .drop-up:hover,
+.diagramm .legend .legendNode .add:hover,
+.diagramm .legend .legendNode .delete:hover {
+  color: steelblue;
+}
+.diagramm .legend .legendNode .add, .diagramm .legend .legendNode .delete {
+  right: 0;
+  font-size: 1.2rem;
+}
+.diagramm .legend .legendNode .drop-down, .diagramm .legend .legendNode .drop-up {
+  margin-left: -1.5rem;
+}
+.diagramm .legend .legendNode .drop-down {
+  display: none;
+}
+.diagramm .legend .legendNode.collapsed {
+  background: #dddddd;
+}
+.diagramm .legend .legendNode.collapsed .drop-up {
+  display: none;
+}
+.diagramm .legend .legendNode.collapsed .drop-down {
+  display: inline-block;
 }
 .diagramm .chart {
   flex: 1;
@@ -65,25 +107,6 @@
 .dates text,
 .legendNode text {
   font-size: 0.8rem;
-}
-.dates .addOP,
-.dates .deleteOp,
-.legendNode .addOP,
-.legendNode .deleteOp {
-  cursor: pointer;
-  font-size: 1rem;
-  position: absolute;
-  left: -20px;
-}
-.dates .addOP:hover,
-.dates .deleteOp:hover,
-.legendNode .addOP:hover,
-.legendNode .deleteOp:hover {
-  color: steelblue;
-}
-.dates .deleteOp,
-.legendNode .deleteOp {
-  left: 30px;
 }
 
 .ctrl.left,

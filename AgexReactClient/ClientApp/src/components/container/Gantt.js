@@ -145,65 +145,85 @@ function Gantt({ timeframe, ...props }) {
       let legendNodeEnter = legendNode
         .enter()
         .append("div")
-        .attr("class", d =>
-          d.height === 0 ? "legendNode operation" : "legendNode"
-        );
+        .attr("class", "legendNode");
 
       legendNodeEnter
         .style("top", d => top(d) * 20 + "px")
+      
+      legendNodeEnter
+        .append("div")
+        .attr("class", "text")
         .style("margin-left", d => {
-          if (d.height !== 0) return (d.depth - 1) * 10 + 10 + "px";
-          else return 0;
+          return (d.depth - 1) * 10 + 20 + "px";
         });
 
+      // apend "drop_down"  
       legendNodeEnter
+        .filter(d => d.height !== 0)
+        .select(".text")
+        .append("i")
+        .attr("class", "material-icons drop-down")
+        .html("arrow_drop_down")
+        
+      // apend "drop_up"  
+      legendNodeEnter
+        .filter(d => d.height !== 0)
+        .select(".text")
+        .append("i")
+        .attr("class", "material-icons drop-up")
+        .html("arrow_drop_up")
+
+      legendNodeEnter
+        .select(".text")
         .append("span")
         .html(d => d.data.name)
-        .attr("class", "text");
 
       // append "+"
       legendNodeEnter
         .filter(d => d.height === 1)
-        .insert("i", ".text")
-        .attr("class", "material-icons addOP")
+        .append("i")
+        .attr("class", "material-icons add")
         .html("add")
         .on("click", function(d) {
           d3.event.stopPropagation();
           props.addNewOperation(d.data.node);
-        })
-        .on("mouseover", function(d) {
-          d3.select(this).attr("fill", "steelblue");
-        })
-        .on("mouseout", function(d) {
-          d3.select(this).attr("fill", "black");
         });
 
-      // append "-"
+      // append "trash_can"
       legendNodeEnter
         .filter(d => d.height === 0 && d.data.node.isManual)
-        .insert("i", ".text")
-        .attr("class", "material-icons deleteOp")
-        .html("remove")
+        .append("i")
+        .attr("class", "material-icons delete")
+        .html("delete_outline")
         .on("click", function(d) {
           d3.event.stopPropagation();
           props.deleteOperation(d.data.node);
         });
-
-      // legendNodeEnter
-      // .filter(d => d.height === 0)
-      // .append("i")
-      // .attr("class", "material-icons md-18 delete")
-      // .html("delete_outline")
-      // .on("click", function(d) {
-      //   d3.event.stopPropagation();
-      //   props.deleteOperation(d.data.node);
-      // });
 
       legendNode = legendNodeEnter.merge(legendNode);
       legendNode
         .transition()
         .style("top", d => top(d) * 20 + "px")
         .duration(t);
+
+      legendNode.attr("class", d => {
+        let className = "legendNode";
+          if (!d.children && d._children) {
+            className += " collapsed"
+          }
+          if (d.height === 0) {
+            className += " operation";
+            if (d.data.node.isManual) className += " manual"
+            if (isOperationClosed(d)) className += " completed"
+          }
+          return className;
+      })
+
+      function isOperationClosed(d) {
+        let squareRemainder = getSquareRemainder(d.data.node);
+        if (squareRemainder <= 0) return true;
+        else return false;
+      }
 
       legendNode.on("click", click);
 
@@ -223,29 +243,6 @@ function Gantt({ timeframe, ...props }) {
         update(clickRoot, clickTimeframe, false);
       }
 
-      // change color of closed operations
-      legendNode
-        .filter(d => d.height === 0)
-        .select("text")
-        .attr("fill", d => (isOperationClosed(d) ? "green" : "black"))
-        .attr("font-weight", d => (isOperationClosed(d) ? "bold" : "normal"));
-
-      function isOperationClosed(d) {
-        let squareRemainder = getSquareRemainder(d.data.node);
-        if (squareRemainder <= 0) return true;
-        else return false;
-      }
-
-      // legendNodeEnter
-      //   .filter(d => d.height === 1)
-      //   .append("i")
-      //   .attr("class", "material-icons md-18 add")
-      //   .html("add")
-      //   .on("click", function(d) {
-      //     d3.event.stopPropagation();
-      //     props.addNewOperation(d.data.node);
-      //   });
-
       /*
        ********** DATES ********
        */
@@ -257,9 +254,11 @@ function Gantt({ timeframe, ...props }) {
         .exit()
         .transition()
         .style("opacity", 0)
-        .duration(t);
+        .duration(t)
+        .remove()
 
-      date.style("opacity", 1);
+      date.style("opacity", 1)
+        .style("left", (d, i) => i * 40 + "px");
 
       // enter cells
       let dateEnter = date
