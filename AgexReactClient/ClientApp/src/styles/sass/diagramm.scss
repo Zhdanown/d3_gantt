@@ -62,7 +62,18 @@
       }
 
       .drop-down,
-      .drop-up,
+      .drop-up {
+        position: absolute;
+        font-size: 1.5rem;
+      }
+
+      &:hover {
+        .drop-down,
+        .drop-up {
+          color: steelblue;
+        }
+      }
+
       .add,
       .delete {
         position: absolute;
@@ -138,4 +149,9 @@
 .ctrl.left,
 .ctrl.right {
   cursor: e-resize;
+}
+
+.background {
+  // background-image: url("https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png");
+  background-image: url("/tile.jpg");
 }

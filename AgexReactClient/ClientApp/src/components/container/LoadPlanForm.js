@@ -20,10 +20,10 @@ function LoadPlanForm(props) {
   seasons = seasons.slice(-6);
 
   const fetchPlan = () => {
-    const start = dateToString(startDate, "yyyy-mm-dd");
-    const end = dateToString(endDate, "yyyy-mm-dd");
-    // const start = "2020-03-01";
-    // const end = "2020-04-30";
+    // const start = dateToString(startDate, "yyyy-mm-dd");
+    // const end = dateToString(endDate, "yyyy-mm-dd");
+    const start = "2020-03-01";
+    const end = "2021-03-01";
 
     props.loadPlan({ seasonId: season.id, typeId: type.id, start, end });
   };

@@ -50,15 +50,20 @@
   overflow: hidden;
 }
 .diagramm .legend .legendNode .drop-down,
-.diagramm .legend .legendNode .drop-up,
+.diagramm .legend .legendNode .drop-up {
+  position: absolute;
+  font-size: 1.5rem;
+}
+.diagramm .legend .legendNode:hover .drop-down,
+.diagramm .legend .legendNode:hover .drop-up {
+  color: steelblue;
+}
 .diagramm .legend .legendNode .add,
 .diagramm .legend .legendNode .delete {
   position: absolute;
   font-size: 1.5rem;
   cursor: pointer;
 }
-.diagramm .legend .legendNode .drop-down:hover,
-.diagramm .legend .legendNode .drop-up:hover,
 .diagramm .legend .legendNode .add:hover,
 .diagramm .legend .legendNode .delete:hover {
   color: steelblue;
@@ -112,6 +117,10 @@
 .ctrl.left,
 .ctrl.right {
   cursor: e-resize;
+}
+
+.background {
+  background-image: url("/tile.jpg");
 }
 
 /*# sourceMappingURL=diagramm.css.map */

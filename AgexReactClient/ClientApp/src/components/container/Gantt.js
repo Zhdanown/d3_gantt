@@ -95,6 +95,26 @@ function Gantt({ timeframe, ...props }) {
 
     chart.select(".grid").style("margin-top", "-20px");
 
+    // // add tiled background
+    // grid
+    //   .append("svg:foreignObject")
+    //   .attr("width", width)
+    //   .attr("height", height)
+    //   .append("xhtml:body")
+    //   .style("height", "100%")
+    //   .attr("xmlns", "http://www.w3.org/1999/xhtml")
+    //   .append("div")
+    //   .attr("class", "background")
+    //   .style("width", "100%")
+    //   .style("height", "100%")
+    //   .on('click', function(e) {
+    //     // console.log(d3.event);
+    //     const {offsetX, offsetY} = d3.event
+    //     console.log(offsetX, offsetY)
+    //     // debugger
+    //   })
+
+
     let t = 400;
 
     update(root, timeframe);
@@ -120,7 +140,7 @@ function Gantt({ timeframe, ...props }) {
       });
 
       // update svg (grid) size
-      d3.select(".diagramm svg")
+      grid
         .attr("width", dates.length * 40)
         .attr("height", () => nodes.length * 20);
 
@@ -129,6 +149,11 @@ function Gantt({ timeframe, ...props }) {
 
       // grid.attr("transform", "translate(0, 20)");
       legend.attr("transform", "translate(0, 20)");
+
+      // // update tiled background
+      // grid.select("foreignObject")
+      // .attr("width", dates.length * 40)
+      // .attr("height", () => nodes.length * 20);
 
       /*
        ********** LEGENDNODES ********
@@ -273,31 +298,6 @@ function Gantt({ timeframe, ...props }) {
         .duration(t);
 
       dateEnter.html(d => dateToString(d));
-      // .attr("x", 5)
-      // .attr("y", -5);
-      // dateEnter
-      //   .append("rect")
-      //   .attr("height", 20)
-      //   .attr("width", 40)
-      //   .attr("y", -20)
-      //   .attr("fill", "none")
-      //   .attr("stroke-width", 1)
-      //   .attr("stroke", "gray");
-
-      // let dateEnter = date
-      //   .enter()
-      //   .append("rect")
-      //   .attr("x", (d, i) => i * 45 + 30)
-      //   .attr("height", 30)
-      //   .attr("width", 45);
-      // dateEnter.append("text").text("3434");
-      // dateEnter
-      //   .transition()
-      //   .attr("height", 30)
-      //   .attr("fill", "none")
-      //   .attr("stroke-width", 1)
-      //   .attr("stroke", "gray")
-      //   .duration(t);
 
       /*
        ********** OPERATIONS ********
@@ -344,10 +344,11 @@ function Gantt({ timeframe, ...props }) {
         .transition()
         .attr("transform", d => `translate(0, ${top(d) * 20})`)
         .duration(t);
+        
       /*
        ********** CELLGROUP ********
        */
-
+      
       // select cellGroup in each operation
       let cellGroup = operation.select(".cellGroup");
 

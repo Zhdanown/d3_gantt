@@ -3,9 +3,7 @@ import {
   GET_TYPES,
   CREATE_PLAN,
   LOAD_PLAN,
-  SET_OPERATION_DATA,
   GET_AGROOPERATIONS,
-  SHOW_DEFICIT
 } from "./types";
 import agex from "../apis/agex";
 import alert from "../components/Alert";
@@ -65,7 +63,7 @@ export const loadPlan = ({
   if (response.status === 200) {
     dispatch({
       type: LOAD_PLAN,
-      payload: response.data
+      payload: response.data.map(x => ({...x, selectedPeriod: {start, end}}))
     });
   }
 };
@@ -80,9 +78,3 @@ export const getAgrooperations = () => async dispatch => {
   }
 };
 
-export const showDeficit = deficit => {
-  return {
-    type: SHOW_DEFICIT,
-    payload: deficit
-  };
-};

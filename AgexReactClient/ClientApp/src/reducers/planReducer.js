@@ -12,7 +12,6 @@ import {
   DELETE_PERIOD,
   EDIT_PERIOD,
   SET_PERIOD_DATA,
-  SHOW_DEFICIT
 } from "../actions/types";
 
 // helper
@@ -45,10 +44,6 @@ function operationDataReducer(state = null, action) {
 }
 function periodDataReducer(state = null, action) {
   if (action.type === SET_PERIOD_DATA) return action.payload;
-  else return state;
-}
-function deficitReducer(state = null, action) {
-  if (action.type === SHOW_DEFICIT) return action.payload;
   else return state;
 }
 
@@ -136,7 +131,6 @@ const planReducer = combineReducers({
   periodData: periodDataReducer,
   agrooperations: agrooperationsReducer,
   plans: plansReducer,
-  deficit: deficitReducer
 });
 
 export default planReducer;
