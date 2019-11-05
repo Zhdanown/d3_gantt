@@ -12,6 +12,7 @@ import {
   DELETE_PERIOD,
   EDIT_PERIOD,
   SET_PERIOD_DATA,
+  APPLY_FILTER,
 } from "../actions/types";
 
 // helper
@@ -46,6 +47,15 @@ function periodDataReducer(state = null, action) {
   if (action.type === SET_PERIOD_DATA) return action.payload;
   else return state;
 }
+function filterReducer(state = {crops: [], farms: []}, action) {
+  switch (action.type) {
+    case APPLY_FILTER:
+      return {...state, crops: action.payload.crops, farms: action.payload.farms}  
+    default:
+      return state
+  }
+}
+
 
 function addNewOperation(plansState, action) {
   return plansState.map(plan => {
@@ -131,6 +141,7 @@ const planReducer = combineReducers({
   periodData: periodDataReducer,
   agrooperations: agrooperationsReducer,
   plans: plansReducer,
+  filter: filterReducer
 });
 
 export default planReducer;

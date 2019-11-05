@@ -4,24 +4,32 @@ import { Link } from "react-router-dom";
 import AuthStatus from "../container/AuthStatus";
 import Dropdown from "../shared/Dropdown";
 
-const Navbar = ({ ...props }) => {
-  
+const Navbar = ({ selectedPlanType, ...props }) => {
   if (props.selectedPeriod) {
-    const {start, end} = props.selectedPeriod;
+    const { start, end } = props.selectedPeriod;
     var selectedPeriod = start + " - " + end;
   }
-  
+
   return (
     <React.Fragment>
       <nav style={{ minHeight: "4.2rem" }}>
         <div className="nav-wrapper container">
           <Link to="/" className="brand-logo">
-            {selectedPeriod}
+            {selectedPlanType ? selectedPlanType : null} {selectedPeriod}
           </Link>
+
           <ul className="right">
             {/* *********************** */}
             <li>
-             
+              <Link to="/tech">Техника</Link>
+            </li>
+            <li>
+              <Link to="/filter">
+                <i className="material-icons">filter_list</i>
+              </Link>
+            </li>
+
+            <li>
               <Dropdown caption="Планы">
                 <li>
                   <Link to="/load_plan">Загрузить план</Link>
@@ -32,7 +40,6 @@ const Navbar = ({ ...props }) => {
                 </li>
               </Dropdown>
             </li>
-            <li></li>
 
             {/* *********************** */}
             <li>
@@ -47,8 +54,11 @@ const Navbar = ({ ...props }) => {
 
 const mapStateToProps = state => {
   return {
-    selectedPeriod: state.plan.plans.length && state.plan.plans[0].selectedPeriod
-  }
-}
+    selectedPeriod:
+      state.plan.plans.length && state.plan.plans[0].selectedPeriod,
+    selectedPlanType:
+      state.plan.plans.length && state.plan.plans[0].seasonPlanType.name
+  };
+};
 
-export default connect(mapStateToProps)( Navbar );
+export default connect(mapStateToProps)(Navbar);

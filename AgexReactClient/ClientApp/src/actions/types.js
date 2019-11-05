@@ -20,3 +20,5 @@ export const ADD_PERIOD = "ADD_PERIOD";
 export const DELETE_PERIOD = "DELETE_PERIOD";
 export const SET_PERIOD_DATA = "SET_PERIOD_DATA";
 export const EDIT_PERIOD = "EDIT_PERIOD";
+/** filter */
+export const APPLY_FILTER = "APPLY_FILTER";

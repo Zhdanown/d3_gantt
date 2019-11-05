@@ -43,12 +43,30 @@ const applyTimeFrame = (dates, tf) => {
   }
 };
 
+var showEmptySet = () => {
+  d3.select(".diagramm .legend")
+    .selectAll("*")
+    .remove();
+  d3.select(".diagramm .chart .dates .wrapper")
+    .selectAll("*")
+    .remove();
+  d3.select(".diagramm .grid")
+    .selectAll(".grid-row")
+    .remove();
+  d3.select(".diagramm .grid foreignObject")
+    .attr("width", 0)
+    .attr("height", 0);
+};
+
 var updateGannt = null;
 
 function Gantt({ timeframe, ...props }) {
   useEffect(() => {
     let { operations } = props;
-    if (!operations.length) return;
+    if (!operations.length) {
+      showEmptySet();
+      return;
+    }
 
     /** append dates to each operation */
     operations = operations.map(operation => {
@@ -95,25 +113,18 @@ function Gantt({ timeframe, ...props }) {
 
     chart.select(".grid").style("margin-top", "-20px");
 
-    // // add tiled background
-    // grid
-    //   .append("svg:foreignObject")
-    //   .attr("width", width)
-    //   .attr("height", height)
-    //   .append("xhtml:body")
-    //   .style("height", "100%")
-    //   .attr("xmlns", "http://www.w3.org/1999/xhtml")
-    //   .append("div")
-    //   .attr("class", "background")
-    //   .style("width", "100%")
-    //   .style("height", "100%")
-    //   .on('click', function(e) {
-    //     // console.log(d3.event);
-    //     const {offsetX, offsetY} = d3.event
-    //     console.log(offsetX, offsetY)
-    //     // debugger
-    //   })
-
+    // add tiled background
+    grid
+      .append("svg:foreignObject")
+      .attr("width", width)
+      .attr("height", height)
+      .append("xhtml:body")
+      .style("height", "100%")
+      .attr("xmlns", "http://www.w3.org/1999/xhtml")
+      .append("div")
+      .attr("class", "background")
+      .style("width", "100%")
+      .style("height", "100%");
 
     let t = 400;
 
@@ -150,10 +161,38 @@ function Gantt({ timeframe, ...props }) {
       // grid.attr("transform", "translate(0, 20)");
       legend.attr("transform", "translate(0, 20)");
 
-      // // update tiled background
-      // grid.select("foreignObject")
-      // .attr("width", dates.length * 40)
-      // .attr("height", () => nodes.length * 20);
+      // update tiled background
+      grid
+        .select("foreignObject")
+        .attr("width", dates.length * 40)
+        .attr("height", () => nodes.length * 20);
+
+      grid.select(".background").on("click", function(e) {
+        d3.event.stopPropagation();
+        console.log(window.devicePixelRatio);
+        let { offsetX, offsetY } = d3.event;
+
+        // take into account broswer zoom level
+        offsetX = offsetX * window.devicePixelRatio;
+        offsetY = offsetY * window.devicePixelRatio;
+
+        // get date
+        let date = dates[Math.floor(offsetX / 40)];
+
+        // get operation data
+        let operationIndex = Math.floor(offsetY / 20);
+        let operationDom = operation.filter(function(x) {
+          let operationRow = d3.select(this);
+          if (operationIndex === +operationRow.node().dataset.index) return x;
+          else return false;
+        });
+        let operationData = d3
+          .select(operationDom)
+          .node()
+          .node().__data__.data.node;
+
+        props.addNewPeriod({ ...operationData, selectedDay: date });
+      });
 
       /*
        ********** LEGENDNODES ********
@@ -172,9 +211,8 @@ function Gantt({ timeframe, ...props }) {
         .append("div")
         .attr("class", "legendNode");
 
-      legendNodeEnter
-        .style("top", d => top(d) * 20 + "px")
-      
+      legendNodeEnter.style("top", d => top(d) * 20 + "px");
+
       legendNodeEnter
         .append("div")
         .attr("class", "text")
@@ -182,26 +220,26 @@ function Gantt({ timeframe, ...props }) {
           return (d.depth - 1) * 10 + 20 + "px";
         });
 
-      // apend "drop_down"  
+      // append "drop_down"
       legendNodeEnter
         .filter(d => d.height !== 0)
         .select(".text")
         .append("i")
         .attr("class", "material-icons drop-down")
-        .html("arrow_drop_down")
-        
-      // apend "drop_up"  
+        .html("arrow_drop_down");
+
+      // append "drop_up"
       legendNodeEnter
         .filter(d => d.height !== 0)
         .select(".text")
         .append("i")
         .attr("class", "material-icons drop-up")
-        .html("arrow_drop_up")
+        .html("arrow_drop_up");
 
       legendNodeEnter
         .select(".text")
         .append("span")
-        .html(d => d.data.name)
+        .html(d => d.data.name);
 
       // append "+"
       legendNodeEnter
@@ -233,16 +271,16 @@ function Gantt({ timeframe, ...props }) {
 
       legendNode.attr("class", d => {
         let className = "legendNode";
-          if (!d.children && d._children) {
-            className += " collapsed"
-          }
-          if (d.height === 0) {
-            className += " operation";
-            if (d.data.node.isManual) className += " manual"
-            if (isOperationClosed(d)) className += " completed"
-          }
-          return className;
-      })
+        if (!d.children && d._children) {
+          className += " collapsed";
+        }
+        if (d.height === 0) {
+          className += " operation";
+          if (d.data.node.isManual) className += " manual";
+          if (isOperationClosed(d)) className += " completed";
+        }
+        return className;
+      });
 
       function isOperationClosed(d) {
         let squareRemainder = getSquareRemainder(d.data.node);
@@ -280,10 +318,9 @@ function Gantt({ timeframe, ...props }) {
         .transition()
         .style("opacity", 0)
         .duration(t)
-        .remove()
+        .remove();
 
-      date.style("opacity", 1)
-        .style("left", (d, i) => i * 40 + "px");
+      date.style("opacity", 1).style("left", (d, i) => i * 40 + "px");
 
       // enter cells
       let dateEnter = date
@@ -316,7 +353,8 @@ function Gantt({ timeframe, ...props }) {
         .enter()
         .append("g")
         .attr("class", "grid-row")
-        .attr("transform", d => `translate(0, ${top(d) * 20})`);
+        .attr("transform", d => `translate(0, ${top(d) * 20})`)
+        .attr("data-index", d => top(d));
 
       operationEnter
         .transition()
@@ -344,51 +382,51 @@ function Gantt({ timeframe, ...props }) {
         .transition()
         .attr("transform", d => `translate(0, ${top(d) * 20})`)
         .duration(t);
-        
+
       /*
        ********** CELLGROUP ********
        */
-      
-      // select cellGroup in each operation
-      let cellGroup = operation.select(".cellGroup");
 
-      // do an enter/exit/update cycle with cells datum
-      let cell = cellGroup
-        .selectAll(".cell")
-        .data(d => d.data.dateRange, d => d);
+      // // select cellGroup in each operation
+      // let cellGroup = operation.select(".cellGroup");
 
-      // enter cells
-      let cellEnter = cell
-        .enter()
-        .append("rect")
-        .attr("class", "cell")
-        .attr("x", (d, i) => i * 40)
-        // .attr("height", 0)
-        .attr("fill-opacity", 0)
-        .attr("height", 20)
-        .attr("width", 40);
+      // // do an enter/exit/update cycle with cells datum
+      // let cell = cellGroup
+      //   .selectAll(".cell")
+      //   .data(d => d.data.dateRange, d => d);
 
-      cellEnter
-        .transition()
-        .attr("fill", "transparent")
-        .attr("fill-opacity", 0.5)
-        .attr("stroke-width", 1)
-        .attr("stroke", "lightgray")
-        .duration(t);
+      // // enter cells
+      // let cellEnter = cell
+      //   .enter()
+      //   .append("rect")
+      //   .attr("class", "cell")
+      //   .attr("x", (d, i) => i * 40)
+      //   // .attr("height", 0)
+      //   .attr("fill-opacity", 0)
+      //   .attr("height", 20)
+      //   .attr("width", 40);
 
-      cell = cellEnter.merge(cell);
+      // cellEnter
+      //   .transition()
+      //   .attr("fill", "transparent")
+      //   .attr("fill-opacity", 0.5)
+      //   .attr("stroke-width", 1)
+      //   .attr("stroke", "lightgray")
+      //   .duration(t);
 
-      // clickable cells
-      cellGroup
-        .filter(x => x.height === 0)
-        .selectAll(".cell")
-        .on("click", function(d) {
-          d3.event.stopPropagation();
-          // let date = d.date;
-          const operation = { ...d3.select(this).node().parentNode.__data__ };
-          let operationData = operation.data.node;
-          props.addNewPeriod({ ...operationData, selectedDay: d });
-        });
+      // cell = cellEnter.merge(cell);
+
+      // // clickable cells
+      // cellGroup
+      //   .filter(x => x.height === 0)
+      //   .selectAll(".cell")
+      //   .on("click", function(d) {
+      //     d3.event.stopPropagation();
+      //     // let date = d.date;
+      //     const operation = { ...d3.select(this).node().parentNode.__data__ };
+      //     let operationData = operation.data.node;
+      //     props.addNewPeriod({ ...operationData, selectedDay: d });
+      //   });
 
       /*
        ********** AGROTERMS ********
@@ -910,8 +948,8 @@ function Gantt({ timeframe, ...props }) {
   );
 }
 
-const mapStateToProps = store => {
-  let { plans } = store.plan;
+const mapStateToProps = state => {
+  let { plans, filter } = state.plan;
 
   if (plans.length) {
     var operations = plans.reduce((acc, cur) => {
@@ -926,11 +964,24 @@ const mapStateToProps = store => {
       acc = [...acc, ...operations];
       return acc;
     }, []);
-    // debugger;
+
+    // apply filter
+    const { crops, farms } = filter;
+    if (crops.length) {
+      operations = operations.filter(
+        operation => !crops.find(x => x.id === operation.crop.id)
+      );
+    }
+    if (farms.length) {
+      operations = operations.filter(
+        operation => !farms.find(x => x.id === operation.farm.id)
+      );
+    }
+
     return {
       operations: operations,
       // periods: Object.values(state.periods)
-      plans: store.plans
+      plans: state.plans
     };
   } else {
     return {

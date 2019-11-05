@@ -30,6 +30,8 @@ import AddOperationForm from "./container/AddOperationForm";
 import AddPeriodForm from "./container/AddPeriodForm";
 import EditPeriodForm from "./container/EditPeriodForm";
 import Deficit from "./container/Deficit";
+import FilterForm from "./container/FilterForm";
+import MachineryCatalogue from "./container/MachineryCatalogue";
 
 const formats = {
   DAY: { type: "day", cellWidth: 40 },
@@ -91,6 +93,8 @@ function App({ ...props }) {
         <Route path="/add_operation" component={AddOperationForm} />
         <Route path="/add_period" component={AddPeriodForm} />
         <Route path="/edit_period" component={EditPeriodForm} />
+        <Route path="/filter" component={FilterForm} />
+        <Route path="/tech" component={MachineryCatalogue} />
 
         {/* <div className="container">
           <div className="row"></div>

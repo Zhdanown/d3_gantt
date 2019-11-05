@@ -58,7 +58,7 @@ export const getId = d => {
   }
 
   // prepend node id for operations to distinguish them
-  if (d.height === 0) key = d.data.node.id + key;
+  if (d.height === 0) key = d.data.node && d.data.node.id + key;
 
   return key;
 };
