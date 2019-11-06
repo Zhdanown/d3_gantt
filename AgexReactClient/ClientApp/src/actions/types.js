@@ -1,5 +1,7 @@
 /** user authentication */
 export const LOGIN = "LOGIN";
+export const START_LOGGING_IN = "START_LOGGING_IN";
+export const STOP_LOGGING_IN = "STOP_LOGGING_IN";
 export const LOGOUT = "LOGOUT";
 export const FETCH_USER_PROFILE = "FETCH_USER_PROFILE";
 /** create plan */

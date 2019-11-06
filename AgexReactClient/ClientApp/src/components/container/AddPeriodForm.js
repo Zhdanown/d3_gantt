@@ -106,6 +106,24 @@ function AddPeriodForm(props) {
     props.setPeriodData(null);
   };
 
+  const renderSubmitButton = () => {
+    if (!startDate || !endDate) return;
+    else if (endDate.getTime() < startDate.getTime()) return;
+
+    return (
+      <button
+        className="btn waves-effect waves-light modal-close"
+        type="submit"
+        name="action"
+        form="period-form"
+        onClick={addPeriod}
+      >
+        Добавить период
+        <i className="material-icons right">add</i>
+      </button>
+    );
+  };
+
   return (
     <Modal name="addPeriod" onClose={closeForm}>
       <div className="modal-content">
@@ -157,16 +175,7 @@ function AddPeriodForm(props) {
         <a href="#!" className="modal-close waves-effect waves-green btn-flat">
           Отмена
         </a>
-        <button
-          className="btn waves-effect waves-light modal-close"
-          type="submit"
-          name="action"
-          form="period-form"
-          onClick={addPeriod}
-        >
-          Добавить период
-          <i className="material-icons right">add</i>
-        </button>
+        {renderSubmitButton()}
       </div>
     </Modal>
   );

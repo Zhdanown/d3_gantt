@@ -25,10 +25,10 @@ function LoginForm(props) {
       let elem = document.querySelector("#loginForm");
       let instance = window.M.Modal.getInstance(elem);
       instance.close();
-      setError(null)
+      setError(null);
     } else {
       setPassword("");
-      setError(response.data.message)
+      setError(response.data.message);
     }
   };
 
@@ -59,19 +59,31 @@ function LoginForm(props) {
               <label htmlFor="password">Пароль</label>
             </div>
           </div>
+
           <p className="error">{error}</p>
           <div className="row">
             <div className="col s12 center">
-
-              <button
-                className="btn waves-effect waves-light"
-                type="submit"
-              >
-                Войти
-              </button>
+              {props.isLoggingIn ? (
+                <div className="preloader-wrapper active">
+                  <div className="spinner-layer spinner-blue-only">
+                    <div className="circle-clipper left">
+                      <div className="circle"></div>
+                    </div>
+                    <div className="gap-patch">
+                      <div className="circle"></div>
+                    </div>
+                    <div className="circle-clipper right">
+                      <div className="circle"></div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <button className="btn waves-effect waves-light" type="submit">
+                  Войти
+                </button>
+              )}
             </div>
           </div>
-          
         </div>
       </form>
     </Modal>
@@ -80,9 +92,10 @@ function LoginForm(props) {
 
 const mapStateToProps = state => {
   return {
-    authError: state.auth.error
-  }
-}
+    authError: state.auth.error,
+    isLoggingIn: state.auth.isLoggingIn
+  };
+};
 
 export default connect(
   mapStateToProps,

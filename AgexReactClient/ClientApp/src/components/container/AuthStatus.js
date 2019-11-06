@@ -6,15 +6,24 @@ import { Link } from "react-router-dom";
 import { /*login,*/ logout } from "../../actions/auth";
 
 function AuthStatus({ user, ...props }) {
-  if (props.loggedIn)
+  if (props.isloggedIn)
     return (
       <React.Fragment>
-        <Dropdown caption={user && user.login}>
-          <li>
+        <Dropdown
+          caption={
+            user && (
+              <React.Fragment>
+                <i className="material-icons left">account_circle</i>{" "}
+                {user.login}
+              </React.Fragment>
+            )
+          }
+        >
+          {/* <li>
             <a href="#!" onClick={() => alert("В разработке")}>
               Профиль пользователя
             </a>
-          </li>
+          </li> */}
           <li className="divider" tabIndex="-1"></li>
           <li>
             <a href="#!" onClick={props.logout}>
@@ -30,7 +39,7 @@ function AuthStatus({ user, ...props }) {
 const mapStateToProps = store => {
   return {
     user: store.auth.user,
-    loggedIn: store.auth.loggedIn
+    isloggedIn: store.auth.isloggedIn
   };
 };
 

@@ -25,7 +25,7 @@ function LoadPlanForm(props) {
     const start = "2020-03-01";
     const end = "2021-03-01";
 
-    props.loadPlan({ seasonId: season.id, typeId: type.id, start, end });
+    props.loadPlan({ seasonId: season.id, typeId: type.id /*, start, end*/ });
   };
 
   return (

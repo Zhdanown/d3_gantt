@@ -48,7 +48,8 @@ export const MachineryContainer = ({ ...props }) => {
       var productivityObj = newVehicle.productivity.find(
         x => x.agroOperationId === selectedAgroOperationId
       );
-      setProductivityVehicle(productivityObj.productivity);
+      if (productivityObj) setProductivityVehicle(productivityObj.productivity);
+      else setProductivityVehicle(null);
     } else setProductivityVehicle(null);
   };
 

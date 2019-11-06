@@ -1,0 +1,12 @@
+.machineryCatalogue .collapsible-header {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+.machineryCatalogue .collapsible-body {
+  padding: 1rem;
+}
+.machineryCatalogue .model {
+  display: block;
+}
+
+/*# sourceMappingURL=machineryCatalogue.css.map */

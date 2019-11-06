@@ -169,6 +169,7 @@ function Gantt({ timeframe, ...props }) {
 
       grid.select(".background").on("click", function(e) {
         d3.event.stopPropagation();
+
         console.log(window.devicePixelRatio);
         let { offsetX, offsetY } = d3.event;
 
@@ -186,10 +187,14 @@ function Gantt({ timeframe, ...props }) {
           if (operationIndex === +operationRow.node().dataset.index) return x;
           else return false;
         });
-        let operationData = d3
+        let op = d3
           .select(operationDom)
           .node()
-          .node().__data__.data.node;
+          .node().__data__;
+
+        if (op.height !== 0) return;
+
+        let operationData = op.data.node;
 
         props.addNewPeriod({ ...operationData, selectedDay: date });
       });
@@ -240,6 +245,11 @@ function Gantt({ timeframe, ...props }) {
         .select(".text")
         .append("span")
         .html(d => d.data.name);
+      legendNodeEnter
+        .filter(d => d.height === 0)
+        .select(".text")
+        .append("span")
+        .html(d => d.data.node && " (" + d.data.node.cropSquare + ")");
 
       // append "+"
       legendNodeEnter
@@ -382,6 +392,9 @@ function Gantt({ timeframe, ...props }) {
         .transition()
         .attr("transform", d => `translate(0, ${top(d) * 20})`)
         .duration(t);
+
+      // update indexes
+      operation.attr("data-index", d => top(d));
 
       /*
        ********** CELLGROUP ********
@@ -905,7 +918,10 @@ function Gantt({ timeframe, ...props }) {
         if (timeframe.type === "day") {
           if (d instanceof Date) startDate = d;
           else if (d.data) startDate = d.data.node.dates[0].date;
-          else if (d.days) startDate = new Date(d.days[0].day);
+          else if (d.days) {
+            if (!d.days.length) return 0;
+            startDate = new Date(d.days[0].day);
+          }
         } else if (timeframe.type === "week") {
           // debugger;
           if (Array.isArray(d)) startDate = d[0];

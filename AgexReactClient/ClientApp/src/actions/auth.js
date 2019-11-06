@@ -1,10 +1,11 @@
 /*
  ********** LOGIN, LOGOUT, FETCH_PROFILE ********
  */
-import { LOGIN, LOGOUT } from "./types";
+import { LOGIN, LOGOUT, START_LOGGING_IN, STOP_LOGGING_IN } from "./types";
 import agex from "../apis/agex";
 import Cookies from "js-cookie";
 import history from "../history";
+import withMessage from "../apis/loaderDecorator";
 
 /*
  ********** ACTION CREATORS ********
@@ -13,7 +14,7 @@ const loginUser = user => ({
   type: LOGIN,
   payload: {
     user,
-    loggedIn: true
+    isloggedIn: true
   }
 });
 
@@ -25,6 +26,9 @@ const logoutUser = () => ({ type: LOGOUT });
 export const login = (username, password) => async dispatch => {
   var authResponse;
   try {
+    dispatch({
+      type: START_LOGGING_IN
+    });
 
     authResponse = await agex.post("/auth/logon", {
       Login: username,
@@ -43,12 +47,13 @@ export const login = (username, password) => async dispatch => {
 
     dispatch(loginUser(user));
 
-    return authResponse
-
+    return authResponse;
   } catch (error) {
-    return error.response
+    dispatch({
+      type: STOP_LOGGING_IN
+    });
+    return error.response;
   }
-  
 };
 
 export const logout = () => async dispatch => {
@@ -61,7 +66,10 @@ export const getUserProfile = () => async dispatch => {
   const token = Cookies.get("token");
   if (!token) return;
 
-  const response = await agex.get("/auth/info");
+  const response = await withMessage(
+    agex.get("/auth/info"),
+    "Загрузка профиля пользователя"
+  );
 
   if (response.status === 200) dispatch(loginUser(response.data));
 };

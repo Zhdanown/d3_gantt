@@ -41,7 +41,7 @@ function MachineryForm({ addMachinery, productivity, ...props }) {
             getOptionLabel={opt =>
               "(" + opt.value.count + " ед) - " + opt.label
             }
-            // isOptionDisabled={disableByAgroOperation}
+            isOptionDisabled={disableByAgroOperation}
           />
         </div>
         <div className="col s12 m6">
@@ -54,7 +54,7 @@ function MachineryForm({ addMachinery, productivity, ...props }) {
             getOptionLabel={opt =>
               "(" + opt.value.count + " ед) - " + opt.label
             }
-            // isOptionDisabled={disableByAgroOperation}
+            isOptionDisabled={disableByAgroOperation}
           />
         </div>
       </div>

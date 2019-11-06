@@ -32,6 +32,7 @@ import EditPeriodForm from "./container/EditPeriodForm";
 import Deficit from "./container/Deficit";
 import FilterForm from "./container/FilterForm";
 import MachineryCatalogue from "./container/MachineryCatalogue";
+import Loader from "./container/Loader";
 
 const formats = {
   DAY: { type: "day", cellWidth: 40 },
@@ -96,22 +97,7 @@ function App({ ...props }) {
         <Route path="/filter" component={FilterForm} />
         <Route path="/tech" component={MachineryCatalogue} />
 
-        {/* <div className="container">
-          <div className="row"></div>
-          <div className="row">
-            <div className="col">
-              <button className="btn btn-secondary" onClick={loadOps}>
-                load operations
-              </button>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col">
-              <List list={list} />
-            </div>
-          </div>
-        </div>
-         */}
+        {/* <Loader /> */}
       </div>
     </Router>
   );

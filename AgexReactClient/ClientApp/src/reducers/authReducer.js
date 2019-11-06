@@ -1,15 +1,31 @@
-import { LOGIN, LOGOUT } from "../actions/types";
+import {
+  LOGIN,
+  LOGOUT,
+  START_LOGGING_IN,
+  STOP_LOGGING_IN
+} from "../actions/types";
 
 const authReducer = (state = {}, action) => {
   switch (action.type) {
+    case START_LOGGING_IN:
+      return {
+        ...state,
+        isLoggingIn: true
+      };
+    case STOP_LOGGING_IN:
+      return {
+        ...state,
+        isLoggingIn: false
+      };
     case LOGIN:
       return {
-        ...action.payload
+        ...action.payload, // {user: {}, isLoggedIn: true}
+        isLoggingIn: false
       };
     case LOGOUT:
       return {
         user: null,
-        loggedIn: false
+        isloggedIn: false
       };
 
     default:
