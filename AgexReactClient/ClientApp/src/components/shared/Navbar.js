@@ -23,7 +23,7 @@ const Navbar = ({ selectedPlanType, ...props }) => {
             {/* *********************** */}
             <li>
               <Link to="/tech">
-                <i className="material-icons left">account_circle</i>Техника
+                <i className="material-icons left">directions_car</i>Техника
               </Link>
             </li>
             {props.planFethced ? (

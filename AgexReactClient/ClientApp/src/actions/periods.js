@@ -43,7 +43,9 @@ export const addNewPeriod = ({
 };
 
 export const deletePeriod = ({ operation, period }) => async dispatch => {
-  const response = await agex.delete("seasonplan/period");
+  const response = await agex.delete("seasonplan/period", {
+    data: { Id: period.id }
+  });
 
   if (response.status === 200) {
     dispatch({

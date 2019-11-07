@@ -68,6 +68,29 @@ function Gantt({ timeframe, ...props }) {
       return;
     }
 
+    /** sort operations */
+    operations.sort((a, b) => {
+      const aTime = new Date(a.startDate).getTime();
+      const bTime = new Date(b.startDate).getTime();
+      // sort by startDate
+      if (aTime === bTime) {
+        // then sort by holdingName
+        if (a.holding.name > b.holding.name) return 1;
+        if (a.holding.name < b.holding.name) return -1;
+        else {
+          // then sort by farm name
+          if (a.farm.name > b.farm.name) return 1;
+          if (a.farm.name < b.farm.name) return -1;
+          else {
+            // then sort by culture name
+            if (a.crop.name > b.crop.name) return 1;
+            if (a.crop.name < b.crop.name) return -1;
+            return 0;
+          }
+        }
+      } else return aTime - bTime;
+    });
+
     /** append dates to each operation */
     operations = operations.map(operation => {
       let dates = getOperationDates(operation);
@@ -241,15 +264,34 @@ function Gantt({ timeframe, ...props }) {
         .attr("class", "material-icons drop-up")
         .html("arrow_drop_up");
 
+      // append node name
       legendNodeEnter
         .select(".text")
         .append("span")
         .html(d => d.data.name);
+
+      // append operation Square
       legendNodeEnter
         .filter(d => d.height === 0)
         .select(".text")
+        .on("click", panToAgroterms)
         .append("span")
         .html(d => d.data.node && " (" + d.data.node.cropSquare + ")");
+
+      function panToAgroterms(d) {
+        // get startDate of agroterms
+        const { date: startDate } = d.data.node.dates[0];
+        // get index of startDate
+        console.log(dates.length);
+        const index = dates.findIndex(x => x.getTime() === startDate.getTime());
+        let diagramm = document.querySelector(".diagramm");
+        // diagramm.scrollLeft = (index - 3) * 40;
+        diagramm.scroll({
+          top: diagramm.scrollTop,
+          left: (index - 3) * 40,
+          behavior: "smooth"
+        });
+      }
 
       // append "+"
       legendNodeEnter
@@ -644,267 +686,11 @@ function Gantt({ timeframe, ...props }) {
         .attr("height", 20)
         .attr("fill", "transparent")
         .attr("x", d => d.days.length * 40 - 5);
+
       // attach event listeners on controls
       period.selectAll(".ctrl").on("mousedown", stretchPeriod);
       period.on("mousedown", movePeriod);
 
-      // .style("top", top)
-      // .style("padding-left", d => d.depth * 15 + "px");
-      // legendNodeEnter
-      //   .filter(d => d.data.children.length)
-      //   .append("i")
-      //   .attr("class", "material-icons md-18 toggle")
-      //   .html("expand_less");
-      // legendNodeEnter.append("text").text(d => d.data.name);
-      // /** CULTURES */
-      // legendNodeEnter
-      //   .filter(d => d.height === 1)
-      //   .append("i")
-      //   .attr("class", "material-icons md-18 add")
-      //   .html("add")
-      //   .on("click", function(d) {
-      //     d3.event.stopPropagation();
-      //     props.addNewOperation(d.data.node);
-      //   });
-      // /** OPERATIONS */
-      // legendNodeEnter
-      //   .filter(d => d.height === 0)
-      //   .append("span")
-      //   .attr("class", "terms")
-      //   .html(d => appendTerms(d));
-      // legendNodeEnter
-      //   .filter(d => d.height === 0)
-      //   .append("i")
-      //   .attr("class", "material-icons md-18 delete")
-      //   .html("delete_outline")
-      //   .on("click", function(d) {
-      //     d3.event.stopPropagation();
-      //     props.deleteOperation(d.data.node);
-      //   });
-      // legendNodeEnter
-      //   .style("opacity", 0)
-      //   .transition()
-      //   .style("opacity", 1)
-      //   .duration(t);
-      // legendNode = legendNodeEnter.merge(legendNode);
-      // legendNode
-      //   .transition()
-      //   .style("top", top)
-      //   .style("opacity", 1)
-      //   .duration(t);
-      // legendNode
-      //   .filter(d => {
-      //     return d.height !== 0;
-      //   })
-      //   .on("click", click);
-      // /*
-      //  ********** operations ********
-      //  */
-      // let operation = grid
-      //   .selectAll(".grid-row")
-      //   .data(nodes, d => d.id || (d.id = getId(d)));
-      // operation
-      //   .exit()
-      //   .transition()
-      //   .style("height", 0)
-      //   .style("opacity", 0)
-      //   .duration(t)
-      //   .remove();
-      // // operation
-      // //   .transition()
-      // //   .style("top", top)
-      // //   .duration(t);
-      // let operationEnter = operation
-      //   .enter()
-      //   .append("div")
-      //   .attr("class", "grid-row")
-      //   .style("top", top);
-      // operationEnter
-      //   .style("opacity", 0)
-      //   .transition()
-      //   .style("opacity", 1)
-      //   .duration(t);
-      // // append agroterms
-      // operationEnter
-      //   .filter(d => d.height === 0)
-      //   .append("div")
-      //   .attr("class", "period agroterms");
-      // // append periods
-      // // let customPeriods = operationEnter
-      // //   .filter(d => d.height === 0)
-      // //   .selectAll(".period.custom")
-      // //   .data(d => d.data.node.periods, d => d.id);
-      // // // .enter()
-      // // // .append("div")
-      // // // .attr("class", "period custom");
-      // operation = operationEnter.merge(operation);
-      // operation
-      //   .transition()
-      //   .style("top", top)
-      //   .style("opacity", 1)
-      //   .duration(t);
-      // let days = operation
-      //   .selectAll(".cell")
-      //   .data(d => d.data.dateRange, d => d);
-      // days
-      //   .exit()
-      //   .transition()
-      //   .style("opacity", 0)
-      //   .duration(t)
-      //   .remove();
-      // /* let daysEnter = */ days
-      //   .enter()
-      //   .append("div")
-      //   .attr("class", "cell")
-      //   .style("opacity", 0)
-      //   .transition()
-      //   .style("opacity", 1)
-      //   .style("left", left)
-      //   .style("width", () => timeframe.cellWidth + "px")
-      //   .duration(t);
-      // days
-      //   .transition()
-      //   .style("left", left)
-      //   .style("width", () => timeframe.cellWidth + "px")
-      //   .duration(t);
-      // // debugger;
-      // days
-      //   .enter()
-      //   .selectAll(".cell")
-      //   .on("click", function(d) {
-      //     d3.event.stopPropagation();
-      //     const operation = { ...d3.select(this).node().parentNode.__data__ };
-      //     let operationData = operation.data.node;
-      //     props.addNewPeriod({ ...operationData });
-      //   });
-      // /*
-      //  ********** agroterms by techMap ********
-      //  */
-      // let agroterms = operation.select(".period.agroterms");
-      // agroterms
-      //   .transition()
-      //   .style("left", left)
-      //   .duration(t);
-      // let termDays = agroterms
-      //   .selectAll(".day")
-      //   .data(d => d.data.node.dates, d => d.date);
-      // termDays
-      //   .exit()
-      //   .transition()
-      //   .style("opacity", 0)
-      //   .duration(t)
-      //   .remove();
-      // termDays.style("width", () => {
-      //   if (timeframe.type === "week") return timeframe.cellWidth / 7 + "px";
-      //   else return timeframe.cellWidth + "px";
-      // });
-      // termDays
-      //   .enter()
-      //   .append("div")
-      //   .attr("class", "day")
-      //   .style("opacity", 0)
-      //   .transition()
-      //   .style("opacity", 1)
-      //   .style("width", () => {
-      //     if (timeframe.type === "week") return timeframe.cellWidth / 7 + "px";
-      //     else return timeframe.cellWidth + "px";
-      //   })
-      //   .duration(t);
-      // // /*
-      // //  ********** period ********
-      // //  */
-      // let customPeriods = operation
-      //   .filter(d => d.height === 0)
-      //   .selectAll(".period.custom")
-      //   .data(d => d.data.node.periods, d => d.id);
-      // customPeriods
-      //   .exit()
-      //   .transition()
-      //   .style("opacity", 0)
-      //   .duration(t)
-      //   .remove();
-      // let customPeriodsEnter = customPeriods
-      //   .enter()
-      //   .append("div")
-      //   .attr("class", "period custom");
-      // customPeriodsEnter.style("left", function(d) {
-      //   const date = new Date(d.days[0].day || d.days[0].Day);
-      //   return left(date);
-      // });
-      // // customPeriods = customPeriodsEnter.merge(customPeriods);
-      // customPeriods
-      //   .transition()
-      //   .style("left", function(d) {
-      //     const date = new Date(d.days[0].day || d.days[0].Day);
-      //     return left(date);
-      //   })
-      //   .duration(t);
-      // let periodDays = customPeriodsEnter
-      //   .selectAll(".day")
-      //   .data(d => d.days, d => d.day);
-      // periodDays
-      //   .exit()
-      //   .transition()
-      //   .style("opacity", 0)
-      //   .duration(t)
-      //   .remove();
-      // periodDays.style("width", () => {
-      //   if (timeframe.type === "week") return timeframe.cellWidth / 7 + "px";
-      //   else return timeframe.cellWidth + "px";
-      // });
-      // periodDays
-      //   .enter()
-      //   .append("div")
-      //   .attr("class", "day")
-      //   .style("opacity", 0)
-      //   .transition()
-      //   .style("opacity", 1)
-      //   .style("width", () => {
-      //     if (timeframe.type === "week") return timeframe.cellWidth / 7 + "px";
-      //     else return timeframe.cellWidth + "px";
-      //   })
-      //   .duration(t);
-      // periodDays
-      //   .enter()
-      //   .selectAll(".day")
-      //   .on("click", function() {
-      //     d3.event.stopPropagation();
-      //     const period = { ...d3.select(this).node().parentNode.__data__ };
-      //     const operation = d3.select(this).node().parentNode.parentNode
-      //       .__data__;
-      //     props.editPeriod({
-      //       period,
-      //       operation: operation.data.node /*, selectedDate: d*/
-      //     });
-      //   });
-      // /*
-      //  ********** date bar ********
-      //  */
-      // let date = datesBar.selectAll(".date.cell").data(dates, d => d);
-      // date
-      //   .exit()
-      //   .transition()
-      //   .style("opacity", 0)
-      //   .remove();
-      // let dateEnter = date
-      //   .enter()
-      //   .append("div")
-      //   .attr("class", "date cell")
-      //   .html(d => {
-      //     return dateToString(d);
-      //   });
-      // dateEnter
-      //   .style("opacity", 0)
-      //   .transition()
-      //   .style("opacity", 1)
-      //   .style("left", left)
-      //   .style("width", () => timeframe.cellWidth + "px")
-      //   .duration(t);
-      // date
-      //   .transition()
-      //   .style("left", left)
-      //   .style("width", () => timeframe.cellWidth + "px")
-      //   .duration(t);
       function top(d) {
         return count(d);
         function count(d) {
@@ -936,27 +722,7 @@ function Gantt({ timeframe, ...props }) {
         const offset = getLeftOffset(startDate, dates, timeframe);
         return offset;
       }
-      // function appendTerms(d) {
-      //   // append terms for operations
-      //   if (d.data.node) {
-      //     const { startDate, endDate } = d.data.node;
-      //     const start = new Date(startDate);
-      //     const end = new Date(endDate);
-      //     return ` ${dateToString(start)} - ${dateToString(end)}`;
-      //   } else return null;
-      // }
     }
-
-    // function click(d) {
-    //   if (d.children) {
-    //     d._children = d.children;
-    //     d.children = null;
-    //   } else {
-    //     d.children = d._children;
-    //     d._children = null;
-    //   }
-    //   update(clickRoot, clickTimeframe);
-    // }
 
     return update;
   };
