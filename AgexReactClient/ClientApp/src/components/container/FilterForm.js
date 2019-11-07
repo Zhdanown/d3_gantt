@@ -7,31 +7,55 @@ import Modal from "../shared/Modal";
 import CheckboxList from "../shared/CheckboxList";
 
 // import actions
-import { filterCrops } from "../../actions/filter";
+import { filter } from "../../actions/filter";
 
 function FilterForm({ ...props }) {
+  /*
+   ********** CROPS ********
+   */
+
   // get list of unique crops
   let crops = props.operations.flatMap(operation => operation.crop);
   crops = [...new Set(crops.map(x => JSON.stringify(x)))].map(x =>
     JSON.parse(x)
   );
-
   // syncronize checkboxes state with applied filter
   crops.map(crop => {
     if (props.filteredCrops.find(x => x.id === crop.id)) crop.checked = false;
     else crop.checked = true;
   });
 
+  /*
+   ********** FARMS ********
+   */
+
   // get list of unique farms
   let farms = props.operations.flatMap(operation => operation.farm);
   farms = [...new Set(farms.map(x => JSON.stringify(x)))].map(x =>
     JSON.parse(x)
   );
-
   // syncronize checkboxes state with applied filter
   farms.map(farm => {
     if (props.filteredFarms.find(x => x.id === farm.id)) farm.checked = false;
     else farm.checked = true;
+  });
+
+  /*
+   ********** AGROOPERATIONS ********
+   */
+
+  // get list of unique agrooperations
+  let agroOperations = props.operations.flatMap(
+    operation => operation.agroOperation
+  );
+  agroOperations = [...new Set(agroOperations.map(x => JSON.stringify(x)))].map(
+    x => JSON.parse(x)
+  );
+  // syncronize checkboxes state with applied filter
+  agroOperations.map(agroOperation => {
+    if (props.filteredAgroOperations.find(x => x.id === agroOperation.id))
+      agroOperation.checked = false;
+    else agroOperation.checked = true;
   });
 
   /*
@@ -40,31 +64,47 @@ function FilterForm({ ...props }) {
 
   const [cropList, setCropList] = useState(crops);
   const [farmList, setFarmList] = useState(farms);
+  const [agroOperationList, setAgroOperationList] = useState(agroOperations);
 
   const applyFilter = () => {
     // get list of crops to filter out
     const cropsToFilterOut = cropList.filter(crop => !crop.checked);
     // get list of farms to filter out
     const farmsToFilterOut = farmList.filter(farm => !farm.checked);
+    // get list of agroOperations to filter out
+    const agroOperationsToFilterOut = agroOperationList.filter(
+      agroOperation => !agroOperation.checked
+    );
 
-    props.filterCrops({ crops: cropsToFilterOut, farms: farmsToFilterOut });
+    props.filter({
+      crops: cropsToFilterOut,
+      farms: farmsToFilterOut,
+      agroOperations: agroOperationsToFilterOut
+    });
   };
 
   return (
     <Modal name="filterForm" onClose={() => history.push("/")}>
       <div className="modal-content">
         <div className="row">
-          <div className="col S6">
+          <div className="col s4">
             <CheckboxList
               list={farmList}
               onListChange={newList => setFarmList(newList)}
             />
           </div>
 
-          <div className="col s6">
+          <div className="col s4">
             <CheckboxList
               list={cropList}
               onListChange={newList => setCropList(newList)}
+            />
+          </div>
+
+          <div className="col s4">
+            <CheckboxList
+              list={agroOperationList}
+              onListChange={newList => setAgroOperationList(newList)}
             />
           </div>
         </div>
@@ -101,18 +141,20 @@ const mapStateToProps = state => {
     return {
       operations,
       filteredCrops: filter.crops,
-      filteredFarms: filter.farms
+      filteredFarms: filter.farms,
+      filteredAgroOperations: filter.agroOperations
     };
   } else {
     return {
       operations: [],
       filteredCrops: [],
-      filteredFarms: []
+      filteredFarms: [],
+      filteredAgroOperations: []
     };
   }
 };
 
 export default connect(
   mapStateToProps,
-  { filterCrops }
+  { filter }
 )(FilterForm);

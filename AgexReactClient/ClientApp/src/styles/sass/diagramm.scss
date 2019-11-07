@@ -53,7 +53,11 @@
       }
 
       &.manual .text {
-        font-style: italic
+        font-style: italic;
+      }
+
+      &.touched {
+        font-weight: bold;
       }
 
       .text {
@@ -84,13 +88,15 @@
           color: steelblue;
         }
       }
-      
-      .add, .delete {
+
+      .add,
+      .delete {
         right: 0;
         font-size: 1.2rem;
       }
 
-      .drop-down, .drop-up {
+      .drop-down,
+      .drop-up {
         margin-left: -1.5rem;
       }
 
@@ -106,7 +112,6 @@
         .drop-down {
           display: inline-block;
         }
-        
       }
     }
   }
@@ -135,7 +140,6 @@
         }
       }
     }
-
   }
 }
 

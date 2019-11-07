@@ -287,10 +287,15 @@ function Gantt({ timeframe, ...props }) {
         if (d.height === 0) {
           className += " operation";
           if (d.data.node.isManual) className += " manual";
+          if (isOperationTouched(d)) className += " touched";
           if (isOperationClosed(d)) className += " completed";
         }
         return className;
       });
+
+      function isOperationTouched(d) {
+        return d.data.node.periods.length;
+      }
 
       function isOperationClosed(d) {
         let squareRemainder = getSquareRemainder(d.data.node);
@@ -981,8 +986,11 @@ const mapStateToProps = state => {
       return acc;
     }, []);
 
-    // apply filter
-    const { crops, farms } = filter;
+    /*
+     ********** APPLY FILTER ********
+     */
+
+    const { crops, farms, agroOperations } = filter;
     if (crops.length) {
       operations = operations.filter(
         operation => !crops.find(x => x.id === operation.crop.id)
@@ -991,6 +999,12 @@ const mapStateToProps = state => {
     if (farms.length) {
       operations = operations.filter(
         operation => !farms.find(x => x.id === operation.farm.id)
+      );
+    }
+    if (agroOperations.length) {
+      operations = operations.filter(
+        operation =>
+          !agroOperations.find(x => x.id === operation.agroOperation.id)
       );
     }
 

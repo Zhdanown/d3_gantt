@@ -12,7 +12,7 @@ import {
   DELETE_PERIOD,
   EDIT_PERIOD,
   SET_PERIOD_DATA,
-  APPLY_FILTER,
+  APPLY_FILTER
 } from "../actions/types";
 
 // helper
@@ -47,15 +47,17 @@ function periodDataReducer(state = null, action) {
   if (action.type === SET_PERIOD_DATA) return action.payload;
   else return state;
 }
-function filterReducer(state = {crops: [], farms: []}, action) {
+function filterReducer(
+  state = { crops: [], farms: [], agroOperations: [] },
+  action
+) {
   switch (action.type) {
     case APPLY_FILTER:
-      return {...state, crops: action.payload.crops, farms: action.payload.farms}  
+      return { ...state, ...action.payload };
     default:
-      return state
+      return state;
   }
 }
-
 
 function addNewOperation(plansState, action) {
   return plansState.map(plan => {
