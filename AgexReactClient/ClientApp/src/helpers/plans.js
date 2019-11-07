@@ -1,5 +1,27 @@
 import store from "../store";
 import { createRange, stringToDate } from "./dateHelper";
+import { loadPlan } from "../actions/plans";
+
+export const loadDefaultPlan = async () => {
+  const currentSeason = await new Promise((resolve, reject) => {
+    store.subscribe(() => {
+      const state = store.getState();
+      if (state.plan.seasons.length) {
+        resolve(state.plan.seasons.find(x => x.isCurrent));
+      }
+    });
+  });
+
+  const type = await new Promise((resolve, reject) => {
+    store.subscribe(() => {
+      const state = store.getState();
+      const { types } = state.plan;
+      if (types.length) resolve(types[0]);
+    });
+  });
+
+  store.dispatch(loadPlan({ season: currentSeason, type }));
+};
 
 export const getHierarchy = operations => {
   let tree = { id: "root", name: "root", children: [] };
@@ -133,4 +155,28 @@ export const getSquareRemainder = (operation, periodId = null) => {
   let remainder = cropSquare - sumProductivity;
 
   return remainder;
+};
+
+export const sortOperations = operations => {
+  return operations.sort((a, b) => {
+    const aTime = new Date(a.startDate).getTime();
+    const bTime = new Date(b.startDate).getTime();
+    // sort by startDate
+    if (aTime === bTime) {
+      // then sort by holdingName
+      if (a.holding.name > b.holding.name) return 1;
+      if (a.holding.name < b.holding.name) return -1;
+      else {
+        // then sort by farm name
+        if (a.farm.name > b.farm.name) return 1;
+        if (a.farm.name < b.farm.name) return -1;
+        else {
+          // then sort by culture name
+          if (a.crop.name > b.crop.name) return 1;
+          if (a.crop.name < b.crop.name) return -1;
+          return 0;
+        }
+      }
+    } else return aTime - bTime;
+  });
 };

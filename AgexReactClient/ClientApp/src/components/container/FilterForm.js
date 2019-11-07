@@ -3,11 +3,20 @@ import { connect } from "react-redux";
 import history from "../../history";
 
 // import components
+import { Link } from "react-router-dom";
 import Modal from "../shared/Modal";
 import CheckboxList from "../shared/CheckboxList";
 
 // import actions
 import { filter } from "../../actions/filter";
+
+function sortByName(entries) {
+  return entries.sort((a, b) => {
+    if (a.name > b.name) return 1;
+    if (a.name < b.name) return -1;
+    return 0;
+  });
+}
 
 function FilterForm({ ...props }) {
   /*
@@ -19,6 +28,7 @@ function FilterForm({ ...props }) {
   crops = [...new Set(crops.map(x => JSON.stringify(x)))].map(x =>
     JSON.parse(x)
   );
+  crops = sortByName(crops);
   // syncronize checkboxes state with applied filter
   crops.map(crop => {
     if (props.filteredCrops.find(x => x.id === crop.id)) crop.checked = false;
@@ -34,6 +44,7 @@ function FilterForm({ ...props }) {
   farms = [...new Set(farms.map(x => JSON.stringify(x)))].map(x =>
     JSON.parse(x)
   );
+  farms = sortByName(farms);
   // syncronize checkboxes state with applied filter
   farms.map(farm => {
     if (props.filteredFarms.find(x => x.id === farm.id)) farm.checked = false;
@@ -51,6 +62,7 @@ function FilterForm({ ...props }) {
   agroOperations = [...new Set(agroOperations.map(x => JSON.stringify(x)))].map(
     x => JSON.parse(x)
   );
+  agroOperations = sortByName(agroOperations);
   // syncronize checkboxes state with applied filter
   agroOperations.map(agroOperation => {
     if (props.filteredAgroOperations.find(x => x.id === agroOperation.id))
@@ -110,9 +122,9 @@ function FilterForm({ ...props }) {
         </div>
       </div>
       <div className="modal-footer">
-        <a href="#!" className="modal-close waves-effect waves-green btn-flat">
+        <Link to="/" className="modal-close waves-effect waves-green btn-flat">
           Отмена
-        </a>
+        </Link>
         <button
           className="btn waves-effect waves-light modal-close"
           type="submit"

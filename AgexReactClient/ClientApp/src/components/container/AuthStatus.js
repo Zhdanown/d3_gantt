@@ -20,15 +20,15 @@ function AuthStatus({ user, ...props }) {
           }
         >
           {/* <li>
-            <a href="#!" onClick={() => alert("В разработке")}>
+            <Link to="/" onClick={() => alert("В разработке")}>
               Профиль пользователя
-            </a>
+            </Link>
           </li> */}
           <li className="divider" tabIndex="-1"></li>
           <li>
-            <a href="#!" onClick={props.logout}>
+            <Link to="/" onClick={props.logout}>
               Выйти
-            </a>
+            </Link>
           </li>
         </Dropdown>
       </React.Fragment>

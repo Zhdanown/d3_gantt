@@ -17,7 +17,8 @@ import {
   getHierarchy as getTree,
   getOperationDates,
   evalMachineryQuantity,
-  getSquareRemainder
+  getSquareRemainder,
+  sortOperations
 } from "../../helpers/plans";
 import { isTermsMet } from "../../helpers/periods";
 import { stretchPeriod, movePeriod } from "../../helpers/drag_n_drop";
@@ -67,29 +68,30 @@ function Gantt({ timeframe, ...props }) {
       showEmptySet();
       return;
     }
+    operations = sortOperations(operations);
 
-    /** sort operations */
-    operations.sort((a, b) => {
-      const aTime = new Date(a.startDate).getTime();
-      const bTime = new Date(b.startDate).getTime();
-      // sort by startDate
-      if (aTime === bTime) {
-        // then sort by holdingName
-        if (a.holding.name > b.holding.name) return 1;
-        if (a.holding.name < b.holding.name) return -1;
-        else {
-          // then sort by farm name
-          if (a.farm.name > b.farm.name) return 1;
-          if (a.farm.name < b.farm.name) return -1;
-          else {
-            // then sort by culture name
-            if (a.crop.name > b.crop.name) return 1;
-            if (a.crop.name < b.crop.name) return -1;
-            return 0;
-          }
-        }
-      } else return aTime - bTime;
-    });
+    // /** sort operations */
+    // operations.sort((a, b) => {
+    //   const aTime = new Date(a.startDate).getTime();
+    //   const bTime = new Date(b.startDate).getTime();
+    //   // sort by startDate
+    //   if (aTime === bTime) {
+    //     // then sort by holdingName
+    //     if (a.holding.name > b.holding.name) return 1;
+    //     if (a.holding.name < b.holding.name) return -1;
+    //     else {
+    //       // then sort by farm name
+    //       if (a.farm.name > b.farm.name) return 1;
+    //       if (a.farm.name < b.farm.name) return -1;
+    //       else {
+    //         // then sort by culture name
+    //         if (a.crop.name > b.crop.name) return 1;
+    //         if (a.crop.name < b.crop.name) return -1;
+    //         return 0;
+    //       }
+    //     }
+    //   } else return aTime - bTime;
+    // });
 
     /** append dates to each operation */
     operations = operations.map(operation => {
@@ -276,7 +278,7 @@ function Gantt({ timeframe, ...props }) {
         .select(".text")
         .on("click", panToAgroterms)
         .append("span")
-        .html(d => d.data.node && " (" + d.data.node.cropSquare + ")");
+        .html(d => d.data.node && " (" + d.data.node.cropSquare + " га)");
 
       function panToAgroterms(d) {
         // get startDate of agroterms

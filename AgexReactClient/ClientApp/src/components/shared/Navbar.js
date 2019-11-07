@@ -4,18 +4,13 @@ import { Link } from "react-router-dom";
 import AuthStatus from "../container/AuthStatus";
 import Dropdown from "../shared/Dropdown";
 
-const Navbar = ({ selectedPlanType, ...props }) => {
-  if (props.selectedPeriod) {
-    const { start, end } = props.selectedPeriod;
-    var selectedPeriod = start + " - " + end;
-  }
-
+const Navbar = ({ selectedSeason, ...props }) => {
   return (
     <React.Fragment>
       <nav style={{ minHeight: "4.2rem" }}>
         <div className="nav-wrapper container">
           <Link to="/" className="brand-logo">
-            {selectedPlanType ? selectedPlanType : null}
+            {selectedSeason ? selectedSeason.name : null}
             {/* {selectedPeriod} */}
           </Link>
 
@@ -65,10 +60,8 @@ const Navbar = ({ selectedPlanType, ...props }) => {
 
 const mapStateToProps = state => {
   return {
-    selectedPeriod:
-      state.plan.plans.length && state.plan.plans[0].selectedPeriod,
-    selectedPlanType:
-      state.plan.plans.length && state.plan.plans[0].seasonPlanType.name,
+    selectedSeason:
+      state.plan.plans.length && state.plan.plans[0].selectedSeason,
     planFethced: state.plan.plans.length
   };
 };

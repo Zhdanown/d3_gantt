@@ -4,6 +4,7 @@ import history from "../../history";
 import uuidv4 from "uuidv4";
 
 /** import components */
+import { Link } from "react-router-dom";
 import Modal from "../shared/Modal";
 import MachineryContainer from "./MachineryContainer";
 import DatePicker from "../shared/DatePicker";
@@ -172,9 +173,9 @@ function AddPeriodForm(props) {
         </div>
       </div>
       <div className="modal-footer">
-        <a href="#!" className="modal-close waves-effect waves-green btn-flat">
+        <Link to="/" className="modal-close waves-effect waves-green btn-flat">
           Отмена
-        </a>
+        </Link>
         {renderSubmitButton()}
       </div>
     </Modal>

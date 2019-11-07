@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import history from "../../history";
+/** import components */
+import { Link } from "react-router-dom";
 import Modal from "../shared/Modal";
 import MySelect from "../shared/MySelect";
 import DatePicker from "../shared/DatePicker";
@@ -25,7 +27,7 @@ function LoadPlanForm(props) {
     const start = "2020-03-01";
     const end = "2021-03-01";
 
-    props.loadPlan({ seasonId: season.id, typeId: type.id /*, start, end*/ });
+    props.loadPlan({ season, type /*, start, end*/ });
   };
 
   return (
@@ -54,7 +56,7 @@ function LoadPlanForm(props) {
             />
           </div>
         </div>
-        <div className="row">
+        {/* <div className="row">
           <div className="input-field col s6">
             <DatePicker
               name="start"
@@ -71,12 +73,12 @@ function LoadPlanForm(props) {
               onSelect={date => setEndDate(date)}
             />
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="modal-footer">
-        <a href="#!" className="modal-close waves-effect waves-green btn-flat">
+        <Link to="/" className="modal-close waves-effect waves-green btn-flat">
           Отмена
-        </a>
+        </Link>
         <button
           className="btn waves-effect waves-light modal-close"
           type="submit"

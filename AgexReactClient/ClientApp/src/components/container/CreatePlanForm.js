@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import history from "../../history";
+
+/** import components */
+import { Link } from "react-router-dom";
 import Modal from "../shared/Modal";
 import MySelect from "../shared/MySelect";
+
 /** import actions */
 import { createNewPlan } from "../../actions/plans";
 
@@ -54,9 +58,9 @@ function CreatePlanForm(props) {
         </div>
       </div>
       <div className="modal-footer">
-        <a href="#!" className="modal-close waves-effect waves-green btn-flat">
+        <Link to="/" className="modal-close waves-effect waves-green btn-flat">
           Отмена
-        </a>
+        </Link>
         <button
           className="btn waves-effect waves-light modal-close"
           type="submit"

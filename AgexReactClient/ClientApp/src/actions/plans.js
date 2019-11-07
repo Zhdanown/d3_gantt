@@ -49,21 +49,16 @@ export const createNewPlan = ({
   }
 };
 
-export const loadPlan = ({
-  seasonId,
-  typeId,
-  start,
-  end
-}) => async dispatch => {
+export const loadPlan = ({ season, type, start, end }) => async dispatch => {
   const response = await agex.get(
-    `/seasonplan/season-plan-list/${seasonId}/${typeId}`
+    `/seasonplan/season-plan-list/${season.id}/${type.id}`
   );
   if (response.status === 200) {
     dispatch({
       type: LOAD_PLAN,
       payload: response.data.map(x => ({
         ...x,
-        selectedPeriod: { start, end }
+        selectedSeason: season
       }))
     });
   }

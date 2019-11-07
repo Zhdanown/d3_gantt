@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import history from "../../history";
 import uuid from "uuidv4";
+
+import { Link } from "react-router-dom";
 /** import custom components */
 import Modal from "../shared/Modal";
 import MySelect from "../shared/MySelect";
@@ -97,9 +99,9 @@ function AddOperationForm({ agroOperations, ...props }) {
         </div>
       </div>
       <div className="modal-footer">
-        <a href="#!" className="modal-close waves-effect waves-green btn-flat">
+        <Link to="/" className="modal-close waves-effect waves-green btn-flat">
           Отмена
-        </a>
+        </Link>
         <button
           className="btn waves-effect waves-light modal-close"
           type="submit"

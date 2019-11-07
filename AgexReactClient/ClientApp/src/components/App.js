@@ -3,26 +3,13 @@ import { connect } from "react-redux";
 import { Router, Route } from "react-router-dom";
 import history from "../history";
 
-import Gantt from "./container/Gantt";
-import Navbar from "./shared/Navbar";
-
 /** import styles */
 import "../styles/css/main.css";
 import "../styles/css/season-plan.css";
 
-/** import actions */
-import { getUserProfile } from "../actions/auth";
-import {
-  getPlanSeasons,
-  getPlanTypes,
-  getAgrooperations
-  // showDeficit
-} from "../actions/plans";
-import { deleteOperation, setOperationData } from "../actions/operations";
-import { addNewPeriod, setPeriodData } from "../actions/periods";
-import { getVehicles, getEquipment } from "../actions/machinery";
-
 /** import components */
+import Navbar from "./shared/Navbar";
+import Gantt from "./container/Gantt";
 import LoginForm from "./container/LoginForm";
 import CreatePlanForm from "./container/CreatePlanForm";
 import LoadPlanForm from "./container/LoadPlanForm";
@@ -32,7 +19,23 @@ import EditPeriodForm from "./container/EditPeriodForm";
 import Deficit from "./container/Deficit";
 import FilterForm from "./container/FilterForm";
 import MachineryCatalogue from "./container/MachineryCatalogue";
-import Loader from "./container/Loader";
+// import Loader from "./container/Loader";
+
+/** import actions */
+import { getUserProfile } from "../actions/auth";
+import {
+  getPlanSeasons,
+  getPlanTypes,
+  getAgrooperations,
+  loadPlan
+  // showDeficit
+} from "../actions/plans";
+import { deleteOperation, setOperationData } from "../actions/operations";
+import { addNewPeriod, setPeriodData } from "../actions/periods";
+import { getVehicles, getEquipment } from "../actions/machinery";
+
+/** import helpers */
+import { loadDefaultPlan } from "../helpers/plans";
 
 const formats = {
   DAY: { type: "day", cellWidth: 40 },
@@ -50,6 +53,8 @@ function App({ ...props }) {
     props.getAgrooperations();
     props.getVehicles();
     props.getEquipment();
+    // init default plan load
+    loadDefaultPlan();
   }, []);
 
   const addNewOperation = data => {
@@ -121,7 +126,7 @@ export default connect(
     deleteOperation,
     addNewPeriod,
     getVehicles,
-    getEquipment
-    // showDeficit
+    getEquipment,
+    loadPlan
   }
 )(App);

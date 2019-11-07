@@ -26,18 +26,6 @@ function Dropdown({ caption, ...props }) {
       {/* Dropdown Structure */}
       <ul id={"dropdown-" + id} className="dropdown-content">
         {props.children}
-        {/* <li>
-          <a href="#!">one</a>
-        </li>
-        <li className="divider" tabindex="-1"></li>
-        <li>
-          <a href="#!">three</a>
-        </li>
-        <li>
-          <a href="#!">
-            <i className="material-icons">view_module</i>four
-          </a>
-        </li> */}
       </ul>
     </React.Fragment>
   );
