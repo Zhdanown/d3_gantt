@@ -278,7 +278,15 @@ function Gantt({ timeframe, ...props }) {
         .select(".text")
         .on("click", panToAgroterms)
         .append("span")
-        .html(d => d.data.node && " (" + d.data.node.cropSquare + " га)");
+        .html(
+          d =>
+            d.data.node &&
+            " (" +
+              (d.data.node.cropSquare - getSquareRemainder(d.data.node)) +
+              "/" +
+              d.data.node.cropSquare +
+              " га)"
+        );
 
       function panToAgroterms(d) {
         // get startDate of agroterms

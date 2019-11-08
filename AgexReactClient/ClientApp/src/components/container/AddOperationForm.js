@@ -26,7 +26,7 @@ function AddOperationForm({ agroOperations, ...props }) {
     if (!selectedAgroOperation) errors.push("Не выбрана агрооперация!");
     if (!startDate) errors.push("Не выбрана дата начала!");
     if (!endDate) errors.push("Не выбрана дата завершения!");
-    if (startDate && endDate && startDate.getDate() >= endDate.getDate())
+    if (startDate && endDate && startDate.getTime() >= endDate.getTime())
       errors.push("Дата начала должны быть меньше даты завершения!");
     if (errors.length) {
       errors.forEach(error => alert.warning(error));

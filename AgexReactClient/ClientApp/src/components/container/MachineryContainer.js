@@ -182,6 +182,7 @@ const mapStateToProps = (state, ownProps) => {
 
       .map(x => ({
         ...x.vehicleModel,
+        farm: x.farm,
         productivity: x.productivity,
         count: x.count - countUsed(x, "vehicleModel")
       }));
@@ -190,6 +191,7 @@ const mapStateToProps = (state, ownProps) => {
       .filter(x => x.farm.id === selectedFarmId)
       .map(x => ({
         ...x.workEquipmentModel,
+        farm: x.farm,
         productivity: x.productivity,
         count: x.count - countUsed(x, "workEquipmentModel")
       }));

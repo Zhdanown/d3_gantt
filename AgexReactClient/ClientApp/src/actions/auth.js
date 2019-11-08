@@ -5,7 +5,6 @@ import { LOGIN, LOGOUT, START_LOGGING_IN, STOP_LOGGING_IN } from "./types";
 import agex from "../apis/agex";
 import Cookies from "js-cookie";
 import history from "../history";
-import withMessage from "../apis/loaderDecorator";
 
 /*
  ********** ACTION CREATORS ********
@@ -66,10 +65,7 @@ export const getUserProfile = () => async dispatch => {
   const token = Cookies.get("token");
   if (!token) return;
 
-  const response = await withMessage(
-    agex.get("/auth/info"),
-    "Загрузка профиля пользователя"
-  );
+  const response = await agex.get("/auth/info");
 
   if (response.status === 200) dispatch(loginUser(response.data));
 };

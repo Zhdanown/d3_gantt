@@ -1,23 +1,69 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import history from "../history";
-// import { login } from "../actions/auth";
 import store from "../store";
+import {
+  findMessage,
+  showLoadMessage,
+  hideLoadMessage
+} from "../components/LoadMessage";
 
 const agex = axios.create({
   baseURL: "https://agexdev2.agroterra.ru/api"
 });
 
 agex.interceptors.request.use(request => {
+  const loadMssg = findMessage(request);
+  if (loadMssg) showLoadMessage(loadMssg);
+  console.log(request);
   let token = Cookies.get("token");
-  if (token) request.headers.common["Authorization"] = "Bearer " + token;
-
+  if (token) {
+    request.headers.common["Authorization"] = "Bearer " + token;
+  }
   return request;
+  // else {
+  //   if (request.url === "/auth/logon") return request;
+  //   else return getTokenAndSend(request);
+  // }
 });
 
+/**************************** */
+// let isWaitingForToken = false;
+// // request to be sent when token recieved
+// let queue = [];
+
+// async function getTokenAndSend(request) {
+//   try {
+//     const requestWithToken = new Promise((resolve, reject) => {
+//       addSubscriber(token => {
+//         request.headers.common["Authorization"] = "Bearer " + token;
+//         resolve(axios(request));
+//       }, queue);
+//     });
+
+//     if (!isWaitingForToken) {
+//       isWaitingForToken = true;
+
+//       const newToken = await refreshToken();
+//       isWaitingForToken = false;
+//       onTokenFetched(newToken, queue);
+//     }
+
+//     return requestWithToken;
+//   } catch (error) {
+//     return Promise.reject(error);
+//   }
+// }
+
 agex.interceptors.response.use(
-  response => response,
+  response => {
+    const loadMssg = findMessage(response.config);
+    if (loadMssg) hideLoadMessage(loadMssg);
+    return response;
+  },
   error => {
+    const loadMssg = findMessage(error.config);
+    if (loadMssg) hideLoadMessage(loadMssg);
     if (unauthorized(error.response)) {
       return reattemptRequest(error);
     }
@@ -27,8 +73,8 @@ agex.interceptors.response.use(
 );
 
 function unauthorized(response) {
-  let statusCodes = [401];
-  return statusCodes.indexOf(response.status) !== -1;
+  let codes = [401];
+  return codes.indexOf(response.status) !== -1;
 }
 
 /* ****************************** */
@@ -44,7 +90,7 @@ async function reattemptRequest(error) {
       addSubscriber(token => {
         errorResponse.config.headers["Authorization"] = "Bearer " + token;
         resolve(axios(errorResponse.config));
-      });
+      }, subscribers);
     });
 
     if (!isAlreadyFetchingToken) {
@@ -52,7 +98,7 @@ async function reattemptRequest(error) {
 
       const newToken = await refreshToken();
       isAlreadyFetchingToken = false;
-      onTokenFetched(newToken);
+      onTokenFetched(newToken, subscribers);
     }
 
     return retryOriginalRequest;
@@ -75,13 +121,13 @@ async function refreshToken() {
   return token;
 }
 
-function onTokenFetched(newToken) {
-  subscribers.forEach(callback => callback(newToken));
-  subscribers = [];
+function addSubscriber(callback, list) {
+  list.push(callback);
 }
 
-function addSubscriber(callback) {
-  subscribers.push(callback);
+function onTokenFetched(newToken, list) {
+  list.forEach(callback => callback(newToken));
+  list = [];
 }
 
 export default agex;

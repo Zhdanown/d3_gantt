@@ -24,3 +24,6 @@ export const SET_PERIOD_DATA = "SET_PERIOD_DATA";
 export const EDIT_PERIOD = "EDIT_PERIOD";
 /** filter */
 export const APPLY_FILTER = "APPLY_FILTER";
+/** load messages */
+export const SHOW_MESSAGE = "SHOW_MESSAGE";
+export const HIDE_MESSAGE = "HIDE_MESSAGE";

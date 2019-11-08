@@ -19,7 +19,6 @@ import EditPeriodForm from "./container/EditPeriodForm";
 import Deficit from "./container/Deficit";
 import FilterForm from "./container/FilterForm";
 import MachineryCatalogue from "./container/MachineryCatalogue";
-// import Loader from "./container/Loader";
 
 /** import actions */
 import { getUserProfile } from "../actions/auth";
@@ -101,8 +100,6 @@ function App({ ...props }) {
         <Route path="/edit_period" component={EditPeriodForm} />
         <Route path="/filter" component={FilterForm} />
         <Route path="/tech" component={MachineryCatalogue} />
-
-        {/* <Loader /> */}
       </div>
     </Router>
   );

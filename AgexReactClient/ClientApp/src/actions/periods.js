@@ -16,7 +16,11 @@ export const addNewPeriod = ({
 
   let convertedMachinery = newPeriod.machinery.map(x => ({
     VehicleModelId: x.vehicleModel.id,
-    WorkEquipmentModelId: x.workEquipmentModel ? x.workEquipmentModel.id : null
+    vehicleModelFarmId: x.vehicleModel.farm.id,
+    WorkEquipmentModelId: x.workEquipmentModel ? x.workEquipmentModel.id : null,
+    workEquipmentModelFarmId: x.workEquipmentModel
+      ? x.workEquipmentModel.farm.id
+      : null
   }));
 
   let bodyRequest = {
@@ -68,7 +72,11 @@ export const editPeriod = ({
   const convertedMachinery = changedPeriod.machinery.map(x => ({
     SeasonPlanPeriodId: periodId,
     VehicleModelId: x.vehicleModel.id,
-    WorkEquipmentModelId: x.workEquipmentModel ? x.workEquipmentModel.id : null
+    vehicleModelFarmId: x.vehicleModel.farm.id,
+    WorkEquipmentModelId: x.workEquipmentModel ? x.workEquipmentModel.id : null,
+    workEquipmentModelFarmId: x.workEquipmentModel
+      ? x.workEquipmentModel.farm.id
+      : null
   }));
   const days = changedPeriod.days.map(x => ({
     ...x,
