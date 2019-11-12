@@ -16,6 +16,7 @@ class Modal extends React.Component {
     var instance = window.M.Modal.getInstance(elem);
     // this.setState(() => ({ instance }));
     instance.open();
+    console.log(this.props);
   }
 
   // componentDidUpdate(prevProps) {
@@ -43,7 +44,7 @@ class Modal extends React.Component {
       <div
         id={this.props.name}
         ref={this.modalRef}
-        className="modal modal-fixed-footer"
+        className={"modal modal-fixed-footer " + this.props.className}
       >
         {/* <div className="modal-content">{this.props.children[0]}</div>
         <div className="modal-footer">{this.props.children[1]}</div> */}
@@ -52,5 +53,9 @@ class Modal extends React.Component {
     );
   }
 }
+
+Modal.defaultProps = {
+  className: ""
+};
 
 export default Modal;

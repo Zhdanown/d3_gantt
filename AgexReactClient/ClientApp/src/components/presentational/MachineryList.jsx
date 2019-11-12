@@ -11,8 +11,14 @@ function MachineryList({ machineryList, removeMachinery }) {
           return (
             <div key={index} className="machinery-item">
               <span>
-                {vehicle.name}
-                {workEquipment ? " + " + workEquipment.name : null}
+                {vehicle.name} ({vehicle.farm.name})
+                {workEquipment
+                  ? " + " +
+                    workEquipment.name +
+                    " (" +
+                    workEquipment.farm.name +
+                    ")"
+                  : null}
               </span>
               <span>
                 {productivity ? (

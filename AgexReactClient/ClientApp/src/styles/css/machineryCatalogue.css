@@ -7,6 +7,15 @@
 }
 .machineryCatalogue .model {
   display: block;
+  position: relative;
+}
+.machineryCatalogue .model .model-name {
+  cursor: pointer;
+  padding-right: 2rem;
+}
+.machineryCatalogue .model .model-name i {
+  position: absolute;
+  right: 0;
 }
 
 /*# sourceMappingURL=machineryCatalogue.css.map */

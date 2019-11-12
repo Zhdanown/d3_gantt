@@ -34,7 +34,7 @@ export function stretchPeriod(d) {
 
   function mousemove() {
     // get x coordinate relative to period div
-    const [x, y] = d3.mouse(period);
+    const [x] = d3.mouse(period);
     // get changed value of days and show how period will appear
     if (isLeftCtrl) {
       delta = Math.round(-x / 40);

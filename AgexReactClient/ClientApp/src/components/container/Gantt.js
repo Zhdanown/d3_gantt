@@ -10,8 +10,7 @@ import {
   getLeftOffset,
   getMonday,
   getSunday,
-  createRange,
-  stringToDate
+  createRange
 } from "../../helpers/dateHelper";
 import {
   getHierarchy as getTree,
@@ -272,7 +271,14 @@ function Gantt({ timeframe, ...props }) {
         .append("span")
         .html(d => d.data.name);
 
-      // append operation Square
+      // append crop square
+      legendNodeEnter
+        .filter(d => d.height === 1)
+        .select(".text")
+        .append("span")
+        .html(d => " (" + d.data.node.totalCropSquare + " га)");
+
+      // append operation square
       legendNodeEnter
         .filter(d => d.height === 0)
         .select(".text")
@@ -288,6 +294,12 @@ function Gantt({ timeframe, ...props }) {
               " га)"
         );
 
+      // add tooltips
+      legendNodeEnter
+        .filter(d => d.height === 0)
+        .select(".text")
+        .each(addTooltip);
+
       function panToAgroterms(d) {
         // get startDate of agroterms
         const { date: startDate } = d.data.node.dates[0];
@@ -301,6 +313,33 @@ function Gantt({ timeframe, ...props }) {
           left: (index - 3) * 40,
           behavior: "smooth"
         });
+      }
+
+      function addTooltip(d) {
+        let elem = d3.select(this);
+        // let dom = elem.node();
+        elem
+          .classed("tooltiped", true)
+          // .attr("data-position", "top")
+          .attr(
+            "data-tooltip",
+            d.data.name +
+              " (" +
+              (d.data.node.cropSquare - getSquareRemainder(d.data.node)) +
+              "/" +
+              d.data.node.cropSquare +
+              " га)  " +
+              dateToString(new Date(d.data.node.startDate), "dd.mm.yy") +
+              " - " +
+              dateToString(new Date(d.data.node.endDate), "dd.mm.yy")
+          );
+
+        // window.M.Tooltip.init(dom, {
+        //   enterDelay: 0,
+        //   margin: 5,
+        //   inDuration: 50,
+        //   postition: "top"
+        // });
       }
 
       // append "+"
@@ -732,6 +771,18 @@ function Gantt({ timeframe, ...props }) {
         const offset = getLeftOffset(startDate, dates, timeframe);
         return offset;
       }
+    }
+
+    // init tooltips
+    initToolttips();
+    function initToolttips() {
+      let tooltips = document.querySelectorAll(".tooltiped");
+      window.M.Tooltip.init(tooltips, {
+        enterDelay: 300,
+        // margin: 5,
+        // inDuration: 50,
+        position: "top"
+      });
     }
 
     return update;

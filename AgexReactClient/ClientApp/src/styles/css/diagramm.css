@@ -51,6 +51,7 @@
 .diagramm .legend .legendNode .text {
   white-space: nowrap;
   overflow: hidden;
+  cursor: pointer;
 }
 .diagramm .legend .legendNode .drop-down,
 .diagramm .legend .legendNode .drop-up {

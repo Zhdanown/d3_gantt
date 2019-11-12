@@ -15,9 +15,9 @@ const style = {
 function Deficit({ deficit }) {
   if (deficit && deficit.length) {
     let list = deficit.map(entry => (
-      <React.Fragment key={entry.id}>
+      <React.Fragment key={entry.id + entry.farm.id}>
         <span>
-          {entry.balance} {entry.name}
+          {entry.balance} {entry.name} ({entry.farm.name})
         </span>
         <br />
       </React.Fragment>

@@ -15,7 +15,6 @@ const agex = axios.create({
 agex.interceptors.request.use(request => {
   const loadMssg = findMessage(request);
   if (loadMssg) showLoadMessage(loadMssg);
-  console.log(request);
   let token = Cookies.get("token");
   if (token) {
     request.headers.common["Authorization"] = "Bearer " + token;

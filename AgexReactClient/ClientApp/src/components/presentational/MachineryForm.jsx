@@ -1,19 +1,47 @@
 import React from "react";
 import MySelect from "../shared/MySelect";
+import Checkbox from "../shared/Checkbox";
 
 function MachineryForm({ addMachinery, productivity, ...props }) {
+  const { showAllMode, toggleShowAllMode } = props;
   const { vehicle, vehicleList, onVehicleChange } = props;
   const { workEquipment, workEquipmentList, onWorkEquipmentChange } = props;
 
   const { selectedAgroOperationId: agroOperationId } = props;
 
-  const renderaddMachineryButton = () => {
+  const disableByAgroOperation = option => {
+    return !option.value.productivity.find(
+      x => x.agroOperationId === agroOperationId
+    );
+  };
+
+  const onInputChange = val => {
+    toggleShowAllMode(val.checked);
+  };
+
+  const getLabel = opt => {
+    if (showAllMode) {
+      return (
+        "(" +
+        opt.value.count +
+        " ед) - " +
+        opt.label +
+        " - (" +
+        opt.value.farm.name +
+        ")"
+      );
+    } else {
+      return "(" + opt.value.count + " ед) - " + opt.label;
+    }
+  };
+
+  const renderAddMachineryButton = () => {
     return (
       <button
         type="button"
         className="btn"
         onClick={addMachinery}
-        disabled={!vehicle || !vehicle.id}
+        disabled={!productivity}
       >
         Назначить
         {productivity ? ` ${productivity} га/сут` : null}
@@ -22,14 +50,16 @@ function MachineryForm({ addMachinery, productivity, ...props }) {
     );
   };
 
-  const disableByAgroOperation = option => {
-    return !option.value.productivity.find(
-      x => x.agroOperationId === agroOperationId
-    );
-  };
-
   return (
     <React.Fragment>
+      <div className="row">
+        <div className="col s12">
+          <Checkbox
+            item={{ name: "Показать всю технику", checked: showAllMode }}
+            onInputChange={onInputChange}
+          />
+        </div>
+      </div>
       <div className="row">
         <div className="col s12 m6">
           <MySelect
@@ -38,10 +68,8 @@ function MachineryForm({ addMachinery, productivity, ...props }) {
             options={vehicleList}
             defaultValue={vehicle}
             onChange={onVehicleChange}
-            getOptionLabel={opt =>
-              "(" + opt.value.count + " ед) - " + opt.label
-            }
-            isOptionDisabled={disableByAgroOperation}
+            getOptionLabel={opt => getLabel(opt)}
+            // isOptionDisabled={disableByAgroOperation}
           />
         </div>
         <div className="col s12 m6">
@@ -51,15 +79,13 @@ function MachineryForm({ addMachinery, productivity, ...props }) {
             options={workEquipmentList}
             onChange={onWorkEquipmentChange}
             defaultValue={workEquipment}
-            getOptionLabel={opt =>
-              "(" + opt.value.count + " ед) - " + opt.label
-            }
+            getOptionLabel={getLabel}
             isOptionDisabled={disableByAgroOperation}
           />
         </div>
       </div>
 
-      <div className="center-align">{renderaddMachineryButton()}</div>
+      <div className="center-align">{renderAddMachineryButton()}</div>
     </React.Fragment>
   );
 }

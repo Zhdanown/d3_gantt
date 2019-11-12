@@ -4,6 +4,20 @@ nav {
   background: $colorPrimary;
 }
 
+.modal {
+  &.big {
+    width: 90%;
+    height: 80%;
+    max-height: 80%;
+  }
+
+  .modal-footer {
+    button.left:not(:first-child) {
+      margin-left: 1rem;
+    }
+  }
+}
+
 /*
 ********** spinner ********
 */

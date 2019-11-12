@@ -3,11 +3,14 @@ import MachineryList from "./MachineryList.jsx";
 import MachineryForm from "./MachineryForm.jsx";
 
 function Machinery(props) {
+  const { showAllMode, toggleShowAllMode } = props;
   const { totalProductivity } = props;
   const { machineryList, removeMachinery, addMachinery } = props;
   const { vehicle, vehicleList, onVehicleChange } = props;
   const { workEquipment, workEquipmentList, onWorkEquipmentChange } = props;
   const formProps = {
+    showAllMode,
+    toggleShowAllMode,
     vehicle,
     vehicleList,
     onVehicleChange,

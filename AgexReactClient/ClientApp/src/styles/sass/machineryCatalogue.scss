@@ -8,5 +8,14 @@
   }
   .model {
     display: block;
+    position: relative;
+    .model-name {
+      cursor: pointer;
+      padding-right: 2rem;
+      i {
+        position: absolute;
+        right: 0;
+      }
+    }
   }
 }

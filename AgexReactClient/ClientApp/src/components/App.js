@@ -18,7 +18,7 @@ import AddPeriodForm from "./container/AddPeriodForm";
 import EditPeriodForm from "./container/EditPeriodForm";
 import Deficit from "./container/Deficit";
 import FilterForm from "./container/FilterForm";
-import MachineryCatalogue from "./container/MachineryCatalogue";
+import MachineryCatalogue from "./container/MachineryCatalogue/";
 
 /** import actions */
 import { getUserProfile } from "../actions/auth";
@@ -35,6 +35,7 @@ import { getVehicles, getEquipment } from "../actions/machinery";
 
 /** import helpers */
 import { loadDefaultPlan } from "../helpers/plans";
+import DeviationReport from "./container/reports/DeviationReport";
 
 const formats = {
   DAY: { type: "day", cellWidth: 40 },
@@ -100,6 +101,7 @@ function App({ ...props }) {
         <Route path="/edit_period" component={EditPeriodForm} />
         <Route path="/filter" component={FilterForm} />
         <Route path="/tech" component={MachineryCatalogue} />
+        <Route path="/deviation_report" component={DeviationReport} />
       </div>
     </Router>
   );

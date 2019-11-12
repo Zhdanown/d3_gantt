@@ -124,7 +124,7 @@ export const dateToString = function(dateObj, format) {
     let weekString = `${getString(start)}-${getString(end)}`;
     return weekString;
   } else {
-    throw "God help us";
+    throw new Error("God help us");
   }
 };
 

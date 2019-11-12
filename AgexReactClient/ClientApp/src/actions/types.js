@@ -27,3 +27,8 @@ export const APPLY_FILTER = "APPLY_FILTER";
 /** load messages */
 export const SHOW_MESSAGE = "SHOW_MESSAGE";
 export const HIDE_MESSAGE = "HIDE_MESSAGE";
+/** reports */
+export const LOAD_DEVIATION_REPORT = "LOAD_DEVIATION_REPORT";
+export const LOAD_DEFICIT_REPORT = "LOAD_DEFICIT_REPORT";
+export const LOAD_PROFICIT_REPORT = "LOAD_PROFICIT_REPORT";
+export const LOAD_MIGRATION_REPORT = "LOAD_MIGRATION_REPORT";

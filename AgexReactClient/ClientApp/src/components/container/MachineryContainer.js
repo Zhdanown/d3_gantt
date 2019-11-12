@@ -9,8 +9,11 @@ import {
   decideProductivity
 } from "../../helpers/periods";
 
-export const MachineryContainer = ({ ...props }) => {
+export const MachineryContainer = ({ selectedFarmId, ...props }) => {
   const { selectedAgroOperationId } = props;
+
+  // show all machinery (not filtered by farm)
+  const [showAllMode, toggleShowAllMode] = useState(false);
 
   const [vehicle, setVehicle] = useState(null);
   const [workEquipment, setWorkEquipment] = useState(null);
@@ -77,7 +80,7 @@ export const MachineryContainer = ({ ...props }) => {
       // decrement amount of selected vehicle
       if (vehicle) {
         let newVehicleList = vehicleList.map(x => {
-          if (x.id === vehicle.id) {
+          if (x.id === vehicle.id && x.farm.id === vehicle.farm.id) {
             x.count--;
           }
           return x;
@@ -88,7 +91,8 @@ export const MachineryContainer = ({ ...props }) => {
       // decrement amount of selected workEquipment
       if (workEquipment) {
         let newWorkEquipment = workEquipmentList.map(x => {
-          if (x.id === workEquipment.id) x.count--;
+          if (x.id === workEquipment.id && x.farm.id === workEquipment.farm.id)
+            x.count--;
           return x;
         });
         setWorkEquipmentList(newWorkEquipment);
@@ -123,13 +127,23 @@ export const MachineryContainer = ({ ...props }) => {
 
   return (
     <Machinery
+      showAllMode={showAllMode}
+      toggleShowAllMode={toggleShowAllMode}
       machineryList={props.machineryList}
       removeMachinery={removeMachinery}
       vehicle={vehicle}
-      vehicleList={vehicleList}
+      vehicleList={
+        showAllMode
+          ? vehicleList
+          : vehicleList.filter(x => x.farm.id === selectedFarmId)
+      }
       onVehicleChange={onVehicleChange}
       workEquipment={workEquipment}
-      workEquipmentList={workEquipmentList}
+      workEquipmentList={
+        showAllMode
+          ? workEquipmentList
+          : workEquipmentList.filter(x => x.farm.id === selectedFarmId)
+      }
       onWorkEquipmentChange={onWorkEquipmentChange}
       addMachinery={addMachinery}
       selectedAgroOperationId={props.selectedAgroOperationId}
@@ -147,15 +161,6 @@ MachineryContainer.defaultProps = {
 
 const mapStateToProps = (state, ownProps) => {
   /*
-   ********** get productivity for machinery already assigned to period ********
-   */
-
-  let machineryWithProd = ownProps.machineryList.map(x => ({
-    ...x,
-    productivity: 1000
-  }));
-
-  /*
    ********** get list of available vehicles and equipment for selected farm ********
    */
 
@@ -166,7 +171,11 @@ const mapStateToProps = (state, ownProps) => {
     if (!state.plan.periodData) return 0;
     // count machinery already used in this period
     return state.plan.periodData.machinery.reduce((count, x) => {
-      if (item[type].id === (x[type] && x[type].id)) count++;
+      if (
+        item[type].id === (x[type] && x[type].id) &&
+        item.farm.id === x[type].farm.id
+      )
+        count++;
       return count;
     }, 0);
   }
@@ -178,8 +187,7 @@ const mapStateToProps = (state, ownProps) => {
 
   if (vehicles)
     vehicles = [...vehicles]
-      .filter(x => x.farm.id === selectedFarmId) // filter machinery by farmId
-
+      // .filter(x => x.farm.id === selectedFarmId) // filter machinery by farmId
       .map(x => ({
         ...x.vehicleModel,
         farm: x.farm,
@@ -188,7 +196,7 @@ const mapStateToProps = (state, ownProps) => {
       }));
   if (workEquipment)
     workEquipment = workEquipment
-      .filter(x => x.farm.id === selectedFarmId)
+      // .filter(x => x.farm.id === selectedFarmId) // filter equipment by farmId
       .map(x => ({
         ...x.workEquipmentModel,
         farm: x.farm,

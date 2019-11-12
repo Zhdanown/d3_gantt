@@ -11,7 +11,6 @@ const Navbar = ({ selectedSeason, ...props }) => {
         <div className="nav-wrapper container">
           <Link to="/" className="brand-logo">
             {selectedSeason ? selectedSeason.name : null}
-            {/* {selectedPeriod} */}
           </Link>
 
           <ul className="right">
@@ -28,6 +27,23 @@ const Navbar = ({ selectedSeason, ...props }) => {
                 </Link>
               </li>
             ) : null}
+
+            <li>
+              <Dropdown
+                caption={
+                  <React.Fragment>
+                    <i className="material-icons left">assignment</i> Отчеты
+                  </React.Fragment>
+                }
+              >
+                <li>
+                  <Link to="/deviation_report">Реестр отклонений</Link>
+                  <Link to="/">Профицит техники</Link>
+                  <Link to="/">Дефицит техники</Link>
+                  <Link to="/">Перемещения техники</Link>
+                </li>
+              </Dropdown>
+            </li>
 
             <li>
               <Dropdown
