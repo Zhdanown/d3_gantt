@@ -60,10 +60,10 @@ function DeficitReport({ deficit, ...props }) {
       >
         <thead>
           <tr>
-            <th>ОП</th>
-            <th>Культура</th>
-            <th>Агрооперация</th>
-            <th>Агросрок по техкарте</th>
+            <th>Хозяйство</th>
+            {/* <th>Культура</th> */}
+            {/* <th>Агрооперация</th> */}
+            {/* <th>Агросрок по техкарте</th> */}
             <th>Дата дефицита</th>
             <th>Техника</th>
             <th>Прицепное</th>
@@ -106,9 +106,9 @@ function DeficitReport({ deficit, ...props }) {
             return (
               <tr key={index}>
                 <td>{farm}</td>
-                <td>{crop}</td>
+                {/* <td>{crop}</td>
                 <td>{operation}</td>
-                <td>-----</td>
+                <td>-----</td> */}
                 <td>{fdate(deficitDate)}</td>
                 <td>{renderVehicles()}</td>
                 <td>{renderEquipment()}</td>
@@ -155,7 +155,7 @@ function DeficitReport({ deficit, ...props }) {
           Экспортировать в Excel
           <i className="material-icons right">forward</i>
         </button>
-        <Link to="/" className="modal-close waves-effect waves-green btn-flat">
+        <Link to="/" className="modal-close waves-effect btn-flat">
           Закрыть
         </Link>
       </div>
@@ -169,7 +169,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { loadDeficitReport }
-)(DeficitReport);
+export default connect(mapStateToProps, { loadDeficitReport })(DeficitReport);

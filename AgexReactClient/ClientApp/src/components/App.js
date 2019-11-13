@@ -4,6 +4,8 @@ import { Router, Route } from "react-router-dom";
 import history from "../history";
 
 /** import styles */
+// import "materialize-css/dist/css/materialize.min.css";
+import "../styles/css/materialize.css";
 import "../styles/css/main.css";
 import "../styles/css/season-plan.css";
 
@@ -115,19 +117,16 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {
-    getUserProfile,
-    getPlanSeasons,
-    getPlanTypes,
-    setOperationData,
-    setPeriodData,
-    getAgrooperations,
-    deleteOperation,
-    addNewPeriod,
-    getVehicles,
-    getEquipment,
-    loadPlan
-  }
-)(App);
+export default connect(mapStateToProps, {
+  getUserProfile,
+  getPlanSeasons,
+  getPlanTypes,
+  setOperationData,
+  setPeriodData,
+  getAgrooperations,
+  deleteOperation,
+  addNewPeriod,
+  getVehicles,
+  getEquipment,
+  loadPlan
+})(App);

@@ -59,9 +59,9 @@ function FilterForm({ ...props }) {
   let agroOperations = props.operations.flatMap(
     operation => operation.agroOperation
   );
-  agroOperations = [...new Set(agroOperations.map(x => JSON.stringify(x)))].map(
-    x => JSON.parse(x)
-  );
+  agroOperations = [
+    ...new Set(agroOperations.map(x => JSON.stringify(x)))
+  ].map(x => JSON.parse(x));
   agroOperations = sortByName(agroOperations);
   // syncronize checkboxes state with applied filter
   agroOperations.map(agroOperation => {
@@ -122,7 +122,7 @@ function FilterForm({ ...props }) {
         </div>
       </div>
       <div className="modal-footer">
-        <Link to="/" className="modal-close waves-effect waves-green btn-flat">
+        <Link to="/" className="modal-close waves-effect btn-flat">
           Отмена
         </Link>
         <button
@@ -166,7 +166,4 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(
-  mapStateToProps,
-  { filter }
-)(FilterForm);
+export default connect(mapStateToProps, { filter })(FilterForm);

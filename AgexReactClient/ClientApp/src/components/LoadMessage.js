@@ -1,4 +1,5 @@
 import "../styles/css/alert.css";
+import { Toast, toast as showToast } from "materialize-css";
 
 const loadMessages = [
   // { url: "auth/logon", method: "post", message: "Авторизация" },
@@ -57,7 +58,7 @@ function getEntryId(entry) {
 }
 
 export function showLoadMessage(entry) {
-  window.M.toast({
+  showToast({
     html: entry.message + spinner,
     classes: "toast success " + getEntryId(entry),
     displayLength: Infinity
@@ -66,6 +67,6 @@ export function showLoadMessage(entry) {
 
 export function hideLoadMessage(entry) {
   let domElement = document.querySelector("." + getEntryId(entry));
-  var toast = window.M.Toast.getInstance(domElement);
+  var toast = Toast.getInstance(domElement);
   toast.dismiss();
 }

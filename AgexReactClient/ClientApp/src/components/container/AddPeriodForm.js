@@ -173,7 +173,7 @@ function AddPeriodForm(props) {
         </div>
       </div>
       <div className="modal-footer">
-        <Link to="/" className="modal-close waves-effect waves-green btn-flat">
+        <Link to="/" className="modal-close waves-effect btn-flat">
           Отмена
         </Link>
         {renderSubmitButton()}
@@ -188,7 +188,8 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { addNewPeriod, setOperationData, setPeriodData }
-)(AddPeriodForm);
+export default connect(mapStateToProps, {
+  addNewPeriod,
+  setOperationData,
+  setPeriodData
+})(AddPeriodForm);

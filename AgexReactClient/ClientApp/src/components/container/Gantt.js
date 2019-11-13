@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import * as d3 from "d3";
 import { connect } from "react-redux";
 import "../../styles/css/diagramm.css";
+import { Tooltip } from "materialize-css";
 
 /** import helpers */
 import {
@@ -333,13 +334,6 @@ function Gantt({ timeframe, ...props }) {
               " - " +
               dateToString(new Date(d.data.node.endDate), "dd.mm.yy")
           );
-
-        // window.M.Tooltip.init(dom, {
-        //   enterDelay: 0,
-        //   margin: 5,
-        //   inDuration: 50,
-        //   postition: "top"
-        // });
       }
 
       // append "+"
@@ -549,7 +543,10 @@ function Gantt({ timeframe, ...props }) {
       let agrotermDay = agroterms
         .selectAll(".day")
         // .data(d => d.data.node.dates, d => d.date);
-        .data(d => d.data.node.dates, d => d.date);
+        .data(
+          d => d.data.node.dates,
+          d => d.date
+        );
 
       let agrotermDayEnter = agrotermDay
         .enter()
@@ -582,9 +579,10 @@ function Gantt({ timeframe, ...props }) {
         .select(".periodGroup");
 
       // select each period in periodGroup
-      let period = periodGroup
-        .selectAll(".period")
-        .data(d => d.data.node.periods, d => d.id);
+      let period = periodGroup.selectAll(".period").data(
+        d => d.data.node.periods,
+        d => d.id
+      );
 
       period
         .transition()
@@ -622,9 +620,10 @@ function Gantt({ timeframe, ...props }) {
 
       // PERIODDAY
       // select all days in period
-      let periodDay = period
-        .selectAll(".day")
-        .data(d => d.days, d => d.day + d.productivity);
+      let periodDay = period.selectAll(".day").data(
+        d => d.days,
+        d => d.day + d.productivity
+      );
 
       periodDay
         .exit()
@@ -777,7 +776,7 @@ function Gantt({ timeframe, ...props }) {
     initToolttips();
     function initToolttips() {
       let tooltips = document.querySelectorAll(".tooltiped");
-      window.M.Tooltip.init(tooltips, {
+      Tooltip.init(tooltips, {
         enterDelay: 300,
         // margin: 5,
         // inDuration: 50,

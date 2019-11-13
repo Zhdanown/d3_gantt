@@ -1,14 +1,15 @@
 import "../styles/css/alert.css";
+import { toast } from "materialize-css";
 
 const alert = {
   success: text => {
-    window.M.toast({ html: text, classes: "toast success" });
+    toast({ html: text, classes: "toast success" });
   },
   error: text => {
-    window.M.toast({ html: text, classes: "toast error" });
+    toast({ html: text, classes: "toast error" });
   },
   warning: text => {
-    window.M.toast({ html: text, classes: "toast warning" });
+    toast({ html: text, classes: "toast warning" });
   }
 };
 

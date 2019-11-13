@@ -99,7 +99,7 @@ function AddOperationForm({ agroOperations, ...props }) {
         </div>
       </div>
       <div className="modal-footer">
-        <Link to="/" className="modal-close waves-effect waves-green btn-flat">
+        <Link to="/" className="modal-close waves-effect btn-flat">
           Отмена
         </Link>
         <button
@@ -124,7 +124,4 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { addNewOperation }
-)(AddOperationForm);
+export default connect(mapStateToProps, { addNewOperation })(AddOperationForm);

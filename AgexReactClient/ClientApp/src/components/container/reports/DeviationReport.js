@@ -159,7 +159,7 @@ function DeviationReport({ deviation, ...props }) {
           Экспортировать в Excel
           <i className="material-icons right">forward</i>
         </button>
-        <Link to="/" className="modal-close waves-effect waves-green btn-flat">
+        <Link to="/" className="modal-close waves-effect btn-flat">
           Закрыть
         </Link>
       </div>

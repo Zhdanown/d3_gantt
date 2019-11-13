@@ -1,4 +1,5 @@
 import React from "react";
+import { Modal as M_Modal } from "materialize-css";
 
 class Modal extends React.Component {
   state = {
@@ -9,11 +10,11 @@ class Modal extends React.Component {
   componentDidMount() {
     // initialize modal
     var elem = document.querySelector(`#${this.props.name}`);
-    window.M.Modal.init(elem, {
+    M_Modal.init(elem, {
       onCloseEnd: this.props.onClose
     });
     // get instance
-    var instance = window.M.Modal.getInstance(elem);
+    var instance = M_Modal.getInstance(elem);
     // this.setState(() => ({ instance }));
     instance.open();
     console.log(this.props);

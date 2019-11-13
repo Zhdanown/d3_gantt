@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import history from "../../history";
+import { Modal as M_Modal } from "materialize-css";
+
 import Modal from "../shared/Modal";
 import Spinner from "../shared/Spinner";
 /** import styles */
@@ -24,7 +26,7 @@ function LoginForm(props) {
     if (response.status === 200) {
       // get modal instance
       let elem = document.querySelector("#loginForm");
-      let instance = window.M.Modal.getInstance(elem);
+      let instance = M_Modal.getInstance(elem);
       instance.close();
       setError(null);
     } else {
@@ -86,7 +88,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { login }
-)(LoginForm);
+export default connect(mapStateToProps, { login })(LoginForm);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { Collapsible } from "materialize-css";
 import "../../styles/css/machinery.css";
 
 import Machinery from "../presentational/Machinery.jsx";
@@ -27,7 +28,7 @@ export const MachineryContainer = ({ selectedFarmId, ...props }) => {
   // init
   useEffect(() => {
     let elems = document.querySelectorAll(".machinery .collapsible");
-    window.M.Collapsible.init(elems, { accordion: false });
+    Collapsible.init(elems, { accordion: false });
   }, []);
 
   // update vehicle and equipment lists

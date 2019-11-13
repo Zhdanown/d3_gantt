@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import $ from "jquery";
+import { Datepicker as M_Datepicker } from "materialize-css";
+// import $ from "jquery";
 
 class DatePicker extends Component {
   state = {
@@ -10,7 +11,7 @@ class DatePicker extends Component {
   componentDidMount() {
     // initialize datepicker
     var elem = document.querySelector(`.datepicker#${this.state.id}`);
-    var instance = window.M.Datepicker.init(elem, {
+    var instance = M_Datepicker.init(elem, {
       onSelect: this.props.onSelect,
       onOpen: this.attachClearHandler,
       container: "body",
@@ -25,9 +26,12 @@ class DatePicker extends Component {
   }
 
   attachClearHandler = () => {
-    $(document).on("click", ".datepicker-clear", () =>
-      this.props.onSelect(null)
-    );
+    document.querySelectorAll(".datepicker-clear").forEach(x => {
+      x.addEventListener("click", () => this.props.onSelect(null));
+    });
+    // $(document).on("click", ".datepicker-clear", () =>
+    //   this.props.onSelect(null)
+    // );
   };
 
   componentDidUpdate(prevProps) {

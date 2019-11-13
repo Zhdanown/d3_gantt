@@ -58,7 +58,7 @@ function CreatePlanForm(props) {
         </div>
       </div>
       <div className="modal-footer">
-        <Link to="/" className="modal-close waves-effect waves-green btn-flat">
+        <Link to="/" className="modal-close waves-effect btn-flat">
           Отмена
         </Link>
         <button
@@ -83,7 +83,4 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { createNewPlan }
-)(CreatePlanForm);
+export default connect(mapStateToProps, { createNewPlan })(CreatePlanForm);

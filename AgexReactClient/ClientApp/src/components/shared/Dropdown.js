@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
 
+import { Dropdown as M_Dropdown } from "materialize-css";
+
 function Dropdown({ caption, ...props }) {
   const [id] = useState(props.name + "_" + Math.round(Math.random() * 100000));
 
   useEffect(() => {
     let elem = document.querySelector("#dropdown-trigger-" + id);
-    window.M.Dropdown.init(elem, {
+
+    const options = {
       coverTrigger: false,
       constrainWidth: false
-    });
+    };
+
+    M_Dropdown.init(elem, options);
   });
 
   return (

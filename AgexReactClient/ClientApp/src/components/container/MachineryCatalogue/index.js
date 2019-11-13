@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import history from "../../../history";
+import { Tabs, Collapsible } from "materialize-css";
 
-import { Link } from "react-router-dom";
 import Modal from "../../shared/Modal";
 import ModelsTab from "./ModelsTab";
 import Spinner from "../../shared/Spinner";
@@ -14,14 +14,13 @@ function MachineryCatalogue({ vehicles, equipment }) {
   useEffect(() => {
     // init tabs
     let tabs = document.querySelector(".tabs");
-    window.M.Tabs.init(tabs);
+    Tabs.init(tabs);
   }, []);
 
   useEffect(() => {
     // init collapsible
     let collapsible = document.querySelectorAll(".collapsible");
-    window.M.Collapsible.init(collapsible, { accordion: false });
-    console.log("init collapsible");
+    Collapsible.init(collapsible, { accordion: false });
   }, [vehicles, equipment]);
 
   // get list of farms
@@ -29,7 +28,6 @@ function MachineryCatalogue({ vehicles, equipment }) {
     if (!acc.find(x => x.id === entry.farm.id)) acc = [...acc, entry.farm];
     return acc;
   }, []);
-  console.log(farms);
 
   for (let farm of farms) {
     farm.vehicles = vehicles.filter(vehicle => vehicle.farm.id === farm.id);
@@ -83,7 +81,7 @@ function MachineryCatalogue({ vehicles, equipment }) {
         </div>
       </div>
       <div className="modal-footer">
-        {/* <Link to="/" className="modal-close waves-effect waves-green btn-flat">
+        {/* <Link to="/" className="modal-close waves-effect btn-flat">
           Закрыть
         </Link> */}
         <ul className="tabs tabs-fixed-width z-depth-1">
