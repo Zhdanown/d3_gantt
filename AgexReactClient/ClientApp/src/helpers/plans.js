@@ -35,7 +35,6 @@ export const getHierarchy = operations => {
   function handleNode(node, arr, item, considerTerms = false) {
     let foundNode;
     if (considerTerms) {
-      // debugger;
       foundNode = arr.find(x => x.id === node.id && x.node.id === item.id);
     } else {
       foundNode = arr.find(x => x.id === node.id);
@@ -72,9 +71,9 @@ export const evalMachineryQuantity = (evaluatedDay, farmId, machinery) => {
     .flatMap(pair => pair.workEquipmentModel)
     .filter(x => x);
   // get unique values of models
-  vehicleModels = [...new Set(vehicleModels.map(x => JSON.stringify(x)))].map(
-    x => JSON.parse(x)
-  );
+  vehicleModels = [
+    ...new Set(vehicleModels.map(x => JSON.stringify(x)))
+  ].map(x => JSON.parse(x));
   workEquipmentModels = [
     ...new Set(workEquipmentModels.map(x => JSON.stringify(x)))
   ].map(x => JSON.parse(x));
@@ -138,85 +137,7 @@ export const evalMachineryQuantity = (evaluatedDay, farmId, machinery) => {
     vehicles: vehicleModels.filter(x => x.balance < 0),
     workEquipment: workEquipmentModels.filter(x => x.balance < 0)
   };
-  // debugger;
   return deficit;
-
-  // get overlapping periods of all operations filtered by farm
-  // const periods = state.plan.plans
-  //   .flatMap(plan => plan.operations)
-  //   .filter(oper => /*oper.farm.id === farmId &&*/ oper.periods.length)
-  //   .flatMap(operation => operation.periods)
-  //   .filter(period => period.days.find(day => day.day === evaluatedDay));
-
-  // // get machinery models to be counted
-  // let vehicleModels = machinery.flatMap(pair => pair.vehicleModel);
-  // let workEquipmentModels = machinery.flatMap(pair => pair.workEquipmentModel);
-  // // get unique values of models
-  // vehicleModels = [...new Set(vehicleModels.map(x => JSON.stringify(x)))].map(
-  //   x => JSON.parse(x)
-  // );
-  // workEquipmentModels = [
-  //   ...new Set(workEquipmentModels.map(x => JSON.stringify(x)))
-  // ].map(x => JSON.parse(x));
-
-  // // count models of vehicles
-  // vehicleModels = vehicleModels.map(vehicleModel => ({
-  //   ...vehicleModel,
-  //   count: countModel(vehicleModel, "vehicleModel")
-  // }));
-  // // count models of workEquipment
-  // workEquipmentModels = workEquipmentModels
-  //   .filter(x => x)
-  //   .map(workEquipmentModel => ({
-  //     ...workEquipmentModel,
-  //     count: countModel(workEquipmentModel, "workEquipmentModel")
-  //   }));
-
-  // // get farm's vehicles
-  // let farmsVehicles = state.machinery.vehicles
-  //   .filter(x => x.farm.id === farmId)
-  //   .map(x => ({
-  //     ...x.vehicleModel,
-  //     count: x.count
-  //   }));
-  // // get farm's equipments
-  // let farmsWorkEquipment = state.machinery.equipment
-  //   .filter(x => x.farm.id === farmId)
-  //   .map(x => ({
-  //     ...x.workEquipmentModel,
-  //     count: x.count
-  //   }));
-
-  // // compare assigned counted models with farm's machinery...
-
-  // // compare vehicles
-  // vehicleModels = vehicleModels.map(vehicle => {
-  //   let farmsVehicle = farmsVehicles.find(x => x.id === vehicle.id);
-  //   let balance = farmsVehicle.count - vehicle.count;
-  //   return { ...vehicle, balance };
-  // });
-  // // compare equipments
-  // workEquipmentModels = workEquipmentModels.map(equipment => {
-  //   let farmsEquipment = farmsWorkEquipment.find(x => x.id === equipment.id);
-  //   let balance = farmsEquipment.count - equipment.count;
-  //   return { ...equipment, balance };
-  // });
-
-  // // return deficit
-  // const deficit = {
-  //   vehicles: vehicleModels.filter(x => x.balance < 0),
-  //   workEquipment: workEquipmentModels.filter(x => x.balance < 0)
-  // };
-  // return deficit;
-
-  // function countModel(model, type) {
-  //   return periods.reduce((count, period) => {
-  //     period.machinery.forEach(pair => {
-  //       if (pair[type] && pair[type].id === model.id && pair[type].farm.id === ) count++;
-  //     });
-  //     return count;
-  //   }, 0);
-  // }
 };
 
 export const getSquareRemainder = (operation, periodId = null) => {

@@ -10,8 +10,8 @@ import { dateToString } from "../helpers/dateHelper";
 
 export async function loadOperations() {
   const response = await agex.get(
-    "https://agexdev2.agroterra.ru/api/operation/agrooperations");
-  console.log(response.data);
+    "https://agexdev2.agroterra.ru/api/operation/agrooperations"
+  );
 }
 
 export const addNewOperation = newOperation => async (dispatch, getState) => {
@@ -59,7 +59,8 @@ export const addNewOperation = newOperation => async (dispatch, getState) => {
 
 export const deleteOperation = operation => async dispatch => {
   const response = await agex.delete(`/seasonplan/operation`, {
-    data: { Id: operation.id }});
+    data: { Id: operation.id }
+  });
   if (response.status === 200) {
     dispatch({
       type: DELETE_OPERATION,

@@ -139,7 +139,6 @@ export const getLeftOffset = function(startDate, datesRange, tf) {
     datesRange.forEach((week, weekIndex) => {
       week.forEach((day, dayIndex) => {
         const ft = day.getTime();
-        if (!startDate) debugger;
         const st = startDate.getTime();
         if (ft === st) {
           index = weekIndex + dayIndex / 7;

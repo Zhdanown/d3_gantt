@@ -70,34 +70,31 @@ export const MachineryContainer = ({ selectedFarmId, ...props }) => {
   };
 
   const addMachinery = () => {
-    if (!vehicle) console.log("select Vehicle first!");
-    else {
-      props.addMachinery({ vehicle, workEquipment, productivity });
+    props.addMachinery({ vehicle, workEquipment, productivity });
 
-      /*
-       ********** update models quantity ********
-       */
+    /*
+     ********** update models quantity ********
+     */
 
-      // decrement amount of selected vehicle
-      if (vehicle) {
-        let newVehicleList = vehicleList.map(x => {
-          if (x.id === vehicle.id && x.farm.id === vehicle.farm.id) {
-            x.count--;
-          }
-          return x;
-        });
-        setVehicleList(newVehicleList);
-      }
+    // decrement amount of selected vehicle
+    if (vehicle) {
+      let newVehicleList = vehicleList.map(x => {
+        if (x.id === vehicle.id && x.farm.id === vehicle.farm.id) {
+          x.count--;
+        }
+        return x;
+      });
+      setVehicleList(newVehicleList);
+    }
 
-      // decrement amount of selected workEquipment
-      if (workEquipment) {
-        let newWorkEquipment = workEquipmentList.map(x => {
-          if (x.id === workEquipment.id && x.farm.id === workEquipment.farm.id)
-            x.count--;
-          return x;
-        });
-        setWorkEquipmentList(newWorkEquipment);
-      }
+    // decrement amount of selected workEquipment
+    if (workEquipment) {
+      let newWorkEquipment = workEquipmentList.map(x => {
+        if (x.id === workEquipment.id && x.farm.id === workEquipment.farm.id)
+          x.count--;
+        return x;
+      });
+      setWorkEquipmentList(newWorkEquipment);
     }
   };
 

@@ -195,7 +195,6 @@ function Gantt({ timeframe, ...props }) {
       grid.select(".background").on("click", function(e) {
         d3.event.stopPropagation();
 
-        console.log(window.devicePixelRatio);
         let { offsetX, offsetY } = d3.event;
 
         // take into account broswer zoom level
@@ -305,7 +304,6 @@ function Gantt({ timeframe, ...props }) {
         // get startDate of agroterms
         const { date: startDate } = d.data.node.dates[0];
         // get index of startDate
-        console.log(dates.length);
         const index = dates.findIndex(x => x.getTime() === startDate.getTime());
         let diagramm = document.querySelector(".diagramm");
         // diagramm.scrollLeft = (index - 3) * 40;
@@ -616,8 +614,6 @@ function Gantt({ timeframe, ...props }) {
       period = periodEnter.merge(period);
       // period.attr("transform", d => `translate(${left(d) * 40}, 0)`);
 
-      // debugger;
-
       // PERIODDAY
       // select all days in period
       let periodDay = period.selectAll(".day").data(
@@ -762,7 +758,6 @@ function Gantt({ timeframe, ...props }) {
             startDate = new Date(d.days[0].day);
           }
         } else if (timeframe.type === "week") {
-          // debugger;
           if (Array.isArray(d)) startDate = d[0];
           else startDate = d.data.node.dates[0].date;
         }
@@ -770,18 +765,18 @@ function Gantt({ timeframe, ...props }) {
         const offset = getLeftOffset(startDate, dates, timeframe);
         return offset;
       }
-    }
 
-    // init tooltips
-    initToolttips();
-    function initToolttips() {
-      let tooltips = document.querySelectorAll(".tooltiped");
-      Tooltip.init(tooltips, {
-        enterDelay: 300,
-        // margin: 5,
-        // inDuration: 50,
-        position: "top"
-      });
+      // init tooltips
+      initToolttips();
+      function initToolttips() {
+        let tooltips = document.querySelectorAll(".tooltiped");
+        Tooltip.init(tooltips, {
+          enterDelay: 300,
+          // margin: 5,
+          // inDuration: 50,
+          position: "top"
+        });
+      }
     }
 
     return update;

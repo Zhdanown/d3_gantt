@@ -17,7 +17,6 @@ class Modal extends React.Component {
     var instance = M_Modal.getInstance(elem);
     // this.setState(() => ({ instance }));
     instance.open();
-    console.log(this.props);
   }
 
   // componentDidUpdate(prevProps) {

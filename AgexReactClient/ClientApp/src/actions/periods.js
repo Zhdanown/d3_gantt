@@ -58,8 +58,6 @@ export const deletePeriod = ({ operation, period }) => async dispatch => {
     });
     alert.success("Период удален");
   }
-
-  console.log(response);
 };
 
 export const editPeriod = ({
