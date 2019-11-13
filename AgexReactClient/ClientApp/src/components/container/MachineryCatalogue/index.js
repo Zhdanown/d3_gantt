@@ -5,6 +5,8 @@ import history from "../../../history";
 import { Link } from "react-router-dom";
 import Modal from "../../shared/Modal";
 import ModelsTab from "./ModelsTab";
+import Spinner from "../../shared/Spinner";
+import SpinnerWrapper from "../../shared/SpinnerWrapper";
 
 import "../../../styles/css/machineryCatalogue.css";
 
@@ -58,6 +60,11 @@ function MachineryCatalogue({ vehicles, equipment }) {
       className="big"
     >
       <div className="modal-content machineryCatalogue">
+        {!(vehicles.length && equipment.length) && (
+          <SpinnerWrapper>
+            <Spinner />
+          </SpinnerWrapper>
+        )}
         {/* <ul className="tabs tabs-fixed-width z-depth-1">
           <li className="tab">
             <a className="active" href="#vehicles">

@@ -39,7 +39,7 @@ const Navbar = ({ selectedSeason, ...props }) => {
                 <li>
                   <Link to="/deviation_report">Реестр отклонений</Link>
                   <Link to="/">Профицит техники</Link>
-                  <Link to="/">Дефицит техники</Link>
+                  <Link to="/deficit_report">Дефицит техники</Link>
                   <Link to="/">Перемещения техники</Link>
                 </li>
               </Dropdown>

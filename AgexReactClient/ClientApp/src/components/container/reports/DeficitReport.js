@@ -3,11 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import history from "../../../history";
 
-// import FileSaver from "file-saverjs";
 import TableExport from "tableexport";
-
-/** import styles */
-import "../../../styles/css/reports.css";
 
 /** import components */
 import Modal from "../../shared/Modal";
@@ -15,33 +11,33 @@ import Spinner from "../../shared/Spinner";
 import SpinnerWrapper from "../../shared/SpinnerWrapper";
 
 /** import actions */
-import { loadDeviationReport } from "../../../actions/reports";
+import { loadDeficitReport } from "../../../actions/reports";
 
 /** import helpers */
 import { stringToDate, dateToString } from "../../../helpers/dateHelper";
 
-function DeviationReport({ deviation, ...props }) {
-  const tableId = "deviation_report";
+function DeficitReport({ deficit, ...props }) {
+  const tableId = "deficit_report";
   const [isLoading, toggleLoadStatus] = useState(false);
   const [tableInstance, setTableInstance] = useState(null);
 
   useEffect(() => {
-    if (!deviation) refresh();
+    if (!deficit) refresh();
   }, []);
 
   useEffect(() => {
-    if (isLoading && deviation) toggleLoadStatus(false);
+    if (isLoading && deficit) toggleLoadStatus(false);
 
-    if (deviation) {
+    if (deficit) {
       let table = TableExport(document.getElementById(tableId), {
         exportButtons: false
       });
       setTableInstance(table);
     }
-  }, [deviation]);
+  }, [deficit]);
 
   const refresh = () => {
-    props.loadDeviationReport();
+    props.loadDeficitReport();
     toggleLoadStatus(true);
   };
 
@@ -53,15 +49,13 @@ function DeviationReport({ deviation, ...props }) {
     tableInstance.export2file(data, mimeType, filename, fileExtension);
   };
 
-  const renderDeviation = () => {
-    if (!deviation) return null;
-
-    deviation = deviation.filter(x => x.isDeviation);
+  const renderDeficit = () => {
+    if (!deficit) return null;
 
     return (
       <table
         id={tableId}
-        className="deviation-report"
+        className="deficit-report"
         style={{ display: isLoading ? "none" : "table" }}
       >
         <thead>
@@ -70,52 +64,54 @@ function DeviationReport({ deviation, ...props }) {
             <th>Культура</th>
             <th>Агрооперация</th>
             <th>Агросрок по техкарте</th>
-            <th>Плановая дата исполнения</th>
-            <th>Остаток/Площадь</th>
+            <th>Дата дефицита</th>
+            <th>Техника</th>
+            <th>Прицепное</th>
           </tr>
         </thead>
         <tbody>
-          {deviation.map((entry, index) => {
-            const { crop, farm, agroOperation } = entry;
-            const { square, squareBalance } = entry;
-            // агросрок по техкарте
-            const { startAgroOperationFact, endAgroOperationFact } = entry;
-            // запланированный агросрок
-            const { startAgroOperationPlan, endAgroOperationPlan } = entry;
+          {deficit.map((entry, index) => {
+            const { crop, farm, operation } = entry;
+            const { difictDate: deficitDate, diffictList: deficitList } = entry;
+
+            const vehiclesList = deficitList.filter(
+              x => x.modelType == "Vehicle"
+            );
+
+            const equipmentList = deficitList.filter(
+              x => x.modelType == "WorkEquipment"
+            );
+
+            const renderVehicles = () => {
+              return vehiclesList.map((v, i) => {
+                return (
+                  <div key={i} className="truncate">
+                    {v.diffictCount} {v.modelName}
+                  </div>
+                );
+              });
+            };
+
+            const renderEquipment = () => {
+              return equipmentList.map((e, i) => (
+                <div key={i} className="truncate">
+                  {e.diffictCount} {e.modelName}
+                </div>
+              ));
+            };
 
             const fdate = dateString =>
               dateToString(stringToDate(dateString), "dd.mm.yyyy");
 
-            const isStartDeviation =
-              stringToDate(startAgroOperationFact).getTime() >
-              stringToDate(startAgroOperationPlan).getTime();
-
-            const isEndDeviation =
-              stringToDate(endAgroOperationFact).getTime() <
-              stringToDate(endAgroOperationPlan).getTime();
-
             return (
               <tr key={index}>
-                <td>{farm.name}</td>
-                <td>{crop.name}</td>
-                <td>{agroOperation.name}</td>
-                <td>
-                  {fdate(startAgroOperationFact) +
-                    " - " +
-                    fdate(endAgroOperationFact)}
-                </td>
-                <td>
-                  <span className={isStartDeviation ? "deviation" : null}>
-                    {fdate(startAgroOperationPlan)}
-                  </span>
-                  {" - "}
-                  <span className={isEndDeviation ? "deviation" : null}>
-                    {fdate(endAgroOperationPlan)}
-                  </span>
-                </td>
-                <td className={squareBalance < square ? "deviation" : null}>
-                  {squareBalance + "/" + square}
-                </td>
+                <td>{farm}</td>
+                <td>{crop}</td>
+                <td>{operation}</td>
+                <td>-----</td>
+                <td>{fdate(deficitDate)}</td>
+                <td>{renderVehicles()}</td>
+                <td>{renderEquipment()}</td>
               </tr>
             );
           })}
@@ -126,7 +122,7 @@ function DeviationReport({ deviation, ...props }) {
 
   return (
     <Modal
-      name="deviationReport"
+      name="deficitReport"
       className="big"
       onClose={() => history.push("/")}
     >
@@ -136,7 +132,7 @@ function DeviationReport({ deviation, ...props }) {
             <Spinner />
           </SpinnerWrapper>
         )}
-        {renderDeviation()}
+        {renderDeficit()}
       </div>
       <div className="modal-footer">
         <button
@@ -169,10 +165,11 @@ function DeviationReport({ deviation, ...props }) {
 
 const mapStateToProps = state => {
   return {
-    deviation: state.reports.deviation
+    deficit: state.reports.deficit
   };
 };
 
-export default connect(mapStateToProps, { loadDeviationReport })(
-  DeviationReport
-);
+export default connect(
+  mapStateToProps,
+  { loadDeficitReport }
+)(DeficitReport);

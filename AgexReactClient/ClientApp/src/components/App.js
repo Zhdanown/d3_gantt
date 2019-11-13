@@ -36,6 +36,7 @@ import { getVehicles, getEquipment } from "../actions/machinery";
 /** import helpers */
 import { loadDefaultPlan } from "../helpers/plans";
 import DeviationReport from "./container/reports/DeviationReport";
+import DeficitReport from "./container/reports/DeficitReport";
 
 const formats = {
   DAY: { type: "day", cellWidth: 40 },
@@ -102,6 +103,7 @@ function App({ ...props }) {
         <Route path="/filter" component={FilterForm} />
         <Route path="/tech" component={MachineryCatalogue} />
         <Route path="/deviation_report" component={DeviationReport} />
+        <Route path="/deficit_report" component={DeficitReport} />
       </div>
     </Router>
   );

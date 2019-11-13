@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import Modal from "../shared/Modal";
 import history from "../../history";
+import Modal from "../shared/Modal";
+import Spinner from "../shared/Spinner";
 /** import styles */
 import "../../styles/css/login-form.css";
 /** import actions */
@@ -64,19 +65,7 @@ function LoginForm(props) {
           <div className="row">
             <div className="col s12 center">
               {props.isLoggingIn ? (
-                <div className="preloader-wrapper active">
-                  <div className="spinner-layer spinner-blue-only">
-                    <div className="circle-clipper left">
-                      <div className="circle"></div>
-                    </div>
-                    <div className="gap-patch">
-                      <div className="circle"></div>
-                    </div>
-                    <div className="circle-clipper right">
-                      <div className="circle"></div>
-                    </div>
-                  </div>
-                </div>
+                <Spinner />
               ) : (
                 <button className="btn waves-effect waves-light" type="submit">
                   Войти
