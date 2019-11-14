@@ -3,7 +3,11 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import history from "../../../history";
 
+// import FileSaver from "file-saverjs";
 import TableExport from "tableexport";
+
+/** import styles */
+import "../../../styles/css/reports.css";
 
 /** import components */
 import Modal from "../../shared/Modal";
@@ -11,33 +15,34 @@ import Spinner from "../../shared/Spinner";
 import SpinnerWrapper from "../../shared/SpinnerWrapper";
 
 /** import actions */
-import { loadDeficitReport } from "../../../actions/reports";
+import { loadProficitReport } from "../../../actions/reports";
 
 /** import helpers */
 import { stringToDate, dateToString } from "../../../helpers/dateHelper";
 
-function DeficitReport({ deficit, ...props }) {
-  const tableId = "deficit_report";
+function ProficitReport({ proficit, ...props }) {
+  const tableId = "proficit_report";
   const [isLoading, toggleLoadStatus] = useState(false);
   const [tableInstance, setTableInstance] = useState(null);
 
   useEffect(() => {
-    if (!deficit) refresh();
+    if (!proficit) refresh();
   }, []);
 
   useEffect(() => {
-    if (isLoading && deficit) toggleLoadStatus(false);
+    if (isLoading && proficit) toggleLoadStatus(false);
 
-    if (deficit) {
+    if (proficit) {
       let table = TableExport(document.getElementById(tableId), {
-        exportButtons: false
+        exportButtons: false,
+        trimWhitespace: false
       });
       setTableInstance(table);
     }
-  }, [deficit]);
+  }, [proficit]);
 
   const refresh = () => {
-    props.loadDeficitReport();
+    props.loadProficitReport();
     toggleLoadStatus(true);
   };
 
@@ -49,69 +54,63 @@ function DeficitReport({ deficit, ...props }) {
     tableInstance.export2file(data, mimeType, filename, fileExtension);
   };
 
-  const renderDeficit = () => {
-    if (!deficit) return null;
+  const renderProficit = () => {
+    if (!proficit) return null;
 
     return (
       <table
         id={tableId}
-        className="deficit-report"
+        className="proficit-report"
         style={{ display: isLoading ? "none" : "table" }}
       >
         <thead>
           <tr>
             <th>Хозяйство</th>
-            {/* <th>Культура</th> */}
-            {/* <th>Агрооперация</th> */}
-            {/* <th>Агросрок по техкарте</th> */}
-            <th>Дата дефицита</th>
+            <th>Период</th>
             <th>Техника</th>
             <th>Прицепное</th>
           </tr>
         </thead>
         <tbody>
-          {deficit.map((entry, index) => {
-            const { crop, farm, operation } = entry;
-            const { difictDate: deficitDate, diffictList: deficitList } = entry;
+          {proficit.map((entry, index) => {
+            const { farm, periods } = entry;
+            const {
+              vehicleModel: vehicle,
+              workEquipmentModel: equipment
+            } = entry;
+            const { vehicleModelCount, workEquipmentModelCount } = entry;
 
-            const vehiclesList = deficitList.filter(
-              x => x.modelType == "Vehicle"
-            );
+            const renderPeriods = () => {
+              const getPeriodString = (p, islastPeriod) => {
+                let string =
+                  dateToString(stringToDate(p.startDate), "dd.mm.yyyy") +
+                  "\u00A0" +
+                  "-" +
+                  "\u00A0" +
+                  dateToString(stringToDate(p.endDate), "dd.mm.yyyy");
+                return islastPeriod ? string : string + "\n";
+              };
 
-            const equipmentList = deficitList.filter(
-              x => x.modelType == "WorkEquipment"
-            );
-
-            const renderVehicles = () => {
-              return vehiclesList.map((v, i) => {
-                return (
-                  <div key={i} className="truncate">
-                    {v.diffictCount} ед {v.modelName}
-                  </div>
-                );
-              });
-            };
-
-            const renderEquipment = () => {
-              return equipmentList.map((e, i) => (
-                <div key={i} className="truncate">
-                  {e.diffictCount} ед {e.modelName}
-                </div>
+              return periods.map((period, index) => (
+                <p key={index}>
+                  <span>
+                    {getPeriodString(period, index === periods.length - 1)}
+                  </span>
+                </p>
               ));
             };
 
-            const fdate = dateString =>
-              dateToString(stringToDate(dateString), "dd.mm.yyyy");
-
             return (
               <tr key={index}>
-                <td>{farm}</td>
-                {/* <td>{crop}</td>
-                <td>{operation}</td>
-                <td>-----</td> */}
-                <td>{fdate(deficitDate)}</td>
-                <td>{renderVehicles()}</td>
-                <td>{renderEquipment()}</td>
+                <td>{farm.name}</td>
+                <td>{renderPeriods()}</td>
+                <td>
+                  {vehicle && vehicleModelCount + " ед - " + vehicle.name}
+                </td>
+                <td>
+                  {equipment &&
+                    workEquipmentModelCount + " ед - " + equipment.name}
+                </td>
               </tr>
             );
           })}
@@ -122,7 +121,7 @@ function DeficitReport({ deficit, ...props }) {
 
   return (
     <Modal
-      name="deficitReport"
+      name="deviationReport"
       className="big"
       onClose={() => history.push("/")}
     >
@@ -132,7 +131,7 @@ function DeficitReport({ deficit, ...props }) {
             <Spinner />
           </SpinnerWrapper>
         )}
-        {renderDeficit()}
+        {renderProficit()}
       </div>
       <div className="modal-footer">
         <button
@@ -165,8 +164,8 @@ function DeficitReport({ deficit, ...props }) {
 
 const mapStateToProps = state => {
   return {
-    deficit: state.reports.deficit
+    proficit: state.reports.proficit
   };
 };
 
-export default connect(mapStateToProps, { loadDeficitReport })(DeficitReport);
+export default connect(mapStateToProps, { loadProficitReport })(ProficitReport);

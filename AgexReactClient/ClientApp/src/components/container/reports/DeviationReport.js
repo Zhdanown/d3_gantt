@@ -66,12 +66,12 @@ function DeviationReport({ deviation, ...props }) {
       >
         <thead>
           <tr>
-            <th>ОП</th>
+            <th>Хозяйство</th>
             <th>Культура</th>
             <th>Агрооперация</th>
             <th>Агросрок по техкарте</th>
             <th>Плановая дата исполнения</th>
-            <th>Остаток/Площадь</th>
+            <th>Остаток/Площадь (га)</th>
           </tr>
         </thead>
         <tbody>

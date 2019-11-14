@@ -30,9 +30,9 @@ export const addNewPeriod = ({
     SeasonPlanPeriodDays: newPeriod.days
   };
 
-  const response = await agex.post("/seasonplan/period", bodyRequest);
+  var response = await agex.post("/seasonplan/period", bodyRequest);
 
-  if (response.status === 201) {
+  if (response && response.status === 201) {
     const { id, plan } = operationData;
 
     dispatch({
@@ -42,7 +42,7 @@ export const addNewPeriod = ({
 
     alert.success("Период создан");
   } else {
-    alert.error("something went wrong");
+    // alert.error("something went wrong");
   }
 };
 
@@ -51,7 +51,7 @@ export const deletePeriod = ({ operation, period }) => async dispatch => {
     data: { Id: period.id }
   });
 
-  if (response.status === 200) {
+  if (response && response.status === 200) {
     dispatch({
       type: DELETE_PERIOD,
       payload: { period, planId: operation.plan.id, operationId: operation.id }
@@ -89,7 +89,7 @@ export const editPeriod = ({
 
   const response = await agex.put("seasonplan/period", bodyRequest);
 
-  if (response.status === 200) {
+  if (response && response.status === 200) {
     const { id, plan } = operationData;
     dispatch({
       type: EDIT_PERIOD,
@@ -98,7 +98,7 @@ export const editPeriod = ({
 
     alert.success("Период изменён");
   } else {
-    alert.error("something went wrong");
+    // alert.error(response.statusText);
   }
 };
 

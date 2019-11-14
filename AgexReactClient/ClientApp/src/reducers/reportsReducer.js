@@ -1,9 +1,13 @@
-import { LOAD_DEVIATION_REPORT, LOAD_DEFICIT_REPORT } from "../actions/types";
+import {
+  LOAD_DEVIATION_REPORT,
+  LOAD_DEFICIT_REPORT,
+  LOAD_PROFICIT_REPORT
+} from "../actions/types";
 
 const initState = {
   deviation: null,
   deficit: null,
-  proficit: {},
+  proficit: null,
   migration: {}
 };
 
@@ -18,6 +22,12 @@ const reportsReducer = (state = initState, action) => {
       return {
         ...state,
         deficit: action.payload
+      };
+
+    case LOAD_PROFICIT_REPORT:
+      return {
+        ...state,
+        proficit: action.payload
       };
 
     default:

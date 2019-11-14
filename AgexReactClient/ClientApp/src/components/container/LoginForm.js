@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import history from "../../history";
 import { Modal as M_Modal } from "materialize-css";
@@ -10,10 +10,15 @@ import "../../styles/css/login-form.css";
 /** import actions */
 import { login } from "../../actions/auth";
 
-function LoginForm(props) {
+function LoginForm({ user, ...props }) {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const usernameInput = useRef(null);
+
+  useEffect(() => {
+    usernameInput.current.focus();
+  }, []);
 
   const onClose = () => {
     history.push("/");
@@ -39,10 +44,15 @@ function LoginForm(props) {
     <Modal name="loginForm" onClose={onClose}>
       <form className="login-form" onSubmit={onFormSubmit}>
         <div className="modal-content">
-          <h5 className="center">Вход в систему</h5>
+          <h5 className="center">
+            {user
+              ? "Вход выполнен под учетной записью " + user.login
+              : "Вход в систему"}
+          </h5>
           <div className="row">
             <div className="input-field col s6">
               <input
+                ref={usernameInput}
                 type="text"
                 id="user_login"
                 value={username}
@@ -70,7 +80,7 @@ function LoginForm(props) {
                 <Spinner />
               ) : (
                 <button className="btn waves-effect waves-light" type="submit">
-                  Войти
+                  {!user ? "Войти" : "Войти под другой учетной записью"}
                 </button>
               )}
             </div>
@@ -83,6 +93,7 @@ function LoginForm(props) {
 
 const mapStateToProps = state => {
   return {
+    user: state.auth.user,
     authError: state.auth.error,
     isLoggingIn: state.auth.isLoggingIn
   };

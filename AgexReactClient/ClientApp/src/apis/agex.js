@@ -7,6 +7,7 @@ import {
   showLoadMessage,
   hideLoadMessage
 } from "../components/LoadMessage";
+import alert from "../components/Alert";
 
 const agex = axios.create({
   baseURL: "https://agexdev2.agroterra.ru/api"
@@ -63,11 +64,27 @@ agex.interceptors.response.use(
   error => {
     const loadMssg = findMessage(error.config);
     if (loadMssg) hideLoadMessage(loadMssg);
-    if (unauthorized(error.response)) {
+    if (error.response && unauthorized(error.response)) {
       return reattemptRequest(error);
     }
     // error was due to other reasons than authentication
-    return Promise.reject(error);
+    // try {
+    // var response = await agex.get("/auth/info");
+    // } catch (error) {
+    //   alert.error((error.response && error.response.statusText) || error);
+    // }
+    const { response: errorResponse } = error;
+    if (errorResponse) {
+      const { config, status, statusText } = errorResponse;
+      const errorString = `${config.url}: ${status} (${statusText})`;
+      console.error(errorString);
+      alert.error(errorString);
+    } else {
+      // console.error(error);
+      alert.error(error);
+    }
+
+    // return Promise.reject(error);
   }
 );
 
