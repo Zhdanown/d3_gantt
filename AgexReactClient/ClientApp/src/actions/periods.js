@@ -30,7 +30,9 @@ export const addNewPeriod = ({
     SeasonPlanPeriodDays: newPeriod.days
   };
 
-  var response = await agex.post("/seasonplan/period", bodyRequest);
+  try {
+    var response = await agex.post("/seasonplan/period", bodyRequest);
+  } catch (error) {}
 
   if (response && response.status === 201) {
     const { id, plan } = operationData;
@@ -47,9 +49,11 @@ export const addNewPeriod = ({
 };
 
 export const deletePeriod = ({ operation, period }) => async dispatch => {
-  const response = await agex.delete("seasonplan/period", {
-    data: { Id: period.id }
-  });
+  try {
+    var response = await agex.delete("seasonplan/period", {
+      data: { Id: period.id }
+    });
+  } catch (error) {}
 
   if (response && response.status === 200) {
     dispatch({
@@ -87,7 +91,9 @@ export const editPeriod = ({
     SeasonPlanPeriodDays: days
   };
 
-  const response = await agex.put("seasonplan/period", bodyRequest);
+  try {
+    var response = await agex.put("seasonplan/period", bodyRequest);
+  } catch (error) {}
 
   if (response && response.status === 200) {
     const { id, plan } = operationData;

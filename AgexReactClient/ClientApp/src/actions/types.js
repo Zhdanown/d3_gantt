@@ -7,7 +7,6 @@ export const FETCH_USER_PROFILE = "FETCH_USER_PROFILE";
 /** create plan */
 export const GET_SEASONS = "GET_SEASONS";
 export const GET_TYPES = "GET_TYPES";
-export const CREATE_PLAN = "CREATE_PLAN";
 export const LOAD_PLAN = "LOAD_PLAN";
 /** operations */
 export const SET_OPERATION_DATA = "SET_OPERATION_DATA";

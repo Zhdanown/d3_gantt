@@ -15,7 +15,8 @@ function CreatePlanForm(props) {
   const [planType, setPlanType] = useState(null);
 
   // discard previous seasons
-  let seasons = props.seasons.filter(x => !x.isDelete);
+  let seasons = props.seasons.filter(x => x.isCurrent);
+
   seasons = seasons.slice(-6);
 
   const submitNewPlan = e => {
@@ -25,8 +26,8 @@ function CreatePlanForm(props) {
       return;
     }
     props.createNewPlan({
-      seasonPlanId: planSeason.id,
-      typePlanId: planType.id
+      season: planSeason,
+      type: planType
     });
   };
 

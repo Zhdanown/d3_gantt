@@ -30,6 +30,11 @@ const loadMessages = [
     method: "get",
     message: "Загрузка плана"
   },
+  {
+    url: "seasonplan/create",
+    method: "post",
+    message: "Создание плана"
+  },
   { url: "seasonplan/create", method: "post", message: "Создание плана" },
   { url: "seasonplan/period", method: "post", message: "Создание периода" },
   { url: "seasonplan/period", method: "put", message: "Изменение периода" },

@@ -169,7 +169,9 @@ function Gantt({ timeframe, ...props }) {
           if (cur.data.node) acc = [...acc, cur.data.node];
           return acc;
         }, []);
-      let dates = applyTimeFrame(getDateRange(operations), timeframe);
+
+      var dates = applyTimeFrame(getDateRange(operations), timeframe);
+
       nodes = nodes.map(item => {
         item.data.dateRange = [...dates];
         return item;
@@ -222,6 +224,36 @@ function Gantt({ timeframe, ...props }) {
 
         props.addNewPeriod({ ...operationData, selectedDay: date });
       });
+
+      /*
+       ********** DATES ********
+       */
+
+      let date = datesBar.selectAll(".date").data(dates, d => d);
+
+      // exit cells
+      date
+        .exit()
+        .transition()
+        .style("opacity", 0)
+        .duration(t)
+        .remove();
+
+      date.style("opacity", 1).style("left", (d, i) => i * 40 + "px");
+
+      // enter cells
+      let dateEnter = date
+        .enter()
+        .append("div")
+        .attr("class", "date")
+        .style("left", (d, i) => i * 40 + "px");
+
+      dateEnter
+        .transition()
+        .style("opacity", 1)
+        .duration(t);
+
+      dateEnter.html(d => dateToString(d));
 
       /*
        ********** LEGENDNODES ********
@@ -284,15 +316,7 @@ function Gantt({ timeframe, ...props }) {
         .select(".text")
         .on("click", panToAgroterms)
         .append("span")
-        .html(
-          d =>
-            d.data.node &&
-            " (" +
-              (d.data.node.cropSquare - getSquareRemainder(d.data.node)) +
-              "/" +
-              d.data.node.cropSquare +
-              " га)"
-        );
+        .attr("class", "operationSquare");
 
       // add tooltips
       legendNodeEnter
@@ -301,12 +325,19 @@ function Gantt({ timeframe, ...props }) {
         .each(addTooltip);
 
       function panToAgroterms(d) {
+        // get current dates
+        let currentDates = datesBar.selectAll(".date");
+
         // get startDate of agroterms
         const { date: startDate } = d.data.node.dates[0];
+
         // get index of startDate
-        const index = dates.findIndex(x => x.getTime() === startDate.getTime());
+        let index;
+        currentDates.select((d, i) => {
+          if (d.getTime() === startDate.getTime()) index = i;
+        });
+
         let diagramm = document.querySelector(".diagramm");
-        // diagramm.scrollLeft = (index - 3) * 40;
         diagramm.scroll({
           top: diagramm.scrollTop,
           left: (index - 3) * 40,
@@ -362,6 +393,20 @@ function Gantt({ timeframe, ...props }) {
         .style("top", d => top(d) * 20 + "px")
         .duration(t);
 
+      // show operation square
+      legendNode
+        .filter(d => d.height === 0)
+        .select(".operationSquare")
+        .html(
+          d =>
+            d.data.node &&
+            " (" +
+              (d.data.node.cropSquare - getSquareRemainder(d.data.node)) +
+              "/" +
+              d.data.node.cropSquare +
+              " га)"
+        );
+
       legendNode.attr("class", d => {
         let className = "legendNode";
         if (!d.children && d._children) {
@@ -403,36 +448,6 @@ function Gantt({ timeframe, ...props }) {
         }
         update(clickRoot, clickTimeframe, false);
       }
-
-      /*
-       ********** DATES ********
-       */
-
-      let date = datesBar.selectAll(".date").data(dates, d => d);
-
-      // exit cells
-      date
-        .exit()
-        .transition()
-        .style("opacity", 0)
-        .duration(t)
-        .remove();
-
-      date.style("opacity", 1).style("left", (d, i) => i * 40 + "px");
-
-      // enter cells
-      let dateEnter = date
-        .enter()
-        .append("div")
-        .attr("class", "date")
-        .style("left", (d, i) => i * 40 + "px");
-
-      dateEnter
-        .transition()
-        .style("opacity", 1)
-        .duration(t);
-
-      dateEnter.html(d => dateToString(d));
 
       /*
        ********** OPERATIONS ********

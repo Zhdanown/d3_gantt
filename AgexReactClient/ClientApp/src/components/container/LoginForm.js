@@ -15,6 +15,7 @@ function LoginForm({ user, ...props }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const usernameInput = useRef(null);
+  const passwordInput = useRef(null);
 
   useEffect(() => {
     usernameInput.current.focus();
@@ -28,7 +29,7 @@ function LoginForm({ user, ...props }) {
     event.preventDefault();
     const response = await props.login(username, password);
 
-    if (response.status === 200) {
+    if (response && response.status === 200) {
       // get modal instance
       let elem = document.querySelector("#loginForm");
       let instance = M_Modal.getInstance(elem);
@@ -36,6 +37,7 @@ function LoginForm({ user, ...props }) {
       setError(null);
     } else {
       setPassword("");
+      passwordInput.current.focus();
       setError(response.data.message);
     }
   };
@@ -64,6 +66,7 @@ function LoginForm({ user, ...props }) {
           <div className="row">
             <div className="input-field col s6">
               <input
+                ref={passwordInput}
                 id="password"
                 type="password"
                 value={password}
@@ -80,7 +83,7 @@ function LoginForm({ user, ...props }) {
                 <Spinner />
               ) : (
                 <button className="btn waves-effect waves-light" type="submit">
-                  {!user ? "Войти" : "Войти под другой учетной записью"}
+                  Войти
                 </button>
               )}
             </div>

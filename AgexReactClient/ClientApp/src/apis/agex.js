@@ -68,23 +68,21 @@ agex.interceptors.response.use(
       return reattemptRequest(error);
     }
     // error was due to other reasons than authentication
-    // try {
-    // var response = await agex.get("/auth/info");
-    // } catch (error) {
-    //   alert.error((error.response && error.response.statusText) || error);
-    // }
-    const { response: errorResponse } = error;
-    if (errorResponse) {
-      const { config, status, statusText } = errorResponse;
-      const errorString = `${config.url}: ${status} (${statusText})`;
-      console.error(errorString);
-      alert.error(errorString);
-    } else {
-      // console.error(error);
-      alert.error(error);
-    }
 
-    // return Promise.reject(error);
+    // const { response: errorResponse } = error;
+    // if (errorResponse) {
+    //   const { config, status, statusText } = errorResponse;
+    //   const errorString = `${config.url}: ${status} (${statusText})`;
+    //   alert.error(errorString);
+    // } else {
+    //   alert.error(error);
+    // }
+    console.error(error);
+    alert.error(
+      "При обращении к серверу произошла ошибка. Обратитесь в службу поддержки..."
+    );
+
+    return Promise.reject(error);
   }
 );
 

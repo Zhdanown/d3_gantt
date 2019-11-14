@@ -2,7 +2,6 @@ import { combineReducers } from "redux";
 import {
   GET_SEASONS,
   GET_TYPES,
-  CREATE_PLAN,
   LOAD_PLAN,
   SET_OPERATION_DATA,
   GET_AGROOPERATIONS,
@@ -126,7 +125,6 @@ function editPeriod(plansState, action) {
 }
 
 const plansReducer = createReducer([], {
-  CREATE_PLAN: (plansState, action) => [...plansState, action.payload],
   LOAD_PLAN: (plansState, action) => [...action.payload],
   ADD_NEW_OPERATION: addNewOperation,
   DELETE_OPERATION: deleteOperation,

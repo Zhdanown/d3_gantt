@@ -7,6 +7,7 @@ import {
 } from "./types";
 import agex from "../apis/agex";
 import alert from "../components/Alert";
+import store from "../store";
 
 const getSeasons = seasons => ({
   type: GET_SEASONS,
@@ -31,19 +32,16 @@ export const getPlanTypes = () => async dispatch => {
   if (response && response.status === 200) dispatch(getTypes(response.data));
 };
 
-export const createNewPlan = ({
-  seasonPlanId,
-  typePlanId
-}) => async dispatch => {
-  const response = await agex.post("/seasonplan/create", {
-    SeasonId: seasonPlanId,
-    SeasonPlanTypeId: typePlanId
-  });
-  if (response && response.status === 201) {
-    dispatch({
-      type: CREATE_PLAN,
-      payload: response.data
+export const createNewPlan = ({ season, type }) => async dispatch => {
+  try {
+    var response = await agex.post("/seasonplan/create", {
+      SeasonId: season.id,
+      SeasonPlanTypeId: type.id
     });
+  } catch (error) {}
+
+  if (response && response.status === 201) {
+    store.dispatch(loadPlan({ season, type }));
   } else {
     // alert.error(response.statusText);
   }
@@ -54,6 +52,7 @@ export const loadPlan = ({ season, type, start, end }) => async dispatch => {
     `/seasonplan/season-plan-list/${season.id}/${type.id}`
   );
   if (response && response.status === 200) {
+    if (!response.data.length) alert.success("Сезонный план не найден");
     dispatch({
       type: LOAD_PLAN,
       payload: response.data.map(x => ({

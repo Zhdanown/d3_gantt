@@ -41,7 +41,7 @@ function MachineryForm({ addMachinery, productivity, ...props }) {
         type="button"
         className="btn"
         onClick={addMachinery}
-        disabled={!productivity}
+        disabled={!(vehicle && productivity)}
       >
         Назначить
         {productivity ? ` ${productivity} га/сут` : null}
