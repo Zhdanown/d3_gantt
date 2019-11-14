@@ -3,12 +3,20 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import AuthStatus from "../container/AuthStatus";
 import Dropdown from "../shared/Dropdown";
+import { stringToDate, dateToString } from "../../helpers/dateHelper";
 
-const Navbar = ({ selectedSeason, ...props }) => {
+const Navbar = ({ selectedSeason, updated, ...props }) => {
+  const lastUpdated = updated
+    ? dateToString(stringToDate(updated), "dd.mm.yyyy")
+    : null;
+
   return (
     <React.Fragment>
       <nav style={{ minHeight: "4.2rem" }}>
         <div className="nav-wrapper container">
+          <span className="updated">
+            {lastUpdated && "Обновлено " + lastUpdated}{" "}
+          </span>
           <Link to="/" className="brand-logo">
             {selectedSeason ? selectedSeason.name : null}
           </Link>
@@ -78,7 +86,8 @@ const mapStateToProps = state => {
   return {
     selectedSeason:
       state.plan.plans.length && state.plan.plans[0].selectedSeason,
-    planFethced: state.plan.plans.length
+    planFethced: state.plan.plans.length,
+    updated: state.plan.plans.length && state.plan.plans[0].updateTechMap
   };
 };
 

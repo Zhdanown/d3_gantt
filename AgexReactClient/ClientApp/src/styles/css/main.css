@@ -1,3 +1,11 @@
+nav .brand-logo {
+  top: -10px;
+}
+nav .updated {
+  position: absolute;
+  bottom: -16px;
+}
+
 .modal.big {
   width: 90%;
   height: 80%;

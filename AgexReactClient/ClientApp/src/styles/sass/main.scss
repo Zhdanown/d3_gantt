@@ -2,6 +2,13 @@
 
 nav {
   // background: $colorPrimary;
+  .brand-logo {
+    top: -10px;
+  }
+  .updated {
+    position: absolute;
+    bottom: -16px;
+  }
 }
 
 .modal {
