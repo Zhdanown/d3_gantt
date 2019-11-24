@@ -9,16 +9,28 @@ export const getPeriodDates = data => {
   let remainingArea = getSquareRemainder(data, periodId);
   let range = createRange(new Date(startDate), new Date(endDate));
 
-  const dates = range.map(date => {
-    let prod =
-      remainingArea / totalProductiity < 1 ? remainingArea : totalProductiity;
-    prod = Math.round(prod * 10000) / 10000;
-    remainingArea -= totalProductiity;
-    return {
+  let dates;
+  if ( Math.ceil(remainingArea / totalProductiity) >= range.length ) {
+
+    dates = range.map(date => {
+      let prod =
+        remainingArea / totalProductiity < 1 ? remainingArea : totalProductiity;
+      prod = Math.round(prod * 10000) / 10000;
+      remainingArea -= totalProductiity;
+      return {
+        day: dateToString(date, "ISO"),
+        productivity: prod > 0 ? prod : 0
+      };
+    });
+    
+  } else {
+    let prod = remainingArea / range.length
+    dates = range.map(date => ({
       day: dateToString(date, "ISO"),
-      productivity: prod > 0 ? prod : 0
-    };
-  });
+      productivity: prod
+    }))
+  }
+
   return dates;
 };
 
