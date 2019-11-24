@@ -1,43 +1,24 @@
-import React from "react";
+import React, { createRef } from "react";
 import { Modal as M_Modal } from "materialize-css";
 
 class Modal extends React.Component {
-  state = {
-    // isOpen: false,
-    instance: null
-  };
+  modalRef = createRef();
 
   componentDidMount() {
     // initialize modal
-    var elem = document.querySelector(`#${this.props.name}`);
-    M_Modal.init(elem, {
+    M_Modal.init(this.modalRef.current, {
       onCloseEnd: this.props.onClose
     });
     // get instance
-    var instance = M_Modal.getInstance(elem);
-    // this.setState(() => ({ instance }));
+    var instance = M_Modal.getInstance(this.modalRef.current);
     instance.open();
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.isOpen !== this.props.isOpen) {
-  //     if (this.props.isOpen) {
-  //       this.openModal();
-  //     } else {
-  //       this.closeModal();
-  //     }
-  //   }
-  // }
-
-  // openModal = () => {
-  //   const { instance } = this.state;
-  //   instance.open();
-  // };
-
-  // closeModal = () => {
-  //   const { instance } = this.state;
-  //   instance.close();
-  // };
+  closeModal = () => {
+    // get instance
+    var instance = M_Modal.getInstance(this.modalRef.current);
+    instance.close();
+  };
 
   render() {
     return (
@@ -46,8 +27,12 @@ class Modal extends React.Component {
         ref={this.modalRef}
         className={"modal modal-fixed-footer " + this.props.className}
       >
-        {/* <div className="modal-content">{this.props.children[0]}</div>
-        <div className="modal-footer">{this.props.children[1]}</div> */}
+        <i className="material-icons close-button"
+          style={{position: "absolute", top: "5px", right: "20px", zIndex: 2, cursor: "pointer"}}
+          onClick={() => this.closeModal()}
+        >
+          close
+        </i>
         {this.props.children}
       </div>
     );

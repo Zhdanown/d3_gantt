@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import history from "../../history";
 
 /** import components */
+import { Link } from "react-router-dom";
 import Modal from "../shared/Modal";
 import MachineryContainer from "./MachineryContainer";
 import DatePicker from "../shared/DatePicker";
@@ -134,6 +135,24 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
     props.setPeriodData(null);
   };
 
+  const renderSubmitButton = () => {
+    if (!startDate || !endDate || !machinery.length) return;
+    else if (endDate.getTime() < startDate.getTime()) return;
+
+    return (
+      <button
+        className="btn waves-effect waves-light modal-close"
+        type="submit"
+        name="action"
+        form="period-form"
+        onClick={editPeriod}
+      >
+        Изменить период
+        <i className="material-icons right">add</i>
+      </button>
+    )
+  }
+
   return (
     <Modal name="editPeriod" onClose={closeForm}>
       <div className="modal-content">
@@ -173,12 +192,14 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
             />
           </div>
           <div className="input-field col s12 m6">
-            <DatePicker
-              name="endPeriod"
-              label="Дата завершения"
-              date={endDate}
-              onSelect={date => setEndDate(date)}
-            />
+            { machinery.length ? (
+              <DatePicker
+                name="endPeriod"
+                label="Дата завершения"
+                date={endDate}
+                onSelect={date => setEndDate(date)}
+              />
+            ) : null}
           </div>
         </div>
       </div>
@@ -193,16 +214,10 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
           Удалить период
           <i className="material-icons right">add</i>
         </button>
-        <button
-          className="btn waves-effect waves-light modal-close"
-          type="submit"
-          name="action"
-          form="period-form"
-          onClick={editPeriod}
-        >
-          Изменить период
-          <i className="material-icons right">add</i>
-        </button>
+        <Link to="/" className="modal-close waves-effect btn-flat">
+          Отмена
+        </Link>
+        {renderSubmitButton()}
       </div>
     </Modal>
   );

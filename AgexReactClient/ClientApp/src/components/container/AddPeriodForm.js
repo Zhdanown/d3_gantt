@@ -108,7 +108,7 @@ function AddPeriodForm(props) {
   };
 
   const renderSubmitButton = () => {
-    if (!startDate || !endDate) return;
+    if (!startDate || !endDate || !machinery.length) return;
     else if (endDate.getTime() < startDate.getTime()) return;
 
     return (
@@ -163,12 +163,14 @@ function AddPeriodForm(props) {
             />
           </div>
           <div className="input-field col s12 m6">
-            <DatePicker
-              name="endNewPeriod"
-              label="Дата завершения"
-              date={endDate}
-              onSelect={date => setEndDate(date)}
-            />
+            {machinery.length ? (
+              <DatePicker
+                name="endNewPeriod"
+                label="Дата завершения"
+                date={endDate}
+                onSelect={date => setEndDate(date)}
+              />
+            ) : null}
           </div>
         </div>
       </div>

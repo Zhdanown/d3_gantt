@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import "../../styles/css/react-select.css";
 
-function MySelect({ options, defaultValue, ...props }) {
+function MySelect({ options, defaultValue, classPrefix, maxHeight, ...props }) {
   options = options.map(option => {
     return {
       label: option.name || option.label,
@@ -25,6 +25,10 @@ function MySelect({ options, defaultValue, ...props }) {
   return (
     <Select
       className="react-select"
+      classNamePrefix={classPrefix}
+      noOptionsMessage={() => 'Ничего не найдено...'}
+      maxMenuHeight={maxHeight}
+      placeholder={props.placeholder}
       value={selectedValue}
       onChange={onSelectChange}
       options={options}
@@ -39,7 +43,10 @@ function MySelect({ options, defaultValue, ...props }) {
 MySelect.defaultProps = {
   onChange: option => console.log(option),
   getOptionLabel: option => option.label,
-  isOptionDisabled: option => false
+  isOptionDisabled: option => false,
+  classPrefix: '',
+  maxHeight: 300, // maxMenuHeight
+  placeholder: "Выберите вариант..."
 };
 
 export default MySelect;

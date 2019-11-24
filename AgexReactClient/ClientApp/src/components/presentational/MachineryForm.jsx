@@ -15,9 +15,6 @@ function MachineryForm({ addMachinery, productivity, ...props }) {
     );
   };
 
-  const onInputChange = val => {
-    toggleShowAllMode(val.checked);
-  };
 
   const getLabel = opt => {
     if (showAllMode) {
@@ -53,16 +50,11 @@ function MachineryForm({ addMachinery, productivity, ...props }) {
   return (
     <React.Fragment>
       <div className="row">
-        <div className="col s12">
-          <Checkbox
-            item={{ name: "Показать всю технику", checked: showAllMode }}
-            onInputChange={onInputChange}
-          />
-        </div>
-      </div>
-      <div className="row">
         <div className="col s12 m6">
           <MySelect
+            classPrefix="rs"
+            maxHeight={210}
+            placeholder="Самоходная техника"
             name="vehicle"
             label="Самоходная техника"
             options={vehicleList}
@@ -74,6 +66,9 @@ function MachineryForm({ addMachinery, productivity, ...props }) {
         </div>
         <div className="col s12 m6">
           <MySelect
+            classPrefix="rs"
+            maxHeight={210}
+            placeholder="Сельхозорудие"
             name="work-equipment"
             label="Сельхозорудие"
             options={workEquipmentList}

@@ -66,3 +66,25 @@ nav {
   }
 }
 /*----------------------------*/
+
+// COLLAPSIBLE
+.collapsible-header {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+.collapsible-body {
+  padding: 1rem;
+}
+
+// REACT-SELECT
+.rs__control {
+  min-height: 24px !important;
+
+}
+.rs__menu {
+
+  .rs__option {
+    padding: .2rem !important;
+    font-size: .8rem !important;
+  }
+}

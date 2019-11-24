@@ -1,3 +1,7 @@
+.machinery .showAllCheckbox p {
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
 .machinery .machinery-item {
   display: flex;
   align-items: center;
