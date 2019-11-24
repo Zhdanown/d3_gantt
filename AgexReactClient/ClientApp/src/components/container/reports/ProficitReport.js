@@ -72,49 +72,28 @@ function ProficitReport({ proficit, ...props }) {
           </tr>
         </thead>
         <tbody>
-          {proficit.map((entry, index) => {
-            const { farm, periods } = entry;
-            const {
-              vehicleModel: vehicle,
-              workEquipmentModel: equipment
-            } = entry;
-            const { vehicleModelCount, workEquipmentModelCount } = entry;
+          {proficit.map((row, index) => {
+            const { startDate, endDate, farm } = row;
+            const { vehicleModel: vehicle, vehicleModelCount: vehicleCount } = row;
+            const { workEquipmentModel: equipment, workEquipmentModelCount: equipmentCount } = row;
 
-            const renderPeriods = () => {
-              const getPeriodString = (p, islastPeriod) => {
-                let string =
-                  dateToString(stringToDate(p.startDate), "dd.mm.yyyy") +
-                  "\u00A0" +
-                  "-" +
-                  "\u00A0" +
-                  dateToString(stringToDate(p.endDate), "dd.mm.yyyy");
-                return islastPeriod ? string : string + "\n";
-              };
-
-              return periods.map((period, index) => (
-                <p key={index}>
-                  <span>
-                    {getPeriodString(period, index === periods.length - 1)}
-                  </span>
-                </p>
-              ));
-            };
+            const renderPeriod = () => (
+              <p>
+                <span>{dateToString(stringToDate(startDate), "dd.mm.yyyy")}</span> - 
+                <span>{dateToString(stringToDate(endDate), "dd.mm.yyyy")}</span>
+              </p>
+            )
 
             return (
               <tr key={index}>
                 <td>{farm.name}</td>
-                <td>{renderPeriods()}</td>
-                <td>
-                  {vehicle && vehicleModelCount + " ед - " + vehicle.name}
-                </td>
-                <td>
-                  {equipment &&
-                    workEquipmentModelCount + " ед - " + equipment.name}
-                </td>
+                <td>{renderPeriod()}</td>
+                <td>{vehicle && vehicleCount + " ед - " + vehicle.name}</td>
+                <td>{equipment && equipmentCount + " ед - " + equipment.name}</td>
               </tr>
-            );
+            )
           })}
-        </tbody>
+       </tbody>
       </table>
     );
   };
