@@ -39,6 +39,7 @@ import { getVehicles, getEquipment } from "../actions/machinery";
 
 /** import helpers */
 import { loadDefaultPlan } from "../helpers/plans";
+import MigrationReport from "./container/reports/MigrationReport";
 
 const formats = {
   DAY: { type: "day", cellWidth: 40 },
@@ -107,6 +108,7 @@ function App({ ...props }) {
         <Route path="/deviation_report" component={DeviationReport} />
         <Route path="/deficit_report" component={DeficitReport} />
         <Route path="/proficit_report" component={ProficitReport} />
+        <Route path="/migration_report" component={MigrationReport} />
       </div>
     </Router>
   );
