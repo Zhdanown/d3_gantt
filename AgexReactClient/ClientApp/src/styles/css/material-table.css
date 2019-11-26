@@ -1,7 +1,3 @@
-.deviation-report .deviation {
-  font-weight: bold;
-}
-
 .MuiInput-input:not([type]),
 .MuiInput-input[type=text]:not(.browser-default),
 .MuiInput-input[type=password]:not(.browser-default),
@@ -25,8 +21,8 @@ textarea.materialize-textarea {
   font-size: unset;
   margin: 0;
   padding: 6px 0 7px;
-  -webkit-box-shadow: none !important;
-  box-shadow: none !important;
+  -webkit-box-shadow: none;
+  box-shadow: none;
   /* -webkit-box-sizing: content-box; */
   /* box-sizing: content-box; */
   /* -webkit-transition: border 0.3s, -webkit-box-shadow 0.3s; */
@@ -35,4 +31,4 @@ textarea.materialize-textarea {
   /* transition: box-shadow 0.3s, border 0.3s, -webkit-box-shadow 0.3s; */
 }
 
-/*# sourceMappingURL=reports.css.map */
+/*# sourceMappingURL=material-table.css.map */

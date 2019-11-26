@@ -19,6 +19,8 @@ import { loadDeviationReport } from "../../../actions/reports";
 
 /** import helpers */
 import { stringToDate, dateToString } from "../../../helpers/dateHelper";
+import MaterialTable from "material-table";
+import alert from "../../Alert";
 
 function DeviationReport({ deviation, ...props }) {
   const tableId = "deviation_report";
@@ -32,12 +34,12 @@ function DeviationReport({ deviation, ...props }) {
   useEffect(() => {
     if (isLoading && deviation) toggleLoadStatus(false);
 
-    if (deviation) {
-      let table = TableExport(document.getElementById(tableId), {
-        exportButtons: false
-      });
-      setTableInstance(table);
-    }
+    // if (deviation) {
+    //   let table = TableExport(document.getElementById(tableId), {
+    //     exportButtons: false
+    //   });
+    //   setTableInstance(table);
+    // }
   }, [deviation]);
 
   const refresh = () => {
@@ -46,88 +48,73 @@ function DeviationReport({ deviation, ...props }) {
   };
 
   const exportTable = () => {
-    var exportData = tableInstance.getExportData();
-    const { data, mimeType, filename, fileExtension } = exportData[
-      tableId
-    ].xlsx;
-    tableInstance.export2file(data, mimeType, filename, fileExtension);
+    window.alert("in development");
+    // var exportData = tableInstance.getExportData();
+    // const { data, mimeType, filename, fileExtension } = exportData[
+    //   tableId
+    // ].xlsx;
+    // tableInstance.export2file(data, mimeType, filename, fileExtension);
   };
 
   const renderDeviation = () => {
     if (!deviation) return null;
-
     deviation = deviation.filter(x => x.isDeviation);
 
+    const columns = [
+      { title: "Хозяйство", field: "farm" },
+      { title: "Культура", field: "crop" },
+      { title: "Агрооперации", field: "operation" },
+      { title: "Агросрок по техкарте", field: "tm_terms" },
+      { title: "Плановая дата исполнения", field: "plan_terms" },
+      { title: "Остаток/Площадь", field: "square_balance" }
+    ];
+
+    const data = deviation.map(row => {
+      const { crop, farm, agroOperation } = row;
+      const { square, squareBalance } = row;
+      // агросрок по техкарте
+      const {
+        startAgroOperationFact: tm_start,
+        endAgroOperationFact: tm_end
+      } = row;
+      // запланированный агросрок
+      const {
+        startAgroOperationPlan: plan_start,
+        endAgroOperationPlan: plan_end
+      } = row;
+
+      const fdate = dateString =>
+        dateToString(stringToDate(dateString), "dd.mm.yyyy");
+
+      return {
+        farm: farm.name,
+        crop: crop.name,
+        operation: agroOperation.name,
+        tm_terms: fdate(tm_start) + " - " + fdate(tm_end),
+        plan_terms: fdate(plan_start) + " - " + fdate(plan_end),
+        square_balance: squareBalance + "/" + square
+      };
+    });
+
     return (
-      <table
-        id={tableId}
-        className="deviation-report"
-        style={{ display: isLoading ? "none" : "table" }}
-      >
-        <thead>
-          <tr>
-            <th>Хозяйство</th>
-            <th>Культура</th>
-            <th>Агрооперация</th>
-            <th>Агросрок по техкарте</th>
-            <th>Плановая дата исполнения</th>
-            <th>Остаток/Площадь (га)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {deviation.map((entry, index) => {
-            const { crop, farm, agroOperation } = entry;
-            const { square, squareBalance } = entry;
-            // агросрок по техкарте
-            const { startAgroOperationFact, endAgroOperationFact } = entry;
-            // запланированный агросрок
-            const { startAgroOperationPlan, endAgroOperationPlan } = entry;
-
-            const fdate = dateString =>
-              dateToString(stringToDate(dateString), "dd.mm.yyyy");
-
-            const isStartDeviation =
-              stringToDate(startAgroOperationFact).getTime() >
-              stringToDate(startAgroOperationPlan).getTime();
-
-            const isEndDeviation =
-              stringToDate(endAgroOperationFact).getTime() <
-              stringToDate(endAgroOperationPlan).getTime();
-
-            return (
-              <tr key={index}>
-                <td>{farm.name}</td>
-                <td>{crop.name}</td>
-                <td>{agroOperation.name}</td>
-                <td>
-                  {fdate(startAgroOperationFact) +
-                    " - " +
-                    fdate(endAgroOperationFact)}
-                </td>
-                <td>
-                  <span className={isStartDeviation ? "deviation" : null}>
-                    {fdate(startAgroOperationPlan)}
-                  </span>
-                  {" - "}
-                  <span className={isEndDeviation ? "deviation" : null}>
-                    {fdate(endAgroOperationPlan)}
-                  </span>
-                </td>
-                <td className={squareBalance < square ? "deviation" : null}>
-                  {squareBalance + "/" + square}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <MaterialTable
+        columns={columns}
+        data={data}
+        title=""
+        options={{
+          filtering: true,
+          search: false,
+          toolbar: false,
+          pageSizeOptions: [5, 10, 20, 50, 100]
+        }}
+      />
     );
   };
 
   return (
     <Modal
       name="deviationReport"
-      className="big"
+      className="full"
       onClose={() => history.push("/")}
     >
       <div className="modal-content">
@@ -136,6 +123,7 @@ function DeviationReport({ deviation, ...props }) {
             <Spinner />
           </SpinnerWrapper>
         )}
+        <h5>Реестр отклонений</h5>
         {renderDeviation()}
       </div>
       <div className="modal-footer">

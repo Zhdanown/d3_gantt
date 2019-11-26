@@ -105,6 +105,7 @@ function App({ ...props }) {
         <Route path="/edit_period" component={EditPeriodForm} />
         <Route path="/filter" component={FilterForm} />
         <Route path="/tech" component={MachineryCatalogue} />
+
         <Route path="/deviation_report" component={DeviationReport} />
         <Route path="/deficit_report" component={DeficitReport} />
         <Route path="/proficit_report" component={ProficitReport} />

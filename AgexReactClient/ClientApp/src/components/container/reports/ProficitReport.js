@@ -19,6 +19,7 @@ import { loadProficitReport } from "../../../actions/reports";
 
 /** import helpers */
 import { stringToDate, dateToString } from "../../../helpers/dateHelper";
+import MaterialTable from "material-table";
 
 function ProficitReport({ proficit, ...props }) {
   const tableId = "proficit_report";
@@ -32,13 +33,13 @@ function ProficitReport({ proficit, ...props }) {
   useEffect(() => {
     if (isLoading && proficit) toggleLoadStatus(false);
 
-    if (proficit) {
-      let table = TableExport(document.getElementById(tableId), {
-        exportButtons: false,
-        trimWhitespace: false
-      });
-      setTableInstance(table);
-    }
+    // if (proficit) {
+    //   let table = TableExport(document.getElementById(tableId), {
+    //     exportButtons: false,
+    //     trimWhitespace: false
+    //   });
+    //   setTableInstance(table);
+    // }
   }, [proficit]);
 
   const refresh = () => {
@@ -47,61 +48,71 @@ function ProficitReport({ proficit, ...props }) {
   };
 
   const exportTable = () => {
-    var exportData = tableInstance.getExportData();
-    const { data, mimeType, filename, fileExtension } = exportData[
-      tableId
-    ].xlsx;
-    tableInstance.export2file(data, mimeType, filename, fileExtension);
+    // var exportData = tableInstance.getExportData();
+    // const { data, mimeType, filename, fileExtension } = exportData[
+    //   tableId
+    // ].xlsx;
+    // tableInstance.export2file(data, mimeType, filename, fileExtension);
   };
 
   const renderProficit = () => {
     if (!proficit) return null;
 
+    const columns = [
+      { title: "Хозяйство", field: "farm" },
+      { title: "Период", field: "period" },
+      { title: "Тип техники", field: "type" },
+      {
+        title: "Наименование",
+        field: "modelName",
+        render: rowData => rowData.count + " " + rowData.modelName
+      }
+    ];
+
+    const fdate = dateString =>
+      dateToString(stringToDate(dateString), "dd.mm.yyyy");
+
+    const data = proficit.map(row => {
+      const { startDate: start, endDate: end, farm } = row;
+      const { vehicleModel: vehicle, vehicleModelCount: vehicleCount } = row;
+      const {
+        workEquipmentModel: equipment,
+        workEquipmentModelCount: equipmentCount
+      } = row;
+      const type = vehicle
+        ? "Самоходная техника"
+        : equipment
+        ? "Сельхозорудие"
+        : null;
+
+      return {
+        farm: farm.name,
+        period: fdate(start) + " - " + fdate(end),
+        type,
+        modelName: (vehicle && vehicle.name) || (equipment && equipment.name),
+        count: (vehicle && vehicleCount) || (equipment && equipmentCount)
+      };
+    });
+
     return (
-      <table
-        id={tableId}
-        className="proficit-report"
-        style={{ display: isLoading ? "none" : "table" }}
-      >
-        <thead>
-          <tr>
-            <th>Хозяйство</th>
-            <th>Период</th>
-            <th>Техника</th>
-            <th>Прицепное</th>
-          </tr>
-        </thead>
-        <tbody>
-          {proficit.map((row, index) => {
-            const { startDate, endDate, farm } = row;
-            const { vehicleModel: vehicle, vehicleModelCount: vehicleCount } = row;
-            const { workEquipmentModel: equipment, workEquipmentModelCount: equipmentCount } = row;
-
-            const renderPeriod = () => (
-              <p>
-                <span>{dateToString(stringToDate(startDate), "dd.mm.yyyy")}</span> - 
-                <span>{dateToString(stringToDate(endDate), "dd.mm.yyyy")}</span>
-              </p>
-            )
-
-            return (
-              <tr key={index}>
-                <td>{farm.name}</td>
-                <td>{renderPeriod()}</td>
-                <td>{vehicle && vehicleCount + " ед - " + vehicle.name}</td>
-                <td>{equipment && equipmentCount + " ед - " + equipment.name}</td>
-              </tr>
-            )
-          })}
-       </tbody>
-      </table>
+      <MaterialTable
+        columns={columns}
+        data={data}
+        title=""
+        options={{
+          filtering: true,
+          search: false,
+          toolbar: false,
+          pageSizeOptions: [5, 10, 20, 50, 100]
+        }}
+      />
     );
   };
 
   return (
     <Modal
       name="deviationReport"
-      className="big"
+      className="full"
       onClose={() => history.push("/")}
     >
       <div className="modal-content">
@@ -110,6 +121,7 @@ function ProficitReport({ proficit, ...props }) {
             <Spinner />
           </SpinnerWrapper>
         )}
+        <h5>Профицит техники</h5>
         {renderProficit()}
       </div>
       <div className="modal-footer">

@@ -15,6 +15,7 @@ import { loadDeficitReport } from "../../../actions/reports";
 
 /** import helpers */
 import { stringToDate, dateToString } from "../../../helpers/dateHelper";
+import MaterialTable from "material-table";
 
 function DeficitReport({ deficit, ...props }) {
   const tableId = "deficit_report";
@@ -28,12 +29,12 @@ function DeficitReport({ deficit, ...props }) {
   useEffect(() => {
     if (isLoading && deficit) toggleLoadStatus(false);
 
-    if (deficit) {
-      let table = TableExport(document.getElementById(tableId), {
-        exportButtons: false
-      });
-      setTableInstance(table);
-    }
+    // if (deficit) {
+    //   let table = TableExport(document.getElementById(tableId), {
+    //     exportButtons: false
+    //   });
+    //   setTableInstance(table);
+    // }
   }, [deficit]);
 
   const refresh = () => {
@@ -42,88 +43,96 @@ function DeficitReport({ deficit, ...props }) {
   };
 
   const exportTable = () => {
-    var exportData = tableInstance.getExportData();
-    const { data, mimeType, filename, fileExtension } = exportData[
-      tableId
-    ].xlsx;
-    tableInstance.export2file(data, mimeType, filename, fileExtension);
+    // var exportData = tableInstance.getExportData();
+    // const { data, mimeType, filename, fileExtension } = exportData[
+    //   tableId
+    // ].xlsx;
+    // tableInstance.export2file(data, mimeType, filename, fileExtension);
   };
 
   const renderDeficit = () => {
     if (!deficit) return null;
 
+    const columns = [
+      { title: "Хозяйство", field: "farm" },
+      { title: "Дата дефицита", field: "deficit_date" },
+      {
+        title: "Самоходная техника",
+        field: "vehicles",
+        render: rowData => {
+          const { vehicles } = rowData;
+          if (!vehicles.length) return null;
+          return vehicles.map(v => (
+            <p>
+              {v.diffictCount} {v.modelName}
+            </p>
+          ));
+        },
+        customFilterAndSearch: (term, rowData) => {
+          const { vehicles } = rowData;
+          if (!vehicles.length) return false;
+          return vehicles.find(v => v.modelName.includes(term));
+        }
+      },
+      {
+        title: "Сельхозорудие",
+        field: "equipment",
+        render: rowData => {
+          const { equipment } = rowData;
+          if (!equipment.length) return null;
+          return equipment.map(e => (
+            <p>
+              {e.diffictCount} {e.modelName}
+            </p>
+          ));
+        },
+        customFilterAndSearch: (term, rowData) => {
+          const { equipment } = rowData;
+          if (!equipment.length) return false;
+          return equipment.find(e => e.modelName.includes(term));
+        }
+      }
+    ];
+
+    const fdate = dateString =>
+      dateToString(stringToDate(dateString), "dd.mm.yyyy");
+
+    const data = deficit.map(row => {
+      const { farm } = row;
+      const { difictDate: deficitDate, diffictList: deficitList } = row;
+      const vehiclesList = deficitList.filter(x => x.modelType == "Vehicle");
+
+      const equipmentList = deficitList.filter(
+        x => x.modelType == "WorkEquipment"
+      );
+
+      return {
+        farm: farm,
+        deficit_date: fdate(deficitDate),
+        vehicles: vehiclesList,
+        equipment: equipmentList
+      };
+    });
+
     return (
-      <table
-        id={tableId}
-        className="deficit-report"
-        style={{ display: isLoading ? "none" : "table" }}
-      >
-        <thead>
-          <tr>
-            <th>Хозяйство</th>
-            {/* <th>Культура</th> */}
-            {/* <th>Агрооперация</th> */}
-            {/* <th>Агросрок по техкарте</th> */}
-            <th>Дата дефицита</th>
-            <th>Техника</th>
-            <th>Прицепное</th>
-          </tr>
-        </thead>
-        <tbody>
-          {deficit.map((entry, index) => {
-            const { crop, farm, operation } = entry;
-            const { difictDate: deficitDate, diffictList: deficitList } = entry;
-
-            const vehiclesList = deficitList.filter(
-              x => x.modelType == "Vehicle"
-            );
-
-            const equipmentList = deficitList.filter(
-              x => x.modelType == "WorkEquipment"
-            );
-
-            const renderVehicles = () => {
-              return vehiclesList.map((v, i) => {
-                return (
-                  <div key={i} className="truncate">
-                    {v.diffictCount} ед {v.modelName}
-                  </div>
-                );
-              });
-            };
-
-            const renderEquipment = () => {
-              return equipmentList.map((e, i) => (
-                <div key={i} className="truncate">
-                  {e.diffictCount} ед {e.modelName}
-                </div>
-              ));
-            };
-
-            const fdate = dateString =>
-              dateToString(stringToDate(dateString), "dd.mm.yyyy");
-
-            return (
-              <tr key={index}>
-                <td>{farm}</td>
-                {/* <td>{crop}</td>
-                <td>{operation}</td>
-                <td>-----</td> */}
-                <td>{fdate(deficitDate)}</td>
-                <td>{renderVehicles()}</td>
-                <td>{renderEquipment()}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <MaterialTable
+        columns={columns}
+        data={data}
+        title=""
+        options={{
+          filtering: true,
+          search: false,
+          toolbar: false,
+          pageSizeOptions: [5, 10, 20, 50, 100]
+        }}
+      />
     );
   };
 
   return (
     <Modal
       name="deficitReport"
-      className="big"
+      className="full"
       onClose={() => history.push("/")}
     >
       <div className="modal-content">
@@ -132,6 +141,7 @@ function DeficitReport({ deficit, ...props }) {
             <Spinner />
           </SpinnerWrapper>
         )}
+        <h5>Дефицит техники</h5>
         {renderDeficit()}
       </div>
       <div className="modal-footer">

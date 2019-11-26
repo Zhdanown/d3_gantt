@@ -6,6 +6,7 @@ import history from "../../../history";
 import TableExport from "tableexport";
 
 /** import components */
+import MaterialTable from "material-table";
 import Modal from "../../shared/Modal";
 import Spinner from "../../shared/Spinner";
 import SpinnerWrapper from "../../shared/SpinnerWrapper";
@@ -28,12 +29,12 @@ function MigrationReport({ migration, ...props }) {
   useEffect(() => {
     if (isLoading && migration) toggleLoadStatus(false);
 
-    if (migration) {
-      let table = TableExport(document.getElementById(tableId), {
-        exportButtons: false
-      });
-      setTableInstance(table);
-    }
+    // if (migration) {
+    //   let table = TableExport(document.getElementById(tableId), {
+    //     exportButtons: false
+    //   });
+    //   setTableInstance(table);
+    // }
   }, [migration]);
 
   const refresh = () => {
@@ -42,11 +43,12 @@ function MigrationReport({ migration, ...props }) {
   };
 
   const exportTable = () => {
-    var exportData = tableInstance.getExportData();
-    const { data, mimeType, filename, fileExtension } = exportData[
-      tableId
-    ].xlsx;
-    tableInstance.export2file(data, mimeType, filename, fileExtension);
+    alert("In progress");
+    // var exportData = tableInstance.getExportData();
+    // const { data, mimeType, filename, fileExtension } = exportData[
+    //   tableId
+    // ].xlsx;
+    // tableInstance.export2file(data, mimeType, filename, fileExtension);
   };
   const renderMigration = () => {
     if (!migration) return null;
@@ -56,46 +58,46 @@ function MigrationReport({ migration, ...props }) {
       WorkEquipment: "Сельхозорудие"
     };
 
+    const columns = [
+      { title: "Дата перемещения", field: "migrationDate" },
+      { title: "Из", field: "whereFrom" },
+      { title: "В", field: "whereTo" },
+      { title: "Тип техники", field: "type" },
+      { title: "Наименование", field: "modelName" }
+    ];
+
+    const data = migration.map(row => {
+      return {
+        modelName: row.equipmentName,
+        type: locales[row.equipmentType],
+        migrationDate: dateToString(
+          stringToDate(row.dateMovement),
+          "dd.mm.yyyy"
+        ),
+        whereFrom: row.from.name,
+        whereTo: row.to.name
+      };
+    });
+
     return (
-      <table
-        id={tableId}
-        className="migration-report"
-        style={{ display: isLoading ? "none" : "table" }}
-      >
-        <thead>
-          <tr>
-            <th>Дата перемещения</th>
-            <th>Из</th>
-            <th>В</th>
-            <th>Тип техники</th>
-            <th>Наименование</th>
-          </tr>
-        </thead>
-        <tbody>
-          {migration.map((row, index) => {
-            const { dateMovement, equipmentName, equipmentType } = row;
-            const { from, to } = row;
-            return (
-              <tr key={index}>
-                <td>
-                  {dateToString(stringToDate(dateMovement), "dd.mm.yyyy")}
-                </td>
-                <td>{from.name}</td>
-                <td>{to.name}</td>
-                <td>{locales[equipmentType]}</td>
-                <td>{equipmentName}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <MaterialTable
+        columns={columns}
+        data={data}
+        title=""
+        options={{
+          filtering: true,
+          search: false,
+          toolbar: false,
+          pageSizeOptions: [5, 10, 20, 50, 100]
+        }}
+      />
     );
   };
 
   return (
     <Modal
       name="migrationReport"
-      className="big"
+      className="full"
       onClose={() => history.push("/")}
     >
       <div className="modal-content">
@@ -104,6 +106,7 @@ function MigrationReport({ migration, ...props }) {
             <Spinner />
           </SpinnerWrapper>
         )}
+        <h5>Перемещения техники</h5>
         {renderMigration()}
       </div>
       <div className="modal-footer">

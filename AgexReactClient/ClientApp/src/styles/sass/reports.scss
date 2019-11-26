@@ -3,3 +3,38 @@
     font-weight: bold;
   }
 }
+
+// override styles
+.MuiInput-input:not([type]),
+.MuiInput-input[type="text"]:not(.browser-default),
+.MuiInput-input[type="password"]:not(.browser-default),
+.MuiInput-input[type="email"]:not(.browser-default),
+.MuiInput-input[type="url"]:not(.browser-default),
+.MuiInput-input[type="time"]:not(.browser-default),
+.MuiInput-input[type="date"]:not(.browser-default),
+.MuiInput-input[type="datetime"]:not(.browser-default),
+.MuiInput-input[type="datetime-local"]:not(.browser-default),
+.MuiInput-input[type="tel"]:not(.browser-default),
+.MuiInput-input[type="number"]:not(.browser-default),
+.MuiInput-input[type="search"]:not(.browser-default),
+textarea.materialize-textarea {
+  background-color: transparent;
+  border: none;
+  border-bottom: none;
+  /* border-radius: 0; */
+  outline: none;
+  height: unset;
+  /* width: 100%; */
+  font-size: unset;
+  margin: 0;
+  padding: 6px 0 7px;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  /* -webkit-box-sizing: content-box; */
+  /* box-sizing: content-box; */
+  /* -webkit-transition: border 0.3s, -webkit-box-shadow 0.3s; */
+  /* transition: border 0.3s, -webkit-box-shadow 0.3s; */
+  // -o-transition: box-shadow 0.3s, border 0.3s;
+  /* transition: box-shadow 0.3s, border 0.3s; */
+  /* transition: box-shadow 0.3s, border 0.3s, -webkit-box-shadow 0.3s; */
+}
