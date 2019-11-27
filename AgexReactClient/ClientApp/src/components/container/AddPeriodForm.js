@@ -126,7 +126,7 @@ function AddPeriodForm(props) {
   };
 
   return (
-    <Modal name="addPeriod" onClose={closeForm}>
+    <Modal name="addPeriod" className="big" onClose={closeForm}>
       <div className="modal-content">
         <div className="row">
           {operationData && (

@@ -150,11 +150,11 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
         Изменить период
         <i className="material-icons right">add</i>
       </button>
-    )
-  }
+    );
+  };
 
   return (
-    <Modal name="editPeriod" onClose={closeForm}>
+    <Modal name="editPeriod" className="big" onClose={closeForm}>
       <div className="modal-content">
         {/* <h5>Edit Period</h5> */}
         <div className="row">
@@ -192,7 +192,7 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
             />
           </div>
           <div className="input-field col s12 m6">
-            { machinery.length ? (
+            {machinery.length ? (
               <DatePicker
                 name="endPeriod"
                 label="Дата завершения"
@@ -230,12 +230,9 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {
-    deletePeriod,
-    editPeriod,
-    setPeriodData,
-    setOperationData
-  }
-)(EditPeriodForm);
+export default connect(mapStateToProps, {
+  deletePeriod,
+  editPeriod,
+  setPeriodData,
+  setOperationData
+})(EditPeriodForm);
