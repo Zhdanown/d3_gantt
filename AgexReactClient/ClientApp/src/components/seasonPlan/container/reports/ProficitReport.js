@@ -1,81 +1,96 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import history from "../../../history";
+import history from "../../../../history";
 
+// import FileSaver from "file-saverjs";
 import TableExport from "tableexport";
 
+/** import styles */
+import "../../../../styles/css/reports.css";
+
 /** import components */
+import Modal from "../../../shared/Modal";
+import Spinner from "../../../shared/Spinner";
+import SpinnerWrapper from "../../../shared/SpinnerWrapper";
+
+/** import actions */
+import { loadProficitReport } from "../../../../actions/reports";
+
+/** import utils */
+import { stringToDate, dateToString } from "../../../../utils/dateHelper";
 import MaterialTable from "material-table";
-import Modal from "../../shared/Modal";
-import Spinner from "../../shared/Spinner";
-import SpinnerWrapper from "../../shared/SpinnerWrapper";
 
-/** imprort actions */
-import { loadMigrationReport } from "../../../actions/reports";
-
-/** import helpers */
-import { dateToString, stringToDate } from "../../../helpers/dateHelper";
-
-function MigrationReport({ migration, ...props }) {
-  const tableId = "migration_report";
+function ProficitReport({ proficit, ...props }) {
+  const tableId = "proficit_report";
   const [isLoading, toggleLoadStatus] = useState(false);
   const [tableInstance, setTableInstance] = useState(null);
 
   useEffect(() => {
-    if (!migration) refresh();
+    if (!proficit) refresh();
   }, []);
 
   useEffect(() => {
-    if (isLoading && migration) toggleLoadStatus(false);
+    if (isLoading && proficit) toggleLoadStatus(false);
 
-    // if (migration) {
+    // if (proficit) {
     //   let table = TableExport(document.getElementById(tableId), {
-    //     exportButtons: false
+    //     exportButtons: false,
+    //     trimWhitespace: false
     //   });
     //   setTableInstance(table);
     // }
-  }, [migration]);
+  }, [proficit]);
 
   const refresh = () => {
-    props.loadMigrationReport();
+    props.loadProficitReport();
     toggleLoadStatus(true);
   };
 
   const exportTable = () => {
-    alert("In progress");
     // var exportData = tableInstance.getExportData();
     // const { data, mimeType, filename, fileExtension } = exportData[
     //   tableId
     // ].xlsx;
     // tableInstance.export2file(data, mimeType, filename, fileExtension);
   };
-  const renderMigration = () => {
-    if (!migration) return null;
 
-    const locales = {
-      Vehicle: "Самоходная теника",
-      WorkEquipment: "Сельхозорудие"
-    };
+  const renderProficit = () => {
+    if (!proficit) return null;
 
     const columns = [
-      { title: "Дата перемещения", field: "migrationDate" },
-      { title: "Из", field: "whereFrom" },
-      { title: "В", field: "whereTo" },
+      { title: "Хозяйство", field: "farm" },
+      { title: "Период", field: "period" },
       { title: "Тип техники", field: "type" },
-      { title: "Наименование", field: "modelName" }
+      {
+        title: "Наименование",
+        field: "modelName",
+        render: rowData => rowData.count + " " + rowData.modelName
+      }
     ];
 
-    const data = migration.map(row => {
+    const fdate = dateString =>
+      dateToString(stringToDate(dateString), "dd.mm.yyyy");
+
+    const data = proficit.map(row => {
+      const { startDate: start, endDate: end, farm } = row;
+      const { vehicleModel: vehicle, vehicleModelCount: vehicleCount } = row;
+      const {
+        workEquipmentModel: equipment,
+        workEquipmentModelCount: equipmentCount
+      } = row;
+      const type = vehicle
+        ? "Самоходная техника"
+        : equipment
+        ? "Сельхозорудие"
+        : null;
+
       return {
-        modelName: row.equipmentName,
-        type: locales[row.equipmentType],
-        migrationDate: dateToString(
-          stringToDate(row.dateMovement),
-          "dd.mm.yyyy"
-        ),
-        whereFrom: row.from.name,
-        whereTo: row.to.name
+        farm: farm.name,
+        period: fdate(start) + " - " + fdate(end),
+        type,
+        modelName: (vehicle && vehicle.name) || (equipment && equipment.name),
+        count: (vehicle && vehicleCount) || (equipment && equipmentCount)
       };
     });
 
@@ -96,9 +111,9 @@ function MigrationReport({ migration, ...props }) {
 
   return (
     <Modal
-      name="migrationReport"
+      name="deviationReport"
       className="full"
-      onClose={() => history.push("/")}
+      onClose={() => history.push("/sp")}
     >
       <div className="modal-content">
         {isLoading && (
@@ -106,8 +121,8 @@ function MigrationReport({ migration, ...props }) {
             <Spinner />
           </SpinnerWrapper>
         )}
-        <h5>Перемещения техники</h5>
-        {renderMigration()}
+        <h5>Профицит техники</h5>
+        {renderProficit()}
       </div>
       <div className="modal-footer">
         <button
@@ -140,10 +155,8 @@ function MigrationReport({ migration, ...props }) {
 
 const mapStateToProps = state => {
   return {
-    migration: state.reports.migration
+    proficit: state.reports.proficit
   };
 };
 
-export default connect(mapStateToProps, { loadMigrationReport })(
-  MigrationReport
-);
+export default connect(mapStateToProps, { loadProficitReport })(ProficitReport);

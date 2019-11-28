@@ -2,8 +2,8 @@ import * as d3 from "d3";
 import store from "../store";
 import { editPeriod } from "../actions/periods";
 
-// import { createRange, dateToString } from "../helpers";
-import { getPeriodDates, decideProductivity } from "../helpers/periods";
+// import { createRange, dateToString } from "../utils";
+import { getPeriodDates, decideProductivity } from "../utils/periods";
 // import { CELL_WIDTH } from "../constants";
 
 var win = d3.select(window);

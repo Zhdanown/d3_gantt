@@ -1,7 +1,7 @@
 import React from "react";
 import MachineryList from "./MachineryList.jsx";
 import MachineryForm from "./MachineryForm.jsx";
-import Checkbox from "../shared/Checkbox.js";
+import Checkbox from "../../shared/Checkbox.js";
 
 function Machinery(props) {
   const { showAllMode, toggleShowAllMode } = props;
@@ -36,7 +36,7 @@ function Machinery(props) {
           </div>
           <div className="collapsible-body">
             <div className="showAllCheckbox">
-              <Checkbox 
+              <Checkbox
                 item={{ name: "Показать всю технику", checked: showAllMode }}
                 onInputChange={onInputChange}
               />

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Collapsible } from "materialize-css";
-import "../../styles/css/machinery.css";
+import "../../../styles/css/machinery.css";
 
 import Machinery from "../presentational/Machinery.jsx";
-/** import helpers */
+/** import utils */
 import {
   getTotalProductivity,
   decideProductivity
-} from "../../helpers/periods";
+} from "../../../utils/periods";
 
 export const MachineryContainer = ({ selectedFarmId, ...props }) => {
   const { selectedAgroOperationId } = props;

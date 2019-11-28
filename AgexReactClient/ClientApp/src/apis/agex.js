@@ -6,8 +6,8 @@ import {
   findMessage,
   showLoadMessage,
   hideLoadMessage
-} from "../components/LoadMessage";
-import alert from "../components/Alert";
+} from "../utils/LoadMessage";
+import alert from "../utils/Alert";
 
 const agex = axios.create({
   baseURL: "https://agexdev2.agroterra.ru/api"

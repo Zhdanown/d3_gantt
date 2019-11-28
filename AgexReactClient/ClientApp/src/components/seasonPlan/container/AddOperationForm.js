@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import history from "../../history";
+import history from "../../../history";
 import uuid from "uuidv4";
 
 import { Link } from "react-router-dom";
 /** import custom components */
-import Modal from "../shared/Modal";
-import MySelect from "../shared/MySelect";
-import DatePicker from "../shared/DatePicker";
-import alert from "../Alert";
+import Modal from "../../shared/Modal";
+import MySelect from "../../shared/MySelect";
+import DatePicker from "../../shared/DatePicker";
+import alert from "../../../utils/Alert";
 /** import actions */
-import { addNewOperation } from "../../actions/operations";
+import { addNewOperation } from "../../../actions/operations";
 
 function AddOperationForm({ agroOperations, ...props }) {
   const { operationData } = props;
@@ -51,7 +51,7 @@ function AddOperationForm({ agroOperations, ...props }) {
   };
 
   return (
-    <Modal name="loadPlan" onClose={() => history.push("/")}>
+    <Modal name="loadPlan" onClose={() => history.push("/sp")}>
       <div className="modal-content">
         <h5 className="center">Добавить операцию</h5>
         <div className="row">

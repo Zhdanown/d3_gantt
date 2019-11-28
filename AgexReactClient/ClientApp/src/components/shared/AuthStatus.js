@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import Dropdown from "../shared/Dropdown";
+import Dropdown from "./Dropdown";
 import { Link } from "react-router-dom";
 
 import { /*login,*/ logout } from "../../actions/auth";
@@ -43,7 +43,4 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { /* login,*/ logout }
-)(AuthStatus);
+export default connect(mapStateToProps, { /* login,*/ logout })(AuthStatus);

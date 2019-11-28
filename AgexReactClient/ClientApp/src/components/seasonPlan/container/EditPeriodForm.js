@@ -1,28 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import history from "../../history";
+import history from "../../../history";
 
 /** import components */
 import { Link } from "react-router-dom";
-import Modal from "../shared/Modal";
+import Modal from "../../shared/Modal";
 import MachineryContainer from "./MachineryContainer";
-import DatePicker from "../shared/DatePicker";
+import DatePicker from "../../shared/DatePicker";
 
-/** import helpers */
+/** import utils */
 import {
   getPeriodDates,
   getTotalProductivity,
   decideProductivity
-} from "../../helpers/periods";
-import { getSquareRemainder } from "../../helpers/plans";
+} from "../../../utils/periods";
+import { getSquareRemainder } from "../../../utils/plans";
 
 /** import actions */
-import { deletePeriod, editPeriod, setPeriodData } from "../../actions/periods";
-import { setOperationData } from "../../actions/operations";
+import {
+  deletePeriod,
+  editPeriod,
+  setPeriodData
+} from "../../../actions/periods";
+import { setOperationData } from "../../../actions/operations";
 
 function EditPeriodForm({ periodData, operationData, ...props }) {
   if (!periodData) {
-    history.push("/");
+    history.push("/sp");
     return null;
   }
   const { holding, farm, crop, cropSquare, agroOperation } = operationData;
@@ -130,7 +134,7 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
   };
 
   const closeForm = () => {
-    history.push("/");
+    history.push("/sp");
     props.setOperationData(null);
     props.setPeriodData(null);
   };

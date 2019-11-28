@@ -1,5 +1,5 @@
 import agex from "../apis/agex";
-import alert from "../components/Alert";
+import alert from "../utils/Alert";
 
 import {
   ADD_PERIOD,

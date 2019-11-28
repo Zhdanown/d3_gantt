@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import history from "../../../history";
+import history from "../../../../history";
 
 // import FileSaver from "file-saverjs";
 import TableExport from "tableexport";
 
 /** import styles */
-import "../../../styles/css/reports.css";
+import "../../../../styles/css/reports.css";
 
 /** import components */
-import Modal from "../../shared/Modal";
-import Spinner from "../../shared/Spinner";
-import SpinnerWrapper from "../../shared/SpinnerWrapper";
+import Modal from "../../../shared/Modal";
+import Spinner from "../../../shared/Spinner";
+import SpinnerWrapper from "../../../shared/SpinnerWrapper";
 
 /** import actions */
-import { loadDeviationReport } from "../../../actions/reports";
+import { loadDeviationReport } from "../../../../actions/reports";
 
-/** import helpers */
-import { stringToDate, dateToString } from "../../../helpers/dateHelper";
+/** import utils */
+import { stringToDate, dateToString } from "../../../../utils/dateHelper";
 import MaterialTable from "material-table";
-import alert from "../../Alert";
+import alert from "../../../../utils/Alert";
 
 function DeviationReport({ deviation, ...props }) {
   const tableId = "deviation_report";
@@ -115,7 +115,7 @@ function DeviationReport({ deviation, ...props }) {
     <Modal
       name="deviationReport"
       className="full"
-      onClose={() => history.push("/")}
+      onClose={() => history.push("/sp")}
     >
       <div className="modal-content">
         {isLoading && (

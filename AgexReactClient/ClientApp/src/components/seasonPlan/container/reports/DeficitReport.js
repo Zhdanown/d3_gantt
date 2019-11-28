@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import history from "../../../history";
+import history from "../../../../history";
 
 import TableExport from "tableexport";
 
 /** import components */
-import Modal from "../../shared/Modal";
-import Spinner from "../../shared/Spinner";
-import SpinnerWrapper from "../../shared/SpinnerWrapper";
+import Modal from "../../../shared/Modal";
+import Spinner from "../../../shared/Spinner";
+import SpinnerWrapper from "../../../shared/SpinnerWrapper";
 
 /** import actions */
-import { loadDeficitReport } from "../../../actions/reports";
+import { loadDeficitReport } from "../../../../actions/reports";
 
-/** import helpers */
-import { stringToDate, dateToString } from "../../../helpers/dateHelper";
+/** import utils */
+import { stringToDate, dateToString } from "../../../../utils/dateHelper";
 import MaterialTable from "material-table";
 
 function DeficitReport({ deficit, ...props }) {
@@ -133,7 +133,7 @@ function DeficitReport({ deficit, ...props }) {
     <Modal
       name="deficitReport"
       className="full"
-      onClose={() => history.push("/")}
+      onClose={() => history.push("/sp")}
     >
       <div className="modal-content">
         {isLoading && (

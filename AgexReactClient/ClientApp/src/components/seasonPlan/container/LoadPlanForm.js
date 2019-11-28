@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import history from "../../history";
+import history from "../../../history";
 /** import components */
 import { Link } from "react-router-dom";
-import Modal from "../shared/Modal";
-import MySelect from "../shared/MySelect";
-import DatePicker from "../shared/DatePicker";
+import Modal from "../../shared/Modal";
+import MySelect from "../../shared/MySelect";
+import DatePicker from "../../shared/DatePicker";
 /** import actions */
-import { loadPlan } from "../../actions/plans";
-/** import helpers */
-import { dateToString } from "../../helpers/dateHelper";
+import { loadPlan } from "../../../actions/plans";
+/** import utils */
+import { dateToString } from "../../../utils/dateHelper";
 
 function LoadPlanForm(props) {
   const [season, setSeason] = useState(null);
@@ -31,7 +31,7 @@ function LoadPlanForm(props) {
   };
 
   return (
-    <Modal name="loadPlan" onClose={() => history.push("/")}>
+    <Modal name="loadPlan" onClose={() => history.push("/sp")}>
       <div className="modal-content">
         <h5 className="center">Загрузить план</h5>
         <div className="row">

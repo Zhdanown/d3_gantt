@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import history from "../../history";
 import { Modal as M_Modal } from "materialize-css";
 
-import Modal from "../shared/Modal";
-import Spinner from "../shared/Spinner";
+import Modal from "./Modal";
+import Spinner from "./Spinner";
 /** import styles */
 import "../../styles/css/login-form.css";
 /** import actions */
@@ -22,7 +22,7 @@ function LoginForm({ user, ...props }) {
   }, []);
 
   const onClose = () => {
-    history.push("/");
+    history.push("/sp"); // TODO
   };
 
   const onFormSubmit = async event => {

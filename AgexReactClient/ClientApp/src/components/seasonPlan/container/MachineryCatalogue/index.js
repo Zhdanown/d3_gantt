@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import history from "../../../history";
+import history from "../../../../history";
 import { Tabs, Collapsible } from "materialize-css";
 
-import Modal from "../../shared/Modal";
+import Modal from "../../../shared/Modal";
 import ModelsTab from "./ModelsTab";
-import Spinner from "../../shared/Spinner";
-import SpinnerWrapper from "../../shared/SpinnerWrapper";
+import Spinner from "../../../shared/Spinner";
+import SpinnerWrapper from "../../../shared/SpinnerWrapper";
 
-import "../../../styles/css/machineryCatalogue.css";
+import "../../../../styles/css/machineryCatalogue.css";
 
 function MachineryCatalogue({ vehicles, equipment }) {
   useEffect(() => {
@@ -54,7 +54,7 @@ function MachineryCatalogue({ vehicles, equipment }) {
   return (
     <Modal
       name="machineryCatalogue"
-      onClose={() => history.push("/")}
+      onClose={() => history.push("/sp")}
       className="big"
     >
       <div className="modal-content machineryCatalogue">

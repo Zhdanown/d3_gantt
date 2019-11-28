@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import history from "../../history";
+import history from "../../../history";
 
 // import components
 import { Link } from "react-router-dom";
-import Modal from "../shared/Modal";
-import CheckboxList from "../shared/CheckboxList";
+import Modal from "../../shared/Modal";
+import CheckboxList from "../../shared/CheckboxList";
 
 // import actions
-import { filter } from "../../actions/filter";
+import { filter } from "../../../actions/filter";
 
 function sortByName(entries) {
   return entries.sort((a, b) => {
@@ -96,7 +96,7 @@ function FilterForm({ ...props }) {
   };
 
   return (
-    <Modal name="filterForm" onClose={() => history.push("/")}>
+    <Modal name="filterForm" onClose={() => history.push("/sp")}>
       <div className="modal-content">
         <div className="row">
           <div className="col s4">

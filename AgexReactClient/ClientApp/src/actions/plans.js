@@ -6,7 +6,7 @@ import {
   GET_AGROOPERATIONS
 } from "./types";
 import agex from "../apis/agex";
-import alert from "../components/Alert";
+import alert from "../utils/Alert";
 import store from "../store";
 
 const getSeasons = seasons => ({

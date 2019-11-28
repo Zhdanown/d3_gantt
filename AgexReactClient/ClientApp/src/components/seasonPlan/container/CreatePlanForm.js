@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import history from "../../history";
+import history from "../../../history";
 
 /** import components */
 import { Link } from "react-router-dom";
-import Modal from "../shared/Modal";
-import MySelect from "../shared/MySelect";
+import Modal from "../../shared/Modal";
+import MySelect from "../../shared/MySelect";
 
 /** import actions */
-import { createNewPlan } from "../../actions/plans";
+import { createNewPlan } from "../../../actions/plans";
 
 function CreatePlanForm(props) {
   const [planSeason, setPlanSeason] = useState(null);
@@ -32,7 +32,7 @@ function CreatePlanForm(props) {
   };
 
   return (
-    <Modal name="createPlan" onClose={() => history.push("/")}>
+    <Modal name="createPlan" onClose={() => history.push("/sp")}>
       <div className="modal-content">
         <h5 className="center">Создать план</h5>
         <div className="row">

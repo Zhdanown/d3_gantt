@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import * as d3 from "d3";
 import { connect } from "react-redux";
-import "../../styles/css/diagramm.css";
+import "../../../styles/css/diagramm.css";
 import { Tooltip } from "materialize-css";
 
-/** import helpers */
+/** import utils */
 import {
   getDateRange,
   dateToString,
@@ -12,17 +12,17 @@ import {
   getMonday,
   getSunday,
   createRange
-} from "../../helpers/dateHelper";
+} from "../../../utils/dateHelper";
 import {
   getHierarchy as getTree,
   getOperationDates,
   evalMachineryQuantity,
   getSquareRemainder,
   sortOperations
-} from "../../helpers/plans";
-import { isTermsMet } from "../../helpers/periods";
-import { stretchPeriod, movePeriod } from "../../helpers/drag_n_drop";
-import { rebaseToggledState, appendIdsToNodes } from "../../helpers/tree";
+} from "../../../utils/plans";
+import { isTermsMet } from "../../../utils/periods";
+import { stretchPeriod, movePeriod } from "../../../utils/drag_n_drop";
+import { rebaseToggledState, appendIdsToNodes } from "../../../utils/tree";
 
 // import { CELL_HEIGHT } from "../../constants";
 

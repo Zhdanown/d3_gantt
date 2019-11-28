@@ -1,12 +1,12 @@
 import agex from "../apis/agex";
-import alert from "../components/Alert";
+import alert from "../utils/Alert";
 
 import {
   ADD_NEW_OPERATION,
   DELETE_OPERATION,
   SET_OPERATION_DATA
 } from "./types";
-import { dateToString } from "../helpers/dateHelper";
+import { dateToString } from "../utils/dateHelper";
 
 export const addNewOperation = newOperation => async (dispatch, getState) => {
   // get currently selected plan and append planId to new operation

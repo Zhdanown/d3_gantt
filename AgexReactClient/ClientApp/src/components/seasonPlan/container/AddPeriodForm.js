@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import history from "../../history";
+import history from "../../../history";
 import uuidv4 from "uuidv4";
 
 /** import components */
 import { Link } from "react-router-dom";
-import Modal from "../shared/Modal";
 import MachineryContainer from "./MachineryContainer";
-import DatePicker from "../shared/DatePicker";
+import Modal from "../../shared/Modal";
+import DatePicker from "../../shared/DatePicker";
 
-/** import helpers */
-import { getPeriodDates } from "../../helpers/periods";
-import { getTotalProductivity } from "../../helpers/periods";
+/** import utils */
+import { getTotalProductivity, getPeriodDates } from "../../../utils/periods";
+import { getSquareRemainder } from "../../../utils/plans";
 
 /** import actions */
-import { addNewPeriod } from "../../actions/periods";
-import { setOperationData } from "../../actions/operations";
-import { setPeriodData } from "../../actions/periods";
-import { getSquareRemainder } from "../../helpers/plans";
+import { addNewPeriod, setPeriodData } from "../../../actions/periods";
+import { setOperationData } from "../../../actions/operations";
 
 function AddPeriodForm(props) {
   const { operationData } = props;
@@ -102,7 +100,7 @@ function AddPeriodForm(props) {
   };
 
   const closeForm = () => {
-    history.push("/");
+    history.push("/sp");
     props.setOperationData(null);
     props.setPeriodData(null);
   };
