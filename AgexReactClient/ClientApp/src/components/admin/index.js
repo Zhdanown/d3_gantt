@@ -1,67 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Autocomplete, Collapsible } from "materialize-css";
+
+import Checkbox from "../shared/Checkbox";
+import Roles from "./Roles";
+import Farms from "./Farms";
+
+import "../../styles/css/admin.css";
+import Attributes from "./Attributes";
 
 function AdminPanel() {
+  useEffect(() => {
+    // init autocomplete
+    var elems = document.querySelectorAll(".autocomplete");
+    Autocomplete.init(elems, {
+      data: {
+        Vasya: null,
+        Petya: null,
+        Vanya: "https://placehold.it/250x250"
+      }
+    });
+
+    // init collapsible
+    const elem = document.querySelectorAll(".collapsible");
+    Collapsible.init(elem, { accordion: false });
+  }, []);
+
   return (
-    <div>
-      <h1>Admin Panel</h1>
+    <div className="admin-panel">
+      <div class="row">
+        <div class="input-field col s12">
+          <i class="material-icons prefix">account_circle</i>
+          <input type="text" id="autocomplete-input" class="autocomplete" />
+          <label for="autocomplete-input">Поиск сотрудника</label>
+        </div>
+      </div>
+
       <div className="row">
-        <form className="col s12">
-          <div className="row">
-            <div className="input-field col s6">
-              <input
-                placeholder="Placeholder"
-                id="first_name"
-                type="text"
-                className="validate"
-              />
-              <label htmlFor="first_name">First Name</label>
-            </div>
-            <div className="input-field col s6">
-              <input id="last_name" type="text" className="validate" />
-              <label htmlFor="last_name">Last Name</label>
-            </div>
-          </div>
-          <div className="row">
-            <div className="input-field col s12">
-              <input
-                disabled
-                value="I am not editable"
-                id="disabled"
-                type="text"
-                className="validate"
-              />
-              <label htmlFor="disabled">Disabled</label>
-            </div>
-          </div>
-          <div className="row">
-            <div className="input-field col s12">
-              <input id="password" type="password" className="validate" />
-              <label htmlFor="password">Password</label>
-            </div>
-          </div>
-          <div className="row">
-            <div className="input-field col s12">
-              <input id="email" type="email" className="validate" />
-              <label htmlFor="email">Email</label>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col s12">
-              This is an inline input field:
-              <div className="input-field inline">
-                <input id="email_inline" type="email" className="validate" />
-                <label htmlFor="email_inline">Email</label>
-                <span
-                  className="helper-text"
-                  data-error="wrong"
-                  data-success="right"
-                >
-                  Helper text
-                </span>
-              </div>
-            </div>
-          </div>
+        <form className="col s6">
+          <Attributes />
         </form>
+
+        <div className="col s6">
+          <div className="row">
+            <Roles />
+
+            <Farms />
+          </div>
+        </div>
       </div>
     </div>
   );

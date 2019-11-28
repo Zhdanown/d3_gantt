@@ -92,3 +92,8 @@ nav {
     font-size: 0.8rem !important;
   }
 }
+
+// MATERIALIZE SWITCH
+.switch + label {
+  margin-top: -12px;
+}

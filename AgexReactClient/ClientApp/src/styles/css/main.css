@@ -85,4 +85,8 @@ nav .updated {
   font-size: 0.8rem !important;
 }
 
+.switch + label {
+  margin-top: -12px;
+}
+
 /*# sourceMappingURL=main.css.map */
