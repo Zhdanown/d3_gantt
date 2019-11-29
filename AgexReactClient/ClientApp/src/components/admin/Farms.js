@@ -1,28 +1,37 @@
-import React from "react";
-import Checkbox from "../shared/Checkbox";
+import React, { useState, useEffect } from "react";
+import CollapsibleCard from "../shared/CollapsibleCard";
+import Spinner from "../shared/Spinner";
+import SpinnerWrapper from "../shared/SpinnerWrapper";
+import CheckboxList from "../shared/CheckboxList";
 
-function Farms() {
+function Farms({ farms, userFarms, ...props }) {
+  // syncronize checkboxes state
+  farms = farms.map(farm => ({
+    ...farm,
+    checked: userFarms.find(x => x.id === farm.id) ? true : false
+  }));
+
+  const [farmList, setFarmList] = useState(farms);
+
+  useEffect(() => {
+    props.onChange(farmList);
+  }, [farmList]);
+
   return (
-    <div className="col s12">
-      <ul class="collapsible">
-        <li className="active">
-          <div class="collapsible-header">Хозяйства</div>
-          <div class="collapsible-body">
-            <ul class="collection">
-              <li class="collection-item">
-                <Checkbox item={{ name: "Бунино", checked: true }} />
-              </li>
-              <li class="collection-item">
-                <Checkbox item={{ name: "Солнцево", checked: true }} />
-              </li>
-              <li class="collection-item">
-                <Checkbox item={{ name: "Камыши", checked: true }} />
-              </li>
-            </ul>
-          </div>
-        </li>
-      </ul>
-    </div>
+    <CollapsibleCard
+      header={"Хозяйства (" + farmList.filter(x => x.checked).length + ")"}
+    >
+      {farms.length ? (
+        <CheckboxList
+          list={farmList}
+          onListChange={newList => setFarmList(newList)}
+        />
+      ) : (
+        <SpinnerWrapper>
+          <Spinner />
+        </SpinnerWrapper>
+      )}
+    </CollapsibleCard>
   );
 }
 

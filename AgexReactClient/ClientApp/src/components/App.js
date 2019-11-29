@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Suspense, lazy } from "react";
 import { Router, Route, Switch, Link } from "react-router-dom";
 import history from "../history";
@@ -8,7 +8,6 @@ import "../styles/css/materialize.css";
 import "../styles/css/main.css";
 import "../styles/css/season-plan.css";
 
-import AdminPanel from "./admin";
 import LoginForm from "./shared/LoginForm";
 
 import Spinner from "./shared/Spinner";
@@ -16,7 +15,7 @@ import SpinnerWrapper from "./shared/SpinnerWrapper";
 import Navbar from "./shared/Navbar";
 
 const SeasonPlan = lazy(() => import("./seasonPlan"));
-
+const AdminPanel = lazy(() => import("./admin"));
 /** import components */
 
 function App({ ...props }) {
@@ -60,7 +59,10 @@ function App({ ...props }) {
             />
 
             <Route path="/sp" component={props => <SeasonPlan {...props} />} />
-            <Route path="/admin" component={AdminPanel} />
+            <Route
+              path="/admin"
+              component={props => <AdminPanel {...props} />}
+            />
           </Suspense>
 
           <Route path="/login" component={LoginForm} />

@@ -10,7 +10,7 @@ import MySelect from "../../shared/MySelect";
 import DatePicker from "../../shared/DatePicker";
 import alert from "../../../utils/Alert";
 /** import actions */
-import { addNewOperation } from "../../../actions/operations";
+import { addNewOperation } from "../../../actions/seasonPlan/operations";
 
 function AddOperationForm({ agroOperations, ...props }) {
   const { operationData } = props;

@@ -1,10 +1,15 @@
 /*
  ********** LOGIN, LOGOUT, FETCH_PROFILE ********
  */
-import { LOGIN, LOGOUT, START_LOGGING_IN, STOP_LOGGING_IN } from "./types";
+import {
+  LOGIN,
+  LOGOUT,
+  START_LOGGING_IN,
+  STOP_LOGGING_IN
+} from "./seasonPlan/types";
 import agex from "../apis/agex";
 import Cookies from "js-cookie";
-import history from "../history";
+// import history from "../history";
 
 /*
  ********** ACTION CREATORS ********

@@ -12,7 +12,7 @@ import {
   EDIT_PERIOD,
   SET_PERIOD_DATA,
   APPLY_FILTER
-} from "../actions/types";
+} from "../actions/seasonPlan/types";
 
 // helper
 function createReducer(initialState, handlers) {

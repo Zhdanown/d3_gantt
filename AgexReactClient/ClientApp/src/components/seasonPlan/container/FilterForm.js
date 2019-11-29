@@ -8,7 +8,7 @@ import Modal from "../../shared/Modal";
 import CheckboxList from "../../shared/CheckboxList";
 
 // import actions
-import { filter } from "../../../actions/filter";
+import { filter } from "../../../actions/seasonPlan/filter";
 
 function sortByName(entries) {
   return entries.sort((a, b) => {

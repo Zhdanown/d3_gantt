@@ -26,10 +26,13 @@ import {
   getAgrooperations,
   loadPlan
   // showDeficit
-} from "../../actions/plans";
-import { deleteOperation, setOperationData } from "../../actions/operations";
-import { addNewPeriod, setPeriodData } from "../../actions/periods";
-import { getVehicles, getEquipment } from "../../actions/machinery";
+} from "../../actions/seasonPlan/plans";
+import {
+  deleteOperation,
+  setOperationData
+} from "../../actions/seasonPlan/operations";
+import { addNewPeriod, setPeriodData } from "../../actions/seasonPlan/periods";
+import { getVehicles, getEquipment } from "../../actions/seasonPlan/machinery";
 
 /** import utils */
 import { loadDefaultPlan } from "../../utils/plans";

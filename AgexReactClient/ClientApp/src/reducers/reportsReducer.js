@@ -3,7 +3,7 @@ import {
   LOAD_DEFICIT_REPORT,
   LOAD_PROFICIT_REPORT,
   LOAD_MIGRATION_REPORT
-} from "../actions/types";
+} from "../actions/seasonPlan/types";
 
 const initState = {
   deviation: null,

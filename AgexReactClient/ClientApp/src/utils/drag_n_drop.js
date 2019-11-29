@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import store from "../store";
-import { editPeriod } from "../actions/periods";
+import { editPeriod } from "../actions/seasonPlan/periods";
 
 // import { createRange, dateToString } from "../utils";
 import { getPeriodDates, decideProductivity } from "../utils/periods";

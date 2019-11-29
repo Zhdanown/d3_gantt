@@ -1,6 +1,6 @@
 import React from "react";
-import AuthStatus from "./AuthStatus";
-import Dropdown from "./Dropdown";
+// import AuthStatus from "./AuthStatus";
+// import Dropdown from "./Dropdown";
 
 const Navbar = ({ selectedSeason, updated, ...props }) => {
   return (

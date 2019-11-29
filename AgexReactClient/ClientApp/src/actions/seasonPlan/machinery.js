@@ -1,4 +1,4 @@
-import agex from "../apis/agex";
+import agex from "../../apis/agex";
 import { GET_EQUIPMENT, GET_VEHICLES } from "./types";
 
 export const getVehicles = () => async dispatch => {

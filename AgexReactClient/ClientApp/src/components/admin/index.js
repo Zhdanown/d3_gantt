@@ -1,54 +1,123 @@
-import React, { useEffect } from "react";
-import { Autocomplete, Collapsible } from "materialize-css";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import api from "../../apis/adminAPI";
 
-import Checkbox from "../shared/Checkbox";
+import Navbar from "../shared/Navbar";
+import AuthStatus from "../shared/AuthStatus";
 import Roles from "./Roles";
 import Farms from "./Farms";
 
 import "../../styles/css/admin.css";
-import Attributes from "./Attributes";
+import UserFieldsForm from "./UserFieldsForm";
+import SearchUser from "./SearchUser";
+import SpinnerWrapper from "../shared/SpinnerWrapper";
+import Spinner from "../shared/Spinner";
 
 function AdminPanel() {
-  useEffect(() => {
-    // init autocomplete
-    var elems = document.querySelectorAll(".autocomplete");
-    Autocomplete.init(elems, {
-      data: {
-        Vasya: null,
-        Petya: null,
-        Vanya: "https://placehold.it/250x250"
-      }
-    });
+  const [user, setUser] = useState(null);
+  const [isLoadingUser, toggleLoadUserStatus] = useState(false);
+  // list of all fethced farms
+  const [farms, setFarmList] = useState([]);
+  // list of all fetched roles
+  const [roles, setRoleList] = useState([]);
 
-    // init collapsible
-    const elem = document.querySelectorAll(".collapsible");
-    Collapsible.init(elem, { accordion: false });
+  useEffect(() => {
+    // fetch farms
+    api
+      .get("/farm/farms?is_cluster=true")
+      .then(res => {
+        setFarmList(res.data);
+      })
+      .catch(error => console.error(error));
+
+    // fetch roles
+    api
+      .get("/user/roles")
+      .then(res => {
+        setRoleList(res.data);
+      })
+      .catch(error => console.error(error));
   }, []);
 
+  const fetchUserInfo = selectedUser => {
+    if (!selectedUser) return;
+
+    const { id } = selectedUser;
+    toggleLoadUserStatus(true);
+    api
+      .get(`/user/${id}`)
+      .then(res => {
+        setUser(res.data);
+        toggleLoadUserStatus(false);
+      })
+      .catch(error => {
+        console.error(error);
+        toggleLoadUserStatus(false);
+      });
+  };
+
+  const onFarmlistChange = farmList => {
+    console.log(farmList);
+  };
+  const onRoleListChange = roleList => {
+    console.log(roleList);
+  };
+
   return (
-    <div className="admin-panel">
-      <div class="row">
-        <div class="input-field col s12">
-          <i class="material-icons prefix">account_circle</i>
-          <input type="text" id="autocomplete-input" class="autocomplete" />
-          <label for="autocomplete-input">Поиск сотрудника</label>
-        </div>
-      </div>
+    <React.Fragment>
+      <Navbar>
+        <ul className="right">
+          {/* *********************** */}
+          <li>
+            <Link to="/sp/tech">
+              <i className="material-icons left">directions_car</i>Действия
+            </Link>
+          </li>
+          <li>
+            <AuthStatus />
+          </li>
+        </ul>
+      </Navbar>
 
-      <div className="row">
-        <form className="col s6">
-          <Attributes />
-        </form>
-
-        <div className="col s6">
-          <div className="row">
-            <Roles />
-
-            <Farms />
+      <div className="admin-panel">
+        <div className="row">
+          <div className="col s8 container">
+            <SearchUser onUserSelect={fetchUserInfo} />
           </div>
         </div>
+
+        {/* Show Spinner when loading user profile */}
+        {isLoadingUser ? (
+          <SpinnerWrapper>
+            <Spinner />
+          </SpinnerWrapper>
+        ) : null}
+
+        {user && !isLoadingUser ? (
+          <div className="row">
+            <form className="col s6">
+              <UserFieldsForm />
+            </form>
+
+            <div className="col s6">
+              <div className="row">
+                <Roles
+                  roles={roles}
+                  userRoles={(user && user.userRoles) || []}
+                  onChange={onRoleListChange}
+                />
+
+                <Farms
+                  farms={farms}
+                  userFarms={(user && user.userFarms) || []}
+                  onChange={onFarmlistChange}
+                />
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
-    </div>
+    </React.Fragment>
   );
 }
 

@@ -21,8 +21,8 @@ import {
   deletePeriod,
   editPeriod,
   setPeriodData
-} from "../../../actions/periods";
-import { setOperationData } from "../../../actions/operations";
+} from "../../../actions/seasonPlan/periods";
+import { setOperationData } from "../../../actions/seasonPlan/operations";
 
 function EditPeriodForm({ periodData, operationData, ...props }) {
   if (!periodData) {

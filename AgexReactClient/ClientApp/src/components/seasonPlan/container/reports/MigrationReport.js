@@ -12,7 +12,7 @@ import Spinner from "../../../shared/Spinner";
 import SpinnerWrapper from "../../../shared/SpinnerWrapper";
 
 /** imprort actions */
-import { loadMigrationReport } from "../../../../actions/reports";
+import { loadMigrationReport } from "../../../../actions/seasonPlan/reports";
 
 /** import utils */
 import { dateToString, stringToDate } from "../../../../utils/dateHelper";

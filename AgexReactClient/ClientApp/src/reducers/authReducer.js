@@ -3,7 +3,7 @@ import {
   LOGOUT,
   START_LOGGING_IN,
   STOP_LOGGING_IN
-} from "../actions/types";
+} from "../actions/seasonPlan/types";
 
 const authReducer = (state = {}, action) => {
   switch (action.type) {

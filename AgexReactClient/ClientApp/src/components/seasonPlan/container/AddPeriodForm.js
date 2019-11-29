@@ -14,8 +14,11 @@ import { getTotalProductivity, getPeriodDates } from "../../../utils/periods";
 import { getSquareRemainder } from "../../../utils/plans";
 
 /** import actions */
-import { addNewPeriod, setPeriodData } from "../../../actions/periods";
-import { setOperationData } from "../../../actions/operations";
+import {
+  addNewPeriod,
+  setPeriodData
+} from "../../../actions/seasonPlan/periods";
+import { setOperationData } from "../../../actions/seasonPlan/operations";
 
 function AddPeriodForm(props) {
   const { operationData } = props;

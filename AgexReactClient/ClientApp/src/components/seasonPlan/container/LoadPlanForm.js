@@ -7,7 +7,7 @@ import Modal from "../../shared/Modal";
 import MySelect from "../../shared/MySelect";
 import DatePicker from "../../shared/DatePicker";
 /** import actions */
-import { loadPlan } from "../../../actions/plans";
+import { loadPlan } from "../../../actions/seasonPlan/plans";
 /** import utils */
 import { dateToString } from "../../../utils/dateHelper";
 

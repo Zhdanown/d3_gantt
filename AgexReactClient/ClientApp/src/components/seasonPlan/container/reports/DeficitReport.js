@@ -11,7 +11,7 @@ import Spinner from "../../../shared/Spinner";
 import SpinnerWrapper from "../../../shared/SpinnerWrapper";
 
 /** import actions */
-import { loadDeficitReport } from "../../../../actions/reports";
+import { loadDeficitReport } from "../../../../actions/seasonPlan/reports";
 
 /** import utils */
 import { stringToDate, dateToString } from "../../../../utils/dateHelper";

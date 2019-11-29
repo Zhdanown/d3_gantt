@@ -1,6 +1,6 @@
 import React from "react";
 import MySelect from "../../shared/MySelect";
-import Checkbox from "../../shared/Checkbox";
+// import Checkbox from "../../shared/Checkbox";
 
 function MachineryForm({ addMachinery, productivity, ...props }) {
   const { showAllMode, toggleShowAllMode } = props;

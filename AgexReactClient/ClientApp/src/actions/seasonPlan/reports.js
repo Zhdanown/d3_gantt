@@ -1,5 +1,5 @@
-import agex from "../apis/agex";
-import store from "../store";
+import agex from "../../apis/agex";
+import store from "../../store";
 import {
   LOAD_DEVIATION_REPORT,
   LOAD_DEFICIT_REPORT,

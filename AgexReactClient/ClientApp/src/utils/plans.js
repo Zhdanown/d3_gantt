@@ -1,6 +1,6 @@
 import store from "../store";
 import { createRange, stringToDate } from "./dateHelper";
-import { loadPlan } from "../actions/plans";
+import { loadPlan } from "../actions/seasonPlan/plans";
 
 export const loadDefaultPlan = async () => {
   const currentSeason = await new Promise((resolve, reject) => {

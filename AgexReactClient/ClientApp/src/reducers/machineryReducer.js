@@ -1,4 +1,4 @@
-import { GET_VEHICLES, GET_EQUIPMENT } from "../actions/types";
+import { GET_VEHICLES, GET_EQUIPMENT } from "../actions/seasonPlan/types";
 
 const machineryReducer = (state = {}, action) => {
   switch (action.type) {

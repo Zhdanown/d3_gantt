@@ -8,7 +8,7 @@ import Modal from "../../shared/Modal";
 import MySelect from "../../shared/MySelect";
 
 /** import actions */
-import { createNewPlan } from "../../../actions/plans";
+import { createNewPlan } from "../../../actions/seasonPlan/plans";
 
 function CreatePlanForm(props) {
   const [planSeason, setPlanSeason] = useState(null);
