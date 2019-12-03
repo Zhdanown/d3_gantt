@@ -52,7 +52,7 @@ const NavbarSeasonPlan = ({ selectedSeason, updated, ...props }) => {
           </Dropdown>
         </li>
 
-        <li>
+        {/* <li>
           <Dropdown
             caption={
               <React.Fragment>
@@ -68,7 +68,7 @@ const NavbarSeasonPlan = ({ selectedSeason, updated, ...props }) => {
               <Link to="/sp/create_plan">Создать план</Link>{" "}
             </li>
           </Dropdown>
-        </li>
+        </li> */}
 
         {/* *********************** */}
         <li>

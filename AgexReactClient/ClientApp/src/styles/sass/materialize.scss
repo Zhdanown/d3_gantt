@@ -39,3 +39,19 @@
 @import "m_components/pulse";
 @import "m_components/datepicker";
 @import "m_components/timepicker";
+
+.btn.ripple {
+  // animation: ripple 1s infinite;
+  // background-position: center;
+  // transition: background 0.8s;
+}
+
+@keyframes ripple {
+  0% {
+    background: lightblue radial-gradient(circle, steelblue 1%, transparent 2%);
+  }
+  100% {
+    background: lightblue
+      radial-gradient(circle, steelblue 100%, transparent 101%);
+  }
+}

@@ -1,6 +1,6 @@
 import { GET_VEHICLES, GET_EQUIPMENT } from "../actions/seasonPlan/types";
 
-const machineryReducer = (state = {}, action) => {
+const machineryReducer = (state = { vehicles: [], equipment: [] }, action) => {
   switch (action.type) {
     case GET_VEHICLES:
       return {

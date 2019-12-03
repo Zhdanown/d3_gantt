@@ -26,25 +26,28 @@ function MySelect({ options, defaultValue, classPrefix, maxHeight, ...props }) {
     <Select
       className="react-select"
       classNamePrefix={classPrefix}
-      noOptionsMessage={() => 'Ничего не найдено...'}
+      noOptionsMessage={() => "Ничего не найдено..."}
       maxMenuHeight={maxHeight}
       placeholder={props.placeholder}
       value={selectedValue}
       onChange={onSelectChange}
+      onInputChange={props.onInputChange}
       options={options}
       isClearable={true}
       isSearchable={true}
       getOptionLabel={props.getOptionLabel}
       isOptionDisabled={props.isOptionDisabled}
+      autoFocus={props.autoFocus}
     />
   );
 }
 
 MySelect.defaultProps = {
   onChange: option => console.log(option),
+  onInputChange: value => {},
   getOptionLabel: option => option.label,
   isOptionDisabled: option => false,
-  classPrefix: '',
+  classPrefix: "",
   maxHeight: 300, // maxMenuHeight
   placeholder: "Выберите вариант..."
 };

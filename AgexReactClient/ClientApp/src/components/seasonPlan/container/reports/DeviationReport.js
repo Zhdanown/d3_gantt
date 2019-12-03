@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import MaterialTable from "material-table";
 import history from "../../../../history";
-
-// import FileSaver from "file-saverjs";
-import TableExport from "tableexport";
 
 /** import styles */
 import "../../../../styles/css/reports.css";
@@ -19,13 +17,12 @@ import { loadDeviationReport } from "../../../../actions/seasonPlan/reports";
 
 /** import utils */
 import { stringToDate, dateToString } from "../../../../utils/dateHelper";
-import MaterialTable from "material-table";
-import alert from "../../../../utils/Alert";
+import { exportDeviationReport } from "../../../../utils/exportReports";
+import AsyncButton from "../../../shared/AsyncButton";
 
 function DeviationReport({ deviation, ...props }) {
-  const tableId = "deviation_report";
   const [isLoading, toggleLoadStatus] = useState(false);
-  const [tableInstance, setTableInstance] = useState(null);
+  const [isExporting, toggleExportStatus] = useState(false);
 
   useEffect(() => {
     if (!deviation) refresh();
@@ -33,13 +30,6 @@ function DeviationReport({ deviation, ...props }) {
 
   useEffect(() => {
     if (isLoading && deviation) toggleLoadStatus(false);
-
-    // if (deviation) {
-    //   let table = TableExport(document.getElementById(tableId), {
-    //     exportButtons: false
-    //   });
-    //   setTableInstance(table);
-    // }
   }, [deviation]);
 
   const refresh = () => {
@@ -47,13 +37,12 @@ function DeviationReport({ deviation, ...props }) {
     toggleLoadStatus(true);
   };
 
-  const exportTable = () => {
-    window.alert("in development");
-    // var exportData = tableInstance.getExportData();
-    // const { data, mimeType, filename, fileExtension } = exportData[
-    //   tableId
-    // ].xlsx;
-    // tableInstance.export2file(data, mimeType, filename, fileExtension);
+  const exportReport = () => {
+    toggleExportStatus(true);
+
+    exportDeviationReport()
+      .then(res => toggleExportStatus(false))
+      .catch(res => toggleExportStatus(false));
   };
 
   const renderDeviation = () => {
@@ -123,30 +112,32 @@ function DeviationReport({ deviation, ...props }) {
             <Spinner />
           </SpinnerWrapper>
         )}
-        <h5>Реестр отклонений</h5>
-        {renderDeviation()}
+        {deviation && !isLoading && (
+          <React.Fragment>
+            <h5>Реестр отклонений</h5>
+            {renderDeviation()}
+          </React.Fragment>
+        )}
       </div>
       <div className="modal-footer">
-        <button
+        <AsyncButton
+          label="Обновить отчет"
           className="btn left waves-effect waves-light"
-          type="submit"
-          name="action"
-          form="period-form"
           onClick={refresh}
+          isLoading={isLoading}
         >
-          Обновить отчет
           <i className="material-icons right">refresh</i>
-        </button>
-        <button
+        </AsyncButton>
+
+        <AsyncButton
+          label="Экспортировать в excel"
           className="btn left waves-effect waves-light"
-          type="submit"
-          name="action"
-          form="period-form"
-          onClick={exportTable}
+          onClick={exportReport}
+          isLoading={isExporting}
         >
-          Экспортировать в Excel
           <i className="material-icons right">forward</i>
-        </button>
+        </AsyncButton>
+
         <Link to="/" className="modal-close waves-effect btn-flat">
           Закрыть
         </Link>

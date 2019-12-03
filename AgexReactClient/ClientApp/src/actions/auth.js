@@ -71,6 +71,5 @@ export const getUserProfile = () => async dispatch => {
   if (!token) return;
 
   const response = await agex.get("/auth/info");
-  console.log(response);
   if (response && response.status === 200) dispatch(loginUser(response.data));
 };

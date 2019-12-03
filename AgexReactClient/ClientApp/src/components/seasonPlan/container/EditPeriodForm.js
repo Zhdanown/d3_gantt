@@ -30,7 +30,7 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
     return null;
   }
   const { holding, farm, crop, cropSquare, agroOperation } = operationData;
-  const remainingArea =
+  const harvestedArea =
     cropSquare - getSquareRemainder(operationData, periodData.id);
   const start = new Date(periodData.days[0].day);
   const end = new Date([...periodData.days].pop().day);
@@ -57,7 +57,8 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
     setEndDate(newEndDate);
   }, [startDate, duration]);
 
-  const updateDuration = () => {
+  // update duration when machinery changes
+  useEffect(() => {
     if (!machinery.length) {
       setDuration(null);
       return;
@@ -67,23 +68,14 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
       setDuration(null);
       return;
     }
-
+    const remainingArea = getSquareRemainder(operationData, periodData.id);
     let newDuration = remainingArea / totalProductivity;
     newDuration = Math.ceil(newDuration * 10) / 10;
     setDuration(newDuration);
-  };
-
-  // const updateEndDate = () => {
-  //   if (!duration) return;
-  //   let newEndDate = new Date(startDate);
-  //   newEndDate.setDate(newEndDate.getDate() + Math.ceil(duration) - 1);
-  //   setEndDate(newEndDate);
-  // };
+  }, [machinery]);
 
   const addMachinery = val => {
     setMachinery([...machinery, { ...val }]);
-    updateDuration();
-    // updateEndDate();
   };
 
   const removeMachinery = entry => {
@@ -101,8 +93,6 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
       }
     }
     setMachinery(newMachinery);
-    updateDuration();
-    // updateEndDate();
   };
 
   const editPeriod = () => {
@@ -168,7 +158,7 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
                 <span>
                   {crop.name} - {agroOperation.name}{" "}
                   <b>
-                    {remainingArea} / {cropSquare} га
+                    {harvestedArea} / {cropSquare} га
                   </b>
                   {duration && " - " + duration + " дн."}
                 </span>

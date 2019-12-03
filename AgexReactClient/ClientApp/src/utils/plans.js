@@ -2,6 +2,23 @@ import store from "../store";
 import { createRange, stringToDate } from "./dateHelper";
 import { loadPlan } from "../actions/seasonPlan/plans";
 
+export async function getSeasonId() {
+  const state = store.getState();
+
+  const seasonId = state.plan.plans.length
+    ? state.plan.plans[0].selectedSeason.id
+    : await new Promise((resolve, reject) => {
+        store.subscribe(() => {
+          const state = store.getState();
+          if (state.plan.plans.length) {
+            const { id } = state.plan.plans[0].selectedSeason;
+            resolve(id);
+          }
+        });
+      });
+  return seasonId;
+}
+
 export const loadDefaultPlan = async () => {
   const currentSeason = await new Promise((resolve, reject) => {
     store.subscribe(() => {

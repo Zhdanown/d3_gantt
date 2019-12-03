@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import MaterialTable from "material-table";
 import history from "../../../../history";
-
-import TableExport from "tableexport";
 
 /** import components */
 import Modal from "../../../shared/Modal";
 import Spinner from "../../../shared/Spinner";
 import SpinnerWrapper from "../../../shared/SpinnerWrapper";
+import AsyncButton from "../../../shared/AsyncButton";
 
 /** import actions */
 import { loadDeficitReport } from "../../../../actions/seasonPlan/reports";
 
 /** import utils */
 import { stringToDate, dateToString } from "../../../../utils/dateHelper";
-import MaterialTable from "material-table";
+import { exportDeficitReport } from "../../../../utils/exportReports";
 
 function DeficitReport({ deficit, ...props }) {
-  const tableId = "deficit_report";
   const [isLoading, toggleLoadStatus] = useState(false);
-  const [tableInstance, setTableInstance] = useState(null);
+  const [isExporting, toggleExportStatus] = useState(false);
 
   useEffect(() => {
     if (!deficit) refresh();
@@ -28,13 +27,6 @@ function DeficitReport({ deficit, ...props }) {
 
   useEffect(() => {
     if (isLoading && deficit) toggleLoadStatus(false);
-
-    // if (deficit) {
-    //   let table = TableExport(document.getElementById(tableId), {
-    //     exportButtons: false
-    //   });
-    //   setTableInstance(table);
-    // }
   }, [deficit]);
 
   const refresh = () => {
@@ -42,12 +34,11 @@ function DeficitReport({ deficit, ...props }) {
     toggleLoadStatus(true);
   };
 
-  const exportTable = () => {
-    // var exportData = tableInstance.getExportData();
-    // const { data, mimeType, filename, fileExtension } = exportData[
-    //   tableId
-    // ].xlsx;
-    // tableInstance.export2file(data, mimeType, filename, fileExtension);
+  const exportReport = () => {
+    toggleExportStatus(true);
+    exportDeficitReport()
+      .then(res => toggleExportStatus(false))
+      .catch(res => toggleExportStatus(false));
   };
 
   const renderDeficit = () => {
@@ -141,30 +132,30 @@ function DeficitReport({ deficit, ...props }) {
             <Spinner />
           </SpinnerWrapper>
         )}
-        <h5>Дефицит техники</h5>
-        {renderDeficit()}
+        {deficit && !isLoading && (
+          <React.Fragment>
+            <h5>Дефицит техники</h5>
+            {renderDeficit()}
+          </React.Fragment>
+        )}
       </div>
       <div className="modal-footer">
-        <button
+        <AsyncButton
+          label="Обновить отчет"
           className="btn left waves-effect waves-light"
-          type="submit"
-          name="action"
-          form="period-form"
           onClick={refresh}
+          isLoading={isLoading}
         >
-          Обновить отчет
           <i className="material-icons right">refresh</i>
-        </button>
-        <button
+        </AsyncButton>
+        <AsyncButton
+          label="Экспортировать в excel"
           className="btn left waves-effect waves-light"
-          type="submit"
-          name="action"
-          form="period-form"
-          onClick={exportTable}
+          onClick={exportReport}
+          isLoading={isExporting}
         >
-          Экспортировать в Excel
           <i className="material-icons right">forward</i>
-        </button>
+        </AsyncButton>
         <Link to="/" className="modal-close waves-effect btn-flat">
           Закрыть
         </Link>

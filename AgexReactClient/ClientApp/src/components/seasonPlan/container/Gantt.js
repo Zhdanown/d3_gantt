@@ -91,6 +91,12 @@ function Gantt({ timeframe, ...props }) {
     // init gannt when component mounted
   }, [props.operations, timeframe]);
 
+  useEffect(() => {
+    return () => {
+      updateGannt = null;
+    };
+  }, []);
+
   let clickRoot = null;
   let clickTimeframe = null;
 
@@ -327,6 +333,7 @@ function Gantt({ timeframe, ...props }) {
         // let dom = elem.node();
         elem
           .classed("tooltiped", true)
+          .classed("truncate", true)
           // .attr("data-position", "top")
           .attr(
             "data-tooltip",
@@ -658,8 +665,13 @@ function Gantt({ timeframe, ...props }) {
         .append("text")
         .text(d => Math.round(d.productivity))
         .attr("class", "productivity")
-        .attr("y", "15");
-      // .attr("x", d => (prod.toString().length / 2) * 5 );
+        .attr("y", "15")
+        .attr("x", d => {
+          const charWidth = 8.09;
+          const cellWidth = 40;
+          const textWidth = d.productivity.toString().length * charWidth;
+          return (cellWidth - textWidth) / 2;
+        });
       periodDayEnter.select("rect");
 
       periodDay = periodDayEnter.merge(periodDay);

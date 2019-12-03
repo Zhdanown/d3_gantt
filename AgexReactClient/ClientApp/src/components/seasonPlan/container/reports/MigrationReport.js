@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import MaterialTable from "material-table";
 import history from "../../../../history";
 
-import TableExport from "tableexport";
-
 /** import components */
-import MaterialTable from "material-table";
 import Modal from "../../../shared/Modal";
 import Spinner from "../../../shared/Spinner";
 import SpinnerWrapper from "../../../shared/SpinnerWrapper";
+import AsyncButton from "../../../shared/AsyncButton";
 
 /** imprort actions */
 import { loadMigrationReport } from "../../../../actions/seasonPlan/reports";
 
 /** import utils */
 import { dateToString, stringToDate } from "../../../../utils/dateHelper";
+import { exportMigrationReport } from "../../../../utils/exportReports";
 
 function MigrationReport({ migration, ...props }) {
-  const tableId = "migration_report";
   const [isLoading, toggleLoadStatus] = useState(false);
-  const [tableInstance, setTableInstance] = useState(null);
+  const [isExporting, toggleExportStatus] = useState(false);
 
   useEffect(() => {
     if (!migration) refresh();
@@ -28,13 +27,6 @@ function MigrationReport({ migration, ...props }) {
 
   useEffect(() => {
     if (isLoading && migration) toggleLoadStatus(false);
-
-    // if (migration) {
-    //   let table = TableExport(document.getElementById(tableId), {
-    //     exportButtons: false
-    //   });
-    //   setTableInstance(table);
-    // }
   }, [migration]);
 
   const refresh = () => {
@@ -42,14 +34,13 @@ function MigrationReport({ migration, ...props }) {
     toggleLoadStatus(true);
   };
 
-  const exportTable = () => {
-    alert("In progress");
-    // var exportData = tableInstance.getExportData();
-    // const { data, mimeType, filename, fileExtension } = exportData[
-    //   tableId
-    // ].xlsx;
-    // tableInstance.export2file(data, mimeType, filename, fileExtension);
+  const exportReport = () => {
+    toggleExportStatus(true);
+    exportMigrationReport()
+      .then(res => toggleExportStatus(false))
+      .catch(res => toggleExportStatus(false));
   };
+
   const renderMigration = () => {
     if (!migration) return null;
 
@@ -106,30 +97,30 @@ function MigrationReport({ migration, ...props }) {
             <Spinner />
           </SpinnerWrapper>
         )}
-        <h5>Перемещения техники</h5>
-        {renderMigration()}
+        {migration && !isLoading && (
+          <React.Fragment>
+            <h5>Перемещения техники</h5>
+            {renderMigration()}
+          </React.Fragment>
+        )}
       </div>
       <div className="modal-footer">
-        <button
+        <AsyncButton
+          label="Обновить отчет"
           className="btn left waves-effect waves-light"
-          type="submit"
-          name="action"
-          form="period-form"
           onClick={refresh}
+          isLoading={isLoading}
         >
-          Обновить отчет
           <i className="material-icons right">refresh</i>
-        </button>
-        <button
+        </AsyncButton>
+        <AsyncButton
+          label="Экспортировать в excel"
           className="btn left waves-effect waves-light"
-          type="submit"
-          name="action"
-          form="period-form"
-          onClick={exportTable}
+          onClick={exportReport}
+          isLoading={isExporting}
         >
-          Экспортировать в Excel
           <i className="material-icons right">forward</i>
-        </button>
+        </AsyncButton>
         <Link to="/" className="modal-close waves-effect btn-flat">
           Закрыть
         </Link>

@@ -22,7 +22,10 @@ function LoginForm({ user, ...props }) {
   }, []);
 
   const onClose = () => {
-    history.push("/sp"); // TODO
+    console.log(props);
+    // debugger;
+    // history.push("/sp"); // TODO
+    props.history.goBack();
   };
 
   const onFormSubmit = async event => {

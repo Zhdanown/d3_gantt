@@ -9,8 +9,10 @@ import {
 } from "../utils/LoadMessage";
 import alert from "../utils/Alert";
 
+import { API_BASE_URL } from "../config";
+
 const agex = axios.create({
-  baseURL: "https://agexdev2.agroterra.ru/api"
+  baseURL: API_BASE_URL
 });
 
 agex.interceptors.request.use(request => {

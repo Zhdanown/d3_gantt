@@ -19,7 +19,7 @@ import ProficitReport from "./container/reports/ProficitReport";
 import MigrationReport from "./container/reports/MigrationReport";
 
 /** import actions */
-import { getUserProfile } from "../../actions/auth";
+// import { getUserProfile } from "../../actions/auth";
 import {
   getPlanSeasons,
   getPlanTypes,
@@ -47,12 +47,11 @@ function SeasonPlan(props) {
   const [deficit, setDeficit] = useState(null);
 
   useEffect(() => {
-    props.getUserProfile();
-    props.getPlanSeasons();
-    props.getPlanTypes();
-    props.getAgrooperations();
-    props.getVehicles();
-    props.getEquipment();
+    if (!props.isPlans) props.getPlanSeasons();
+    if (!props.isPlanTypes) props.getPlanTypes();
+    if (!props.isAgroOperations) props.getAgrooperations();
+    if (!props.isVehicles) props.getVehicles();
+    if (!props.isEquipment) props.getEquipment();
     // init default plan load
     loadDefaultPlan();
   }, []);
@@ -106,12 +105,16 @@ function SeasonPlan(props) {
 
 const mapStateToProps = store => {
   return {
-    plans: store.plan.plans
+    isPlans: store.plan.plans.length,
+    isPlanTypes: store.plan.types.length,
+    isAgroOperations: store.plan.agrooperations.length,
+    isVehicles: store.machinery.vehicles.length,
+    isEquipment: store.machinery.equipment.length
   };
 };
 
 export default connect(mapStateToProps, {
-  getUserProfile,
+  // getUserProfile,
   getPlanSeasons,
   getPlanTypes,
   setOperationData,

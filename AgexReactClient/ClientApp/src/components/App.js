@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { Suspense, lazy } from "react";
 import { Router, Route, Switch, Link } from "react-router-dom";
 import history from "../history";
@@ -7,6 +8,9 @@ import history from "../history";
 import "../styles/css/materialize.css";
 import "../styles/css/main.css";
 import "../styles/css/season-plan.css";
+
+/** import actions */
+import { getUserProfile } from "../actions/auth";
 
 import LoginForm from "./shared/LoginForm";
 
@@ -18,10 +22,10 @@ const SeasonPlan = lazy(() => import("./seasonPlan"));
 const AdminPanel = lazy(() => import("./admin"));
 /** import components */
 
-function App({ ...props }) {
-  // const showDeficit = deficitToShow => {
-  //   props.showDeficit(deficitToShow);
-  // };
+function App({ isAccess, ...props }) {
+  useEffect(() => {
+    props.getUserProfile();
+  }, []);
 
   return (
     <Router history={history}>
@@ -47,12 +51,14 @@ function App({ ...props }) {
                         Сезонный план
                       </Link>
                     </li>
-                    <li>
-                      <Link to="/admin">
-                        <i className="material-icons left">build</i>Панель
-                        администратора
-                      </Link>
-                    </li>
+                    {isAccess && (
+                      <li>
+                        <Link to="/admin">
+                          <i className="material-icons left">build</i>Панель
+                          администратора
+                        </Link>
+                      </li>
+                    )}
                   </ul>
                 </Navbar>
               )}
@@ -63,13 +69,20 @@ function App({ ...props }) {
               path="/admin"
               component={props => <AdminPanel {...props} />}
             />
+            <Route path="/login" component={LoginForm} />
           </Suspense>
 
-          <Route path="/login" component={LoginForm} />
+          {/* <Route path="/login" component={LoginForm} /> */}
         </Switch>
       </div>
     </Router>
   );
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    isAccess: state.auth.user && state.auth.user.isAdmin
+  };
+};
+
+export default connect(mapStateToProps, { getUserProfile })(App);

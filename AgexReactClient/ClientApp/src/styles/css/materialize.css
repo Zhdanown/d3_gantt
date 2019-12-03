@@ -8171,5 +8171,13 @@ input[type=range]::-ms-thumb {
     margin-top: 1.2rem;
   }
 }
+@keyframes ripple {
+  0% {
+    background: lightblue radial-gradient(circle, steelblue 1%, transparent 2%);
+  }
+  100% {
+    background: lightblue radial-gradient(circle, steelblue 100%, transparent 101%);
+  }
+}
 
 /*# sourceMappingURL=materialize.css.map */

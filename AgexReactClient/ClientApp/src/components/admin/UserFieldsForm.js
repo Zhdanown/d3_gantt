@@ -1,65 +1,112 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import CollapsibleCard from "../shared/CollapsibleCard";
+import Switch from "../shared/Switch";
 
-function UserFieldsForm(props) {
+const InputField = ({ label, type, id, value, onChange, ...props }) => {
+  useEffect(() => {
+    window.M.updateTextFields();
+  }, []);
+  return (
+    <div className="input-field col s12">
+      <input
+        id={id}
+        type={type}
+        value={value || ""}
+        onChange={e => onChange(e.target.value)}
+        disabled={props.disabled}
+      />
+      <label htmlFor={id}>{label}</label>
+    </div>
+  );
+};
+
+function UserFieldsForm({ userProps, ...props }) {
+  const { isActive, toggleActiveStatus } = userProps;
+  const { isAdmin, toggleAdminStatus } = userProps;
+  const { firstName, setFirstName } = userProps;
+  const { lastName, setLastName } = userProps;
+  const { middleName, setMiddleName } = userProps;
+  const { login, setLogin } = userProps;
+  const { domain, setDomain } = userProps;
+  const { email, setEmail } = userProps;
+  const { phone, setPhone } = userProps;
+
   return (
     <CollapsibleCard header="Основная информация">
       <div className="row">
-        <div className="input-field col s12">
-          <input id="last_name" type="text" />
-          <label htmlFor="last_name">Фамилия</label>
-        </div>
-        <div className="input-field col s12">
-          <input id="name" type="text" />
-          <label htmlFor="name">Имя</label>
-        </div>
-        <div className="input-field col s12">
-          <input id="patronymic" type="text" />
-          <label htmlFor="patronymic">Отчество</label>
-        </div>
+        <InputField
+          label="Фамилия"
+          type="text"
+          id="last_name"
+          value={lastName}
+          onChange={setLastName}
+          disabled={true}
+        />
+        <InputField
+          label="Имя"
+          type="text"
+          id="first_name"
+          value={firstName}
+          onChange={setFirstName}
+          disabled={true}
+        />
+        <InputField
+          label="Отчество"
+          type="text"
+          id="middle_name"
+          value={middleName}
+          onChange={setMiddleName}
+          disabled={true}
+        />
       </div>
 
       <div className="row">
-        <div className="input-field col s12">
-          <input id="login" type="text" />
-          <label htmlFor="login">Логин</label>
-        </div>
-        <div className="input-field col s12">
-          <input id="domain" type="text" />
-          <label htmlFor="domain">Домен</label>
-        </div>
-        <div className="input-field col s12">
-          <input id="email" type="email" className="validate" />
-          <label htmlFor="email">Email</label>
-        </div>
-        <div className="input-field col s12">
-          <input id="phone" type="tel" />
-          <label htmlFor="phone">Телефон</label>
-        </div>
+        <InputField
+          label="Логин"
+          type="text"
+          id="login"
+          value={login}
+          onChange={setLogin}
+          disabled={true}
+        />
+        <InputField
+          label="Домен"
+          type="text"
+          id="domain"
+          value={domain}
+          onChange={setDomain}
+          disabled={true}
+        />
+        <InputField
+          label="Email"
+          type="email"
+          id="email"
+          value={email}
+          onChange={setEmail}
+          disabled={true}
+        />
+        <InputField
+          label="Телефон"
+          type="tel"
+          id="phone"
+          value={phone}
+          onChange={setPhone}
+          disabled={true}
+        />
       </div>
       <div className="row">
-        <div className="input-field col s12">
-          <span className="switch right">
-            <label>
-              Off
-              <input id="is_active" type="checkbox" />
-              <span className="lever"></span>
-              On
-            </label>
-          </span>
-          <label htmlFor="is_active">Активность</label>
-        </div>
-        <div className="input-field col s12">
-          <span className="switch right">
-            <label>
-              Off
-              <input id="is_admin" type="checkbox" />
-              <span className="lever"></span>
-              On
-            </label>
-          </span>
-          <label htmlFor="is_admin">Администратор</label>
-        </div>
+        <Switch
+          label="Активность"
+          id="is_active"
+          on={isActive}
+          onChange={toggleActiveStatus}
+        />
+        <Switch
+          label="Администратор"
+          id="is_admin"
+          on={isAdmin}
+          onChange={toggleAdminStatus}
+        />
       </div>
     </CollapsibleCard>
   );
