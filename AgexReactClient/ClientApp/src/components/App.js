@@ -8,6 +8,7 @@ import history from "../history";
 import "../styles/css/materialize.css";
 import "../styles/css/main.css";
 import "../styles/css/season-plan.css";
+import "material-icons/iconfont/material-icons.css";
 
 /** import actions */
 import { getUserProfile } from "../actions/auth";

@@ -179,7 +179,6 @@ function Gantt({ timeframe, ...props }) {
 
       grid.select(".background").on("click", function(e) {
         d3.event.stopPropagation();
-
         let { offsetX, offsetY } = d3.event;
 
         // take into account broswer zoom level

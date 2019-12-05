@@ -130,6 +130,8 @@ export const evalMachineryQuantity = (evaluatedDay, farmId, machinery) => {
     const foundModel = state.machinery.vehicles.find(
       x => x.vehicleModel.id === model.id && x.farm.id === model.farm.id
     );
+    if (!foundModel) return { ...model, balance: -model.usedQuantity };
+
     let balance = foundModel.count - model.usedQuantity;
     return {
       ...model,
