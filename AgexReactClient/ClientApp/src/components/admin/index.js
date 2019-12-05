@@ -69,6 +69,7 @@ function AdminPanel(props) {
   const [lastName, setLastName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
   const [domain, setDomain] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -83,6 +84,7 @@ function AdminPanel(props) {
     setLastName(user.lastName);
     setMiddleName(user.middleName);
     setLogin(user.login);
+    setPassword(user.password);
     setDomain(user.domain);
     setEmail(user.email);
     setPhone(user.phone);
@@ -103,6 +105,8 @@ function AdminPanel(props) {
     setMiddleName,
     login,
     setLogin,
+    password,
+    setPassword,
     domain,
     setDomain,
     email,
@@ -120,6 +124,7 @@ function AdminPanel(props) {
       domain: domain || null,
       phone: phone || null,
       login: login || null,
+      password: password || null,
       email: email || null,
       isActive,
       isAdmin,
@@ -137,8 +142,8 @@ function AdminPanel(props) {
       if (res.status === 200) {
         setUser({
           ...bodyRequest,
-          userFarms,
-          userRoles
+          userFarms: userFarms.filter(x => x.checked),
+          userRoles: userRoles.filter(x => x.checked)
         });
       }
       toggleSubmittingStatus(false);
@@ -148,19 +153,45 @@ function AdminPanel(props) {
   const renderSubmitButton = () => {
     if (!user) return null;
 
-    // if (
-    //   isActive === user.isActive &&
-    //   isAdmin === user.isAdmin &&
-    //   firstName === user.firstName &&
-    //   lastName === user.lastName &&
-    //   middleName === user.middleName &&
-    //   login === user.login &&
-    //   domain === user.domain &&
-    //   email === user.email &&
-    //   phone === user.phone
-    // ) {
-    //   return null;
-    // }
+    if (
+      isActive === user.isActive &&
+      isAdmin === user.isAdmin &&
+      !checkIfFarmsDiffer() &&
+      !checkIfRolesDiffer()
+    )
+      return null;
+
+    function checkIfRolesDiffer() {
+      let isRolesDiffer = false;
+
+      for (let userRole of userRoles) {
+        const isUserHasRole = user.userRoles.find(x => x.id === userRole.id);
+        if (userRole.checked && !isUserHasRole) {
+          isRolesDiffer = true;
+          break;
+        } else if (!userRole.checked && isUserHasRole) {
+          isRolesDiffer = true;
+          break;
+        }
+      }
+      return isRolesDiffer;
+    }
+
+    function checkIfFarmsDiffer() {
+      let isFarmsDiffer = false;
+
+      for (let userFarm of userFarms) {
+        const isUserHasFarm = user.userFarms.find(x => x.id === userFarm.id);
+        if (userFarm.checked && !isUserHasFarm) {
+          isFarmsDiffer = true;
+          break;
+        } else if (!userFarm.checked && isUserHasFarm) {
+          isFarmsDiffer = true;
+          break;
+        }
+      }
+      return isFarmsDiffer;
+    }
 
     return (
       <AsyncButton

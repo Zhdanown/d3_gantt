@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Checkbox from "../shared/Checkbox";
 import CollapsibleCard from "../shared/CollapsibleCard";
 import CheckboxList from "../shared/CheckboxList";
 import Spinner from "../shared/Spinner";

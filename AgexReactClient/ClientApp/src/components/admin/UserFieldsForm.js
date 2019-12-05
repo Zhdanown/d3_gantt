@@ -27,6 +27,7 @@ function UserFieldsForm({ userProps, ...props }) {
   const { lastName, setLastName } = userProps;
   const { middleName, setMiddleName } = userProps;
   const { login, setLogin } = userProps;
+  const { password, setPassword } = userProps;
   const { domain, setDomain } = userProps;
   const { email, setEmail } = userProps;
   const { phone, setPhone } = userProps;
@@ -68,6 +69,14 @@ function UserFieldsForm({ userProps, ...props }) {
           value={login}
           onChange={setLogin}
           disabled={true}
+        />
+        <InputField
+          label="Пароль"
+          type="text"
+          id="password"
+          value={password}
+          onChange={setPassword}
+          // disabled={true}
         />
         <InputField
           label="Домен"
