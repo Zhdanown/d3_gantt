@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import Modal from "../../shared/Modal";
 import MySelect from "../../shared/MySelect";
 import DatePicker from "../../shared/DatePicker";
+import InputField from "../../shared/InputField";
 import alert from "../../../utils/Alert";
 /** import actions */
 import { addNewOperation } from "../../../actions/seasonPlan/operations";
@@ -20,6 +21,7 @@ function AddOperationForm({ agroOperations, ...props }) {
   const [selectedAgroOperation, selectAgroOperation] = useState(null);
   const [startDate, setStartDate] = useState(new Date(operationData.startDate));
   const [endDate, setEndDate] = useState(new Date(operationData.endDate));
+  const [operationArea, setOperationArea] = useState(cropSquare);
 
   const addNewOperation = () => {
     let errors = [];
@@ -42,7 +44,7 @@ function AddOperationForm({ agroOperations, ...props }) {
       crop,
       farm,
       holding,
-      cropSquare,
+      cropSquare: operationArea,
       startDate,
       endDate,
       periods: []
@@ -50,35 +52,60 @@ function AddOperationForm({ agroOperations, ...props }) {
     props.addNewOperation(newOperation);
   };
 
+  const renderSubmitButton = () => {
+    if (
+      !selectedAgroOperation ||
+      +operationArea <= 0 ||
+      !startDate ||
+      !endDate ||
+      startDate.getTime() > endDate.getTime()
+    )
+      return null;
+    return (
+      <button
+        className="btn waves-effect waves-light modal-close"
+        type="submit"
+        name="action"
+        form="period-form"
+        onClick={addNewOperation}
+      >
+        Добавить операцию
+        <i className="material-icons right">add</i>
+      </button>
+    );
+  };
+
   return (
     <Modal name="loadPlan" onClose={() => history.push("/sp")}>
       <div className="modal-content">
-        <h5 className="center">Добавить операцию</h5>
+        <div className="col s12">
+          <span>{crop.name}</span>
+          <span className="right">
+            {holding.name} - {farm.name}
+          </span>
+        </div>
+        <div className="row"></div>
         <div className="row">
-          {operationData && (
-            <div className="col s12 m6">
-              <p>
-                Холдинг: <b>{holding.name}</b>
-              </p>
-              <p>
-                Хозяйство: <b>{farm.name}</b>
-              </p>
-              <p>
-                Культура: <b>{crop.name}</b>
-              </p>
-            </div>
-          )}
-          <div className="input-field col s12 m6">
-            <h6>Агрооперация</h6>
+          <div className="col s12">
             <MySelect
               name="add_new_operation"
               label="Новая операция"
               options={agroOperations}
-              // defaultValue={season}
               onChange={selectAgroOperation}
+              placeholder="Выбрать операцию..."
             />
           </div>
         </div>
+        <div className="row">
+          <InputField
+            label="Площадь операции (га)"
+            type="number"
+            id="area"
+            value={operationArea}
+            onChange={setOperationArea}
+          />
+        </div>
+
         <div className="row">
           <div className="input-field col s12 m6">
             <DatePicker
@@ -102,16 +129,7 @@ function AddOperationForm({ agroOperations, ...props }) {
         <Link to="/" className="modal-close waves-effect btn-flat">
           Отмена
         </Link>
-        <button
-          className="btn waves-effect waves-light modal-close"
-          type="submit"
-          name="action"
-          form="period-form"
-          onClick={addNewOperation}
-        >
-          Добавить операцию
-          <i className="material-icons right">add</i>
-        </button>
+        {renderSubmitButton()}
       </div>
     </Modal>
   );

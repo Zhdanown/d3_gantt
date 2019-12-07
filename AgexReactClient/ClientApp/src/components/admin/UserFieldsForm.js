@@ -1,24 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import CollapsibleCard from "../shared/CollapsibleCard";
 import Switch from "../shared/Switch";
-
-const InputField = ({ label, type, id, value, onChange, ...props }) => {
-  useEffect(() => {
-    window.M.updateTextFields();
-  }, []);
-  return (
-    <div className="input-field col s12">
-      <input
-        id={id}
-        type={type}
-        value={value || ""}
-        onChange={e => onChange(e.target.value)}
-        disabled={props.disabled}
-      />
-      <label htmlFor={id}>{label}</label>
-    </div>
-  );
-};
+import InputField from "../shared/InputField";
 
 function UserFieldsForm({ userProps, ...props }) {
   const { isActive, toggleActiveStatus } = userProps;
