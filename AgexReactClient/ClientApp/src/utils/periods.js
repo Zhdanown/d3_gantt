@@ -24,11 +24,16 @@ export const getPeriodDates = data => {
     });
     
   } else {
-    let prod = remainingArea / range.length
-    dates = range.map(date => ({
-      day: dateToString(date, "ISO"),
-      productivity: prod
-    }))
+    let avg = remainingArea / range.length;
+    avg = Math.ceil(avg * 10000) / 10000;
+    dates = range.map(date => {
+      const prod = remainingArea < avg ? Math.ceil(remainingArea * 10000) / 10000 : avg;
+      remainingArea -= avg;
+      return {
+        day: dateToString(date, "ISO"),
+        productivity: prod
+      }
+    });
   }
 
   return dates;

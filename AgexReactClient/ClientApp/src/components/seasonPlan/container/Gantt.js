@@ -668,8 +668,9 @@ function Gantt({ timeframe, ...props }) {
         .attr("x", d => {
           const charWidth = 8.09;
           const cellWidth = 40;
-          const textWidth = d.productivity.toString().length * charWidth;
-          return (cellWidth - textWidth) / 2;
+          const textWidth = Math.round(d.productivity).toString().length * charWidth;
+          const offset = (cellWidth - textWidth) / 2;
+          return offset > 0 ? offset : 0;
         });
       periodDayEnter.select("rect");
 
