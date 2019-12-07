@@ -21,7 +21,7 @@ import {
   sortOperations
 } from "../../../utils/plans";
 import { isTermsMet } from "../../../utils/periods";
-import { stretchPeriod, movePeriod } from "../../../utils/drag_n_drop";
+import { stretchPeriod, movePeriod, copyPeriod } from "../../../utils/drag_n_drop";
 import { rebaseToggledState, appendIdsToNodes } from "../../../utils/tree";
 
 // import { CELL_HEIGHT } from "../../constants";
@@ -737,7 +737,11 @@ function Gantt({ timeframe, ...props }) {
 
       // attach event listeners on controls
       period.selectAll(".ctrl").on("mousedown", stretchPeriod);
-      period.on("mousedown", movePeriod);
+      period.on("mousedown", function(d) {
+        const period = d3.select(this).node();
+        if (d3.event.ctrlKey) copyPeriod(d, period, operation)
+        else movePeriod(d, period)
+      });
 
       function top(d) {
         return count(d);

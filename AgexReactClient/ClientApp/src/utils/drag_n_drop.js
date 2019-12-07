@@ -1,6 +1,8 @@
 import * as d3 from "d3";
+import uuidv4 from "uuidv4";
 import store from "../store";
-import { editPeriod } from "../actions/seasonPlan/periods";
+import alert from "./Alert";
+import { editPeriod, addNewPeriod } from "../actions/seasonPlan/periods";
 
 // import { createRange, dateToString } from "../utils";
 import { getPeriodDates, decideProductivity } from "../utils/periods";
@@ -90,8 +92,7 @@ export function stretchPeriod(d) {
   }
 }
 
-export function movePeriod(d) {
-  const period = d3.select(this).node();
+export function movePeriod(d, period) {
   const periodData = period.__data__;
   const operationData = period.parentNode.__data__.data.node;
   const [initX] = d3.mouse(period);
@@ -127,9 +128,9 @@ export function movePeriod(d) {
     let start = new Date(d.days[0].day);
     start.setDate(start.getDate() + delta);
     end.setDate(end.getDate() + delta);
-
-    // const dates = getPeriodDates({ ...d, startDate: start, endDate: end });
-    let { machinery, id } = periodData;
+    
+    const { id } = periodData;
+    let { machinery } = periodData;
     const { agroOperation } = operationData;
 
     machinery = machinery.map(x => ({
@@ -155,4 +156,107 @@ export function movePeriod(d) {
     };
     store.dispatch(editPeriod({ changedPeriod, operationData }));
   }
+}
+
+export function copyPeriod(d, period, operations) {
+  const [initX, initY] = d3.mouse(period);
+  const length = d.days.length; // current amount of days in period
+  let deltaX = 0;
+  let deltaY = 0;
+
+  // append div element with dashed border
+  var resize = d3
+    .select(period)
+    .append("rect")
+    .attr("class", "resize")
+    .attr("height", 20)
+    .attr("width", () => length * 40)
+    .attr("fill", "none")
+    .attr("stroke-width", 2)
+    .attr("stroke", "black")
+    .attr("stroke-dasharray", "5");
+
+    win.on("mousemove", mousemove).on("mouseup", mouseup);
+    d3.event.preventDefault();
+
+    function mousemove() {
+      const [x, y] = d3.mouse(period);
+      const dx = x - initX;
+      const dy = y - initY;
+      deltaX = Math.round(dx / 40);
+      deltaY = Math.round(dy / 20);
+  
+      resize.attr("x", () => deltaX * 40);
+      resize.attr("y", () => deltaY * 20);
+    }
+
+    function mouseup () {
+      win.on("mousemove", null).on("mouseup", null);
+      d3.select(period)
+        .selectAll(".resize")
+        .remove();
+
+      if( deltaY === 0) return;
+      
+      let end = new Date(d.days[d.days.length - 1].day);
+      let start = new Date(d.days[0].day);
+      start.setDate(start.getDate() + deltaX);
+      end.setDate(end.getDate() + deltaX);
+
+      const sourceIndex = +period.parentNode.parentNode.dataset.index;
+      // get operation data
+      let operationIndex = sourceIndex + deltaY;
+      let operationDom = operations.filter(function(x) {
+        let operationRow = d3.select(this);
+        if (operationIndex === +operationRow.node().dataset.index) return x;
+        else return false;
+      });
+      const op = d3
+        .select(operationDom)
+        .node()
+        .node().__data__;
+
+      const periodData = period.__data__;
+      const operationData = op.data.node
+        
+      var { machinery } = periodData;
+      const { agroOperation } = operationData;
+
+      machinery = machinery.map(x => ({
+        vehicle: x.vehicleModel,
+        workEquipment: x.workEquipmentModel
+      }));
+      
+      const machineryWithProductivity = decideProductivity(
+        machinery,
+        agroOperation.id
+      );
+
+      // check productivity
+      const sumProductivity = machineryWithProductivity.reduce((acc, pair) => {
+        return acc + pair.productivity
+      }, 0)
+      // Если суммарная норма выработки не больше 0, 
+      // значит для техники в выбранной операции нет нормы выработки,
+      // следовательно, данную технику выбрать нельзя => отмена копирования
+      if (sumProductivity <= 0) {
+        alert.success("Копирование запрещено. Копируемая техника недоступна для выбранной операции");
+        return;
+      }
+
+      const days = getPeriodDates({
+        ...operationData,
+        startDate: start,
+        endDate: end,
+        machinery: machineryWithProductivity
+      });
+
+      const newPeriod = {
+        ...d,
+        id: uuidv4(),
+        days
+      };
+
+      store.dispatch(addNewPeriod({ newPeriod, operationData }));
+    }
 }
