@@ -19,13 +19,11 @@ import ProficitReport from "./container/reports/ProficitReport";
 import MigrationReport from "./container/reports/MigrationReport";
 
 /** import actions */
-// import { getUserProfile } from "../../actions/auth";
 import {
   getPlanSeasons,
   getPlanTypes,
   getAgrooperations,
   loadPlan
-  // showDeficit
 } from "../../actions/seasonPlan/plans";
 import {
   deleteOperation,
@@ -44,7 +42,8 @@ const formats = {
 
 function SeasonPlan(props) {
   const [timeframe, setTimeFrame] = useState(formats["DAY"]);
-  const [deficit, setDeficit] = useState(null);
+  // const [deficit, setDeficit] = useState(null);
+  const [dayInfo, setDayInfo] = useState(null);
 
   useEffect(() => {
     if (!props.isPlans) props.getPlanSeasons();
@@ -82,10 +81,11 @@ function SeasonPlan(props) {
         deleteOperation={props.deleteOperation}
         addNewPeriod={addNewPeriod}
         editPeriod={editPeriod}
-        showDeficit={setDeficit}
+        // showDeficit={setDeficit}
+        showInfo={setDayInfo}
       />
 
-      <Deficit deficit={deficit} />
+      <Deficit info={dayInfo} />
 
       <Route path="/sp/create_plan" component={CreatePlanForm} />
       <Route path="/sp/load_plan" component={LoadPlanForm} />

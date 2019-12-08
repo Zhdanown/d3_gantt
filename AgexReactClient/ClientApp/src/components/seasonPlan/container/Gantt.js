@@ -711,8 +711,15 @@ function Gantt({ timeframe, ...props }) {
             operation: operation.data.node /*, selectedDate: d*/
           });
         })
-        .on("mouseover", d => props.showDeficit(d.deficit))
-        .on("mouseout", () => props.showDeficit(null));
+        // .on("mouseover", d => props.showDeficit(d.deficit))
+        // .on("mouseout", () => props.showDeficit(null));
+        .on("mouseover", function(d) {
+          let period = d3.select(this).node().parentNode.__data__;
+          const machinery = [...period.machinery];
+
+          props.showInfo({...d, machinery});
+        })
+        .on("mouseout", () => props.showInfo(null));
 
       /*
        ********** APPEND PERIOD CONTROLS ********
