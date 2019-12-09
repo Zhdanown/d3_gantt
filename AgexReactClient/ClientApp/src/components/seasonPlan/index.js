@@ -23,7 +23,9 @@ import {
   getPlanSeasons,
   getPlanTypes,
   getAgrooperations,
-  loadPlan
+  loadPlan,
+  checkUpdates
+  // showDeficit
 } from "../../actions/seasonPlan/plans";
 import {
   deleteOperation,
@@ -33,7 +35,7 @@ import { addNewPeriod, setPeriodData } from "../../actions/seasonPlan/periods";
 import { getVehicles, getEquipment } from "../../actions/seasonPlan/machinery";
 
 /** import utils */
-import { loadDefaultPlan } from "../../utils/plans";
+import { loadDefaultPlan, updatePlan, initUpdateChecks } from "../../utils/plans";
 
 const formats = {
   DAY: { type: "day", cellWidth: 40 },
@@ -53,6 +55,7 @@ function SeasonPlan(props) {
     if (!props.isEquipment) props.getEquipment();
     // init default plan load
     loadDefaultPlan();
+    initUpdateChecks();
   }, []);
 
   const addNewOperation = data => {
@@ -124,5 +127,6 @@ export default connect(mapStateToProps, {
   addNewPeriod,
   getVehicles,
   getEquipment,
-  loadPlan
+  loadPlan,
+  checkUpdates
 })(SeasonPlan);

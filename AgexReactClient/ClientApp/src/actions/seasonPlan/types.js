@@ -8,6 +8,10 @@ export const FETCH_USER_PROFILE = "FETCH_USER_PROFILE";
 export const GET_SEASONS = "GET_SEASONS";
 export const GET_TYPES = "GET_TYPES";
 export const LOAD_PLAN = "LOAD_PLAN";
+/** plans updates */
+export const SET_LAST_UPDATED_PLAN_TIME = "SET_LAST_UPDATED_PLAN_TIME";
+export const SET_UPDATED_DATA = "SET_UPDATED_DATA";
+
 /** operations */
 export const SET_OPERATION_DATA = "SET_OPERATION_DATA";
 export const GET_AGROOPERATIONS = "GET_AGROOPERATIONS";
