@@ -52,6 +52,12 @@
         }
       }
 
+      &.overflowed {
+        .text {
+          color: darkorange;
+        }
+      }
+
       &.manual .text {
         font-style: italic;
       }

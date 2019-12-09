@@ -21,7 +21,11 @@ import {
   sortOperations
 } from "../../../utils/plans";
 import { isTermsMet } from "../../../utils/periods";
-import { stretchPeriod, movePeriod, copyPeriod } from "../../../utils/drag_n_drop";
+import {
+  stretchPeriod,
+  movePeriod,
+  copyPeriod
+} from "../../../utils/drag_n_drop";
 import { rebaseToggledState, appendIdsToNodes } from "../../../utils/tree";
 
 // import { CELL_HEIGHT } from "../../constants";
@@ -400,6 +404,7 @@ function Gantt({ timeframe, ...props }) {
           if (d.data.node.isManual) className += " manual";
           if (isOperationTouched(d)) className += " touched";
           if (isOperationClosed(d)) className += " completed";
+          if (isOperationOverflowed(d)) className += " overflowed";
         }
         return className;
       });
@@ -411,6 +416,12 @@ function Gantt({ timeframe, ...props }) {
       function isOperationClosed(d) {
         let squareRemainder = getSquareRemainder(d.data.node);
         if (squareRemainder <= 0) return true;
+        else return false;
+      }
+
+      function isOperationOverflowed(d) {
+        let squareRemainder = getSquareRemainder(d.data.node);
+        if (squareRemainder < 0) return true;
         else return false;
       }
 
@@ -668,7 +679,8 @@ function Gantt({ timeframe, ...props }) {
         .attr("x", d => {
           const charWidth = 8.09;
           const cellWidth = 40;
-          const textWidth = Math.round(d.productivity).toString().length * charWidth;
+          const textWidth =
+            Math.round(d.productivity).toString().length * charWidth;
           const offset = (cellWidth - textWidth) / 2;
           return offset > 0 ? offset : 0;
         });
@@ -717,7 +729,7 @@ function Gantt({ timeframe, ...props }) {
           let period = d3.select(this).node().parentNode.__data__;
           const machinery = [...period.machinery];
 
-          props.showInfo({...d, machinery});
+          props.showInfo({ ...d, machinery });
         })
         .on("mouseout", () => props.showInfo(null));
 
@@ -746,8 +758,8 @@ function Gantt({ timeframe, ...props }) {
       period.selectAll(".ctrl").on("mousedown", stretchPeriod);
       period.on("mousedown", function(d) {
         const period = d3.select(this).node();
-        if (d3.event.ctrlKey) copyPeriod(d, period, operation)
-        else movePeriod(d, period)
+        if (d3.event.ctrlKey) copyPeriod(d, period, operation);
+        else movePeriod(d, period);
       });
 
       function top(d) {
