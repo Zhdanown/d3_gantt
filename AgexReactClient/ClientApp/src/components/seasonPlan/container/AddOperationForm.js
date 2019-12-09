@@ -76,7 +76,7 @@ function AddOperationForm({ agroOperations, ...props }) {
   };
 
   return (
-    <Modal name="loadPlan" onClose={() => history.push("/sp")}>
+    <Modal name="addOperation" onClose={() => history.push("/sp")}>
       <div className="modal-content">
         <div className="col s12">
           <span>{crop.name}</span>

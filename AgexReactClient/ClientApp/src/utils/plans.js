@@ -1,6 +1,7 @@
 import store from "../store";
-import { createRange, stringToDate } from "./dateHelper";
-import { loadPlan } from "../actions/seasonPlan/plans";
+import { createRange, stringToDate, dateToString } from "./dateHelper";
+import { loadPlan, checkUpdates, setLastUpdatedTime } from "../actions/seasonPlan/plans";
+import alert from "./Alert";
 
 export async function getSeasonId() {
   const state = store.getState();
@@ -18,6 +19,16 @@ export async function getSeasonId() {
       });
   return seasonId;
 }
+
+export const updatePlan = async () => {
+  const state = store.getState();
+  // get current seson
+  const currentSeason = state.plan.plans[0].selectedSeason;
+  const type = state.plan.types[0];
+  if (!currentSeason || !type) return;
+
+  store.dispatch(loadPlan({ season: currentSeason, type }));
+};
 
 export const loadDefaultPlan = async () => {
   const currentSeason = await new Promise((resolve, reject) => {
@@ -38,6 +49,9 @@ export const loadDefaultPlan = async () => {
   });
 
   store.dispatch(loadPlan({ season: currentSeason, type }));
+
+  const lastUpdated = dateToString(new Date(), "ISO");
+  store.dispatch(setLastUpdatedTime(lastUpdated))
 };
 
 export const getHierarchy = operations => {
@@ -200,4 +214,20 @@ export const sortOperations = operations => {
       }
     } else return aTime - bTime;
   });
+};
+
+export const initUpdateChecks = () => {
+  function fetchUpdates() {
+    const state = store.getState();
+    let { selectedSeason } = state.plan.plans.length
+      ? state.plan.plans[0]
+      : null;
+    let { lastUpdated } = state.spUpdate;
+    if (!selectedSeason || !lastUpdated) return;
+    store.dispatch(checkUpdates(selectedSeason, lastUpdated));
+  }
+
+  setInterval(() => {
+    fetchUpdates();
+  }, 60 * 1000);
 };
