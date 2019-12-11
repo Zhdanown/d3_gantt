@@ -8179,5 +8179,8 @@ input[type=range]::-ms-thumb {
     background: lightblue radial-gradient(circle, steelblue 100%, transparent 101%);
   }
 }
+.btn-block {
+  width: 100%;
+}
 
 /*# sourceMappingURL=materialize.css.map */

@@ -60,6 +60,30 @@ function AdminPanel(props) {
       });
   };
 
+  const changePassword = newPassword => {
+    if (!password) return;
+    const bodyRequest = {
+      id: user.id,
+      firstName,
+      lastName,
+      login,
+      password: newPassword
+    };
+
+    api
+      .patch(`/user/reset-password/`, bodyRequest)
+      .then(res => {
+        if (newPassword) toggleIsUserHasPassword(true);
+        else {
+          setPassword("");
+          toggleIsUserHasPassword(false);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   /*
    ********** userProps ********
    */
@@ -76,6 +100,8 @@ function AdminPanel(props) {
   const [userRoles, setUserRoles] = useState([]);
   const [userFarms, setUserFarms] = useState([]);
 
+  const [isUserHasPassword, toggleIsUserHasPassword] = useState(false);
+
   useEffect(() => {
     if (!user) return;
     toggleActiveStatus(user.isActive);
@@ -85,6 +111,7 @@ function AdminPanel(props) {
     setMiddleName(user.middleName);
     setLogin(user.login);
     setPassword(user.password);
+    toggleIsUserHasPassword(user.password ? true : false);
     setDomain(user.domain);
     setEmail(user.email);
     setPhone(user.phone);
@@ -107,6 +134,8 @@ function AdminPanel(props) {
     setLogin,
     password,
     setPassword,
+    changePassword,
+    isUserHasPassword,
     domain,
     setDomain,
     email,
@@ -124,7 +153,7 @@ function AdminPanel(props) {
       domain: domain || null,
       phone: phone || null,
       login: login || null,
-      password: password || null,
+      // password: password || null,
       email: email || null,
       isActive,
       isAdmin,

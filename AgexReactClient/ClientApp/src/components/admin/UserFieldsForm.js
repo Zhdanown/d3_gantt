@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CollapsibleCard from "../shared/CollapsibleCard";
 import Switch from "../shared/Switch";
 import InputField from "../shared/InputField";
@@ -10,7 +10,12 @@ function UserFieldsForm({ userProps, ...props }) {
   const { lastName, setLastName } = userProps;
   const { middleName, setMiddleName } = userProps;
   const { login, setLogin } = userProps;
-  const { password, setPassword } = userProps;
+  const {
+    password,
+    setPassword,
+    changePassword,
+    isUserHasPassword
+  } = userProps;
   const { domain, setDomain } = userProps;
   const { email, setEmail } = userProps;
   const { phone, setPhone } = userProps;
@@ -53,14 +58,14 @@ function UserFieldsForm({ userProps, ...props }) {
           onChange={setLogin}
           disabled={true}
         />
-        <InputField
+        {/* <InputField
           label="Пароль"
           type="text"
           id="password"
           value={password}
           onChange={setPassword}
           // disabled={true}
-        />
+        /> */}
         <InputField
           label="Домен"
           type="text"
@@ -99,6 +104,40 @@ function UserFieldsForm({ userProps, ...props }) {
           on={isAdmin}
           onChange={toggleAdminStatus}
         />
+      </div>
+      <div className="divider"></div>
+      <div className="row">
+        <InputField
+          label="Пароль"
+          type="password"
+          id="password"
+          value={password}
+          onChange={setPassword}
+          helperText="Мин. длина - 5 символов"
+          // disabled={true}
+        />
+        {password && password.length >= 5 && (
+          <div className="col s12">
+            <button
+              type="button"
+              className="btn btn-block"
+              onClick={() => changePassword(password)}
+            >
+              Изменить пароль
+            </button>
+          </div>
+        )}
+        {isUserHasPassword && (
+          <div className="col s12" style={{ marginTop: "1rem" }}>
+            <button
+              type="button"
+              className="btn btn-block"
+              onClick={() => changePassword(null)}
+            >
+              Сбросить пароль
+            </button>
+          </div>
+        )}
       </div>
     </CollapsibleCard>
   );
