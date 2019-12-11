@@ -21,6 +21,8 @@ function Deficit({ info }) {
   const vehicles = machinery.flatMap(pair => pair.vehicleModel);
   const equipment = machinery.flatMap(pair => pair.workEquipmentModel);
   let modelsList = [...vehicles, ...equipment];
+  // filter out models equal to null (no equipment in pair)
+  modelsList = modelsList.filter(x => x);
   // modelsList
   modelsList = modelsList.map(model => (
     <React.Fragment key={model.id + model.farm.id}>
@@ -30,14 +32,16 @@ function Deficit({ info }) {
       <br />
     </React.Fragment>
   ));
-  const deficitList = deficit && deficit.map(entry => (
-        <React.Fragment key={entry.id + entry.farm.id}>
-          <span style={{color: 'red'}}>
-            {entry.balance} {entry.name} ({entry.farm.name})
-          </span>
-          <br />
-        </React.Fragment>
-      ));
+  const deficitList =
+    deficit &&
+    deficit.map(entry => (
+      <React.Fragment key={entry.id + entry.farm.id}>
+        <span style={{ color: "red" }}>
+          {entry.balance} {entry.name} ({entry.farm.name})
+        </span>
+        <br />
+      </React.Fragment>
+    ));
   return (
     <div className="deficitWindow" style={style}>
       {modelsList}
