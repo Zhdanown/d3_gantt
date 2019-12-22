@@ -621,6 +621,18 @@ function Gantt({ timeframe, ...props }) {
       period = periodEnter.merge(period);
       // period.attr("transform", d => `translate(${left(d) * 40}, 0)`);
 
+      // remove old period border
+      period.selectAll(".border").remove();
+
+      // Append period border
+      period
+        .append("rect")
+        .attr("class", "border")
+        .attr("width", d => d.days.length * 40)
+        .attr("height", 20)
+        .attr("stroke", "#222")
+        .attr("fill", "none");
+
       // PERIODDAY
       // select all days in period
       let periodDay = period.selectAll(".day").data(
@@ -728,18 +740,6 @@ function Gantt({ timeframe, ...props }) {
           props.showInfo({ ...d, machinery });
         })
         .on("mouseout", () => props.showInfo(null));
-
-      // remove old period border
-      period.selectAll(".border").remove();
-
-      // Append period border
-      period
-        .append("rect")
-        .attr("class", "border")
-        .attr("width", d => d.days.length * 40)
-        .attr("height", 20)
-        .attr("stroke", "#222")
-        .attr("fill", "transparent");
 
       /*
        ********** APPEND PERIOD CONTROLS ********

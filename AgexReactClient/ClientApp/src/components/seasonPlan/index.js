@@ -35,7 +35,11 @@ import { addNewPeriod, setPeriodData } from "../../actions/seasonPlan/periods";
 import { getVehicles, getEquipment } from "../../actions/seasonPlan/machinery";
 
 /** import utils */
-import { loadDefaultPlan, updatePlan, initUpdateChecks } from "../../utils/plans";
+import {
+  loadDefaultPlan,
+  updatePlan,
+  initUpdateChecks
+} from "../../utils/plans";
 
 const formats = {
   DAY: { type: "day", cellWidth: 40 },
@@ -46,6 +50,7 @@ function SeasonPlan(props) {
   const [timeframe, setTimeFrame] = useState(formats["DAY"]);
   // const [deficit, setDeficit] = useState(null);
   const [dayInfo, setDayInfo] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: null, y: null });
 
   useEffect(() => {
     if (!props.isPlans) props.getPlanSeasons();
@@ -56,6 +61,15 @@ function SeasonPlan(props) {
     // init default plan load
     loadDefaultPlan();
     initUpdateChecks();
+
+    // handle mouse coordinates
+    var handleMouseMove = function(event) {
+      setMousePosition({ x: event.clientX, y: event.clientY });
+    };
+    document.addEventListener("mousemove", handleMouseMove, false);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove, false);
+    };
   }, []);
 
   const addNewOperation = data => {
@@ -88,7 +102,7 @@ function SeasonPlan(props) {
         showInfo={setDayInfo}
       />
 
-      <Deficit info={dayInfo} />
+      {dayInfo && <Deficit info={dayInfo} mouse={mousePosition} />}
 
       <Route path="/sp/create_plan" component={CreatePlanForm} />
       <Route path="/sp/load_plan" component={LoadPlanForm} />

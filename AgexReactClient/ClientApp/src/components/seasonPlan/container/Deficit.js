@@ -1,22 +1,45 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const style = {
   position: "absolute",
-  bottom: 0,
-  left: 0,
-  margin: "2em",
+  // bottom: 0,
+  // left: 0,
+  // margin: "2em",
   background: "#323232",
   color: "white",
   padding: "10px 25px",
   borderRadius: "2px",
-  zIndex: 2
+  zIndex: 2,
+  width: "max-content"
 };
 
-function Deficit({ info }) {
+function Deficit({ info, mouse }) {
   if (!info) return null;
   const { deficit, machinery } = info;
 
-  console.log(info);
+  var deficitWindowRef = useRef();
+
+  // calculate window position
+  var left, top;
+  var margin = 20;
+  if (deficitWindowRef.current) {
+    var w = deficitWindowRef.current.clientWidth;
+    var h = deficitWindowRef.current.clientHeight;
+    // handle left
+    if (mouse.x + w / 2 > window.innerWidth) {
+      left = mouse.x - w - margin;
+    } else if (mouse.x - w / 2 < 0) {
+      left = mouse.x + margin;
+    } else {
+      left = mouse.x - w / 2;
+    }
+    // handle top
+    if (mouse.y + h + margin > window.innerHeight) {
+      top = mouse.y - h - margin;
+    } else {
+      top = mouse.y + margin;
+    }
+  }
 
   const vehicles = machinery.flatMap(pair => pair.vehicleModel);
   const equipment = machinery.flatMap(pair => pair.workEquipmentModel);
@@ -24,18 +47,18 @@ function Deficit({ info }) {
   // filter out models equal to null (no equipment in pair)
   modelsList = modelsList.filter(x => x);
   // modelsList
-  modelsList = modelsList.map(model => (
-    <React.Fragment key={model.id + model.farm.id}>
+  modelsList = modelsList.map((model, index) => (
+    <React.Fragment key={index}>
       <span>
-        1 {model.name} ({model.farm.name})
+        {model.name} ({model.farm.name})
       </span>
       <br />
     </React.Fragment>
   ));
   const deficitList =
     deficit &&
-    deficit.map(entry => (
-      <React.Fragment key={entry.id + entry.farm.id}>
+    deficit.map((entry, index) => (
+      <React.Fragment key={index}>
         <span style={{ color: "red" }}>
           {entry.balance} {entry.name} ({entry.farm.name})
         </span>
@@ -43,27 +66,18 @@ function Deficit({ info }) {
       </React.Fragment>
     ));
   return (
-    <div className="deficitWindow" style={style}>
+    <div
+      ref={deficitWindowRef}
+      className="deficitWindow"
+      style={{ ...style, left, top }}
+    >
+      <h5>Состав техники</h5>
       {modelsList}
+      {deficit && <h5>Из них в дефиците</h5>}
+
       {deficitList}
     </div>
   );
-
-  // if (dayInfo && dayInfo.length) {
-  //   let list = dayInfo.map(entry => (
-  //     <React.Fragment key={entry.id + entry.farm.id}>
-  //       <span>
-  //         {entry.balance} {entry.name} ({entry.farm.name})
-  //       </span>
-  //       <br />
-  //     </React.Fragment>
-  //   ));
-  //   return (
-  //     <div className="deficitWindow" style={style}>
-  //       {list}
-  //     </div>
-  //   );
-  // } else return null;
 }
 
 export default Deficit;
