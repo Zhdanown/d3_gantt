@@ -174,6 +174,9 @@ function AddPeriodForm(props) {
             ) : null}
           </div>
         </div>
+        {remainingArea <= 0 && (
+          <h5 className="center">Площадь по данной операции распределена!</h5>
+        )}
       </div>
       <div className="modal-footer">
         <Link to="/" className="modal-close waves-effect btn-flat">
