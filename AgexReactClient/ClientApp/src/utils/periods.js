@@ -10,8 +10,7 @@ export const getPeriodDates = data => {
   let range = createRange(new Date(startDate), new Date(endDate));
 
   let dates;
-  if ( Math.ceil(remainingArea / totalProductiity) >= range.length ) {
-
+  if (Math.ceil(remainingArea / totalProductiity) >= range.length) {
     dates = range.map(date => {
       let prod =
         remainingArea / totalProductiity < 1 ? remainingArea : totalProductiity;
@@ -22,17 +21,17 @@ export const getPeriodDates = data => {
         productivity: prod > 0 ? prod : 0
       };
     });
-    
   } else {
     let avg = remainingArea / range.length;
     avg = Math.ceil(avg * 10000) / 10000;
     dates = range.map(date => {
-      const prod = remainingArea < avg ? Math.ceil(remainingArea * 10000) / 10000 : avg;
-      remainingArea -= avg;
+      const prod =
+        remainingArea < avg ? Math.round(remainingArea * 10000) / 10000 : avg;
+      remainingArea = Math.round(10000 * (remainingArea - avg)) / 10000;
       return {
         day: dateToString(date, "ISO"),
         productivity: prod
-      }
+      };
     });
   }
 

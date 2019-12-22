@@ -1,7 +1,10 @@
 import store from "../store";
 import { createRange, stringToDate, dateToString } from "./dateHelper";
-import { loadPlan, checkUpdates, setLastUpdatedTime } from "../actions/seasonPlan/plans";
-import alert from "./Alert";
+import {
+  loadPlan,
+  checkUpdates,
+  setLastUpdatedTime
+} from "../actions/seasonPlan/plans";
 
 export async function getSeasonId() {
   const state = store.getState();
@@ -51,7 +54,7 @@ export const loadDefaultPlan = async () => {
   store.dispatch(loadPlan({ season: currentSeason, type }));
 
   const lastUpdated = dateToString(new Date(), "ISO");
-  store.dispatch(setLastUpdatedTime(lastUpdated))
+  store.dispatch(setLastUpdatedTime(lastUpdated));
 };
 
 export const getHierarchy = operations => {
@@ -181,7 +184,7 @@ export const getSquareRemainder = (operation, periodId = null) => {
 
   let sumProductivity = periods.reduce((totalProd, period) => {
     totalProd += period.days.reduce((acc, day) => {
-      acc += day.productivity;
+      acc = Math.round((acc + day.productivity) * 10000) / 10000;
       return acc;
     }, 0);
     return totalProd;
