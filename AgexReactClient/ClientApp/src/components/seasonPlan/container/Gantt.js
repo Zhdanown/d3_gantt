@@ -563,9 +563,7 @@ function Gantt({ timeframe, ...props }) {
         .attr("width", 40)
         .attr("height", 20)
         .attr("fill", "#aaa")
-        .attr("fill-opacity", 0.5)
-        .attr("stroke", "lightgray")
-        .attr("stroke-width", 1);
+        .attr("fill-opacity", 0.5);
 
       agrotermDay = agrotermDayEnter.merge(agrotermDay);
       agrotermDay.on("click", function(d) {
@@ -660,9 +658,7 @@ function Gantt({ timeframe, ...props }) {
         .attr("width", 40)
         .attr("height", 20)
         .attr("fill", "green")
-        .attr("fill-opacity", checkTerms)
-        .attr("stroke", "lightgray")
-        .attr("stroke-width", 1);
+        .attr("fill-opacity", checkTerms);
 
       function checkTerms(d) {
         const operationData = d3.select(this).node().parentNode.parentNode
@@ -732,6 +728,18 @@ function Gantt({ timeframe, ...props }) {
           props.showInfo({ ...d, machinery });
         })
         .on("mouseout", () => props.showInfo(null));
+
+      // remove old period border
+      period.selectAll(".border").remove();
+
+      // Append period border
+      period
+        .append("rect")
+        .attr("class", "border")
+        .attr("width", d => d.days.length * 40)
+        .attr("height", 20)
+        .attr("stroke", "#222")
+        .attr("fill", "transparent");
 
       /*
        ********** APPEND PERIOD CONTROLS ********
