@@ -17,6 +17,10 @@ nav .updated {
   max-height: 100% !important;
   top: 0 !important;
 }
+.modal.confirm {
+  width: 500px;
+  max-height: 250px;
+}
 .modal .modal-footer button.left:not(:first-child) {
   margin-left: 1rem;
 }
@@ -87,6 +91,11 @@ nav .updated {
 
 .switch + label {
   margin-top: -12px;
+}
+
+#react-confirm-alert {
+  position: absolute;
+  z-index: 1010;
 }
 
 /*# sourceMappingURL=main.css.map */

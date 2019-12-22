@@ -27,6 +27,7 @@ import {
   copyPeriod
 } from "../../../utils/drag_n_drop";
 import { rebaseToggledState, appendIdsToNodes } from "../../../utils/tree";
+import confirm from "../../../utils/ConfirmModal";
 
 // import { CELL_HEIGHT } from "../../constants";
 
@@ -371,7 +372,11 @@ function Gantt({ timeframe, ...props }) {
         .html("delete_outline")
         .on("click", function(d) {
           d3.event.stopPropagation();
-          props.deleteOperation(d.data.node);
+          confirm({
+            message: "Вы уверены, что хотите удалить эту операцию?",
+            onClose: () => {},
+            onOk: () => props.deleteOperation(d.data.node)
+          });
         });
 
       legendNode = legendNodeEnter.merge(legendNode);

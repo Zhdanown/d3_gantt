@@ -15,6 +15,7 @@ import {
   decideProductivity
 } from "../../../utils/periods";
 import { getSquareRemainder } from "../../../utils/plans";
+import confirm from "../../../utils/ConfirmModal";
 
 /** import actions */
 import {
@@ -120,7 +121,17 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
   };
 
   const deletePeriod = () => {
-    props.deletePeriod({ period: periodData, operation: operationData });
+    confirm({
+      onClose: () => {},
+      onOk: () => {
+        props.deletePeriod({ period: periodData, operation: operationData });
+        var instance = window.M.Modal.getInstance(
+          document.getElementById("editPeriod")
+        );
+        instance.close();
+      },
+      message: "Вы уверены, что хотите удалить этот период?"
+    });
   };
 
   const closeForm = () => {
@@ -199,7 +210,7 @@ function EditPeriodForm({ periodData, operationData, ...props }) {
       </div>
       <div className="modal-footer">
         <button
-          className="btn left red waves-effect waves-light modal-close"
+          className="btn left red waves-effect waves-light"
           type="submit"
           name="action"
           form="period-form"
