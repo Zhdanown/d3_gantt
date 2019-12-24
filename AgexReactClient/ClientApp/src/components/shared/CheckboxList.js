@@ -19,7 +19,14 @@ function CheckboxList({ list, onListChange }) {
 
   const onAllChange = item => {
     toggleAll(item.checked);
-    const newList = list.map(x => ({ ...x, checked: item.checked }));
+    const newList = list.map(x => {
+      if (!x.hidden) {
+        return {
+          ...x,
+          checked: item.checked
+        };
+      } else return x;
+    });
     onListChange(newList);
   };
 
@@ -31,13 +38,16 @@ function CheckboxList({ list, onListChange }) {
           onInputChange={onAllChange}
         />
         <div className="divider"></div>
-        {list.map(listItem => (
-          <Checkbox
-            key={listItem.id}
-            item={listItem}
-            onInputChange={onInputChange}
-          />
-        ))}
+        {list.map(listItem => {
+          if (!listItem.hidden)
+            return (
+              <Checkbox
+                key={listItem.id}
+                item={listItem}
+                onInputChange={onInputChange}
+              />
+            );
+        })}
       </React.Fragment>
     );
   else return null;

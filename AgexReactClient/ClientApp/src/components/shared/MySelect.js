@@ -14,6 +14,14 @@ function MySelect({ options, defaultValue, classPrefix, maxHeight, ...props }) {
 
   useEffect(() => {
     if (defaultValue === null) setValue(defaultValue);
+    else {
+      // const newValue = {
+      //   label: defaultValue.name || defaultValue.label,
+      //   value: defaultValue
+      // };
+      // selectedValue;
+      // debugger;
+    }
   }, [defaultValue]);
 
   const onSelectChange = value => {

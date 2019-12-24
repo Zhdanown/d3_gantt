@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import history from "../../../history";
 
@@ -6,6 +6,7 @@ import history from "../../../history";
 import { Link } from "react-router-dom";
 import Modal from "../../shared/Modal";
 import CheckboxList from "../../shared/CheckboxList";
+import InputField from "../../shared/InputField";
 
 // import actions
 import { filter } from "../../../actions/seasonPlan/filter";
@@ -77,6 +78,44 @@ function FilterForm({ ...props }) {
   const [cropList, setCropList] = useState(crops);
   const [farmList, setFarmList] = useState(farms);
   const [agroOperationList, setAgroOperationList] = useState(agroOperations);
+  const [filterKeyWords, setFilterKeyWords] = useState("");
+
+  /*
+   ********** FILTER_SEARCH ********
+   */
+  useEffect(() => {
+    const regExp = new RegExp(filterKeyWords, "i");
+
+    const newFarmList = farmList.map(x => {
+      if (x.name.match(regExp)) {
+        x.hidden = false;
+      } else {
+        x.hidden = true;
+      }
+      return x;
+    });
+    setFarmList(newFarmList);
+
+    const newCropList = cropList.map(x => {
+      if (x.name.match(regExp)) {
+        x.hidden = false;
+      } else {
+        x.hidden = true;
+      }
+      return x;
+    });
+    setCropList(newCropList);
+
+    const newAgroOperationList = agroOperationList.map(x => {
+      if (x.name.match(regExp)) {
+        x.hidden = false;
+      } else {
+        x.hidden = true;
+      }
+      return x;
+    });
+    setAgroOperationList(newAgroOperationList);
+  }, [filterKeyWords]);
 
   const applyFilter = () => {
     // get list of crops to filter out
@@ -95,9 +134,30 @@ function FilterForm({ ...props }) {
     });
   };
 
+  const checkFilterStatus = () => {
+    if (
+      !farmList.filter(x => x.checked).length ||
+      !cropList.filter(x => x.checked).length ||
+      !agroOperationList.filter(x => x.checked).length
+    )
+      return true;
+    else return false;
+  };
+
   return (
     <Modal name="filterForm" onClose={() => history.push("/sp")}>
       <div className="modal-content">
+        <div className="row">
+          <div className="col s12">
+            <InputField
+              label="Поиск"
+              type="text"
+              id="search_filter"
+              value={filterKeyWords}
+              onChange={setFilterKeyWords}
+            />
+          </div>
+        </div>
         <div className="row">
           <div className="col s4">
             <CheckboxList
@@ -131,6 +191,7 @@ function FilterForm({ ...props }) {
           name="action"
           form="period-form"
           onClick={applyFilter}
+          disabled={checkFilterStatus()}
         >
           Применить фильтр
           <i className="material-icons right">add</i>

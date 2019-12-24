@@ -51,7 +51,14 @@ export const loadDefaultPlan = async () => {
     });
   });
 
-  store.dispatch(loadPlan({ season: currentSeason, type }));
+  // get last version of season by default
+  const lastVersion = Math.max(
+    ...currentSeason.versions.flatMap(x => x.version)
+  );
+  // debugger;
+  store.dispatch(
+    loadPlan({ season: currentSeason, type, version: lastVersion })
+  );
 
   const lastUpdated = dateToString(new Date(), "ISO");
   store.dispatch(setLastUpdatedTime(lastUpdated));

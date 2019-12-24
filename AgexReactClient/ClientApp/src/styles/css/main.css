@@ -84,6 +84,9 @@ nav .updated {
   min-height: 24px !important;
 }
 
+.rs__menu {
+  z-index: 2 !important;
+}
 .rs__menu .rs__option {
   padding: 0.2rem !important;
   font-size: 0.8rem !important;

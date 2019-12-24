@@ -33,24 +33,6 @@ function MachineryCatalogue({ vehicles, equipment }) {
     farm.vehicles = vehicles.filter(vehicle => vehicle.farm.id === farm.id);
   }
 
-  // let groupList = (
-  //   <ul className="collapsible">
-  //     {farms.map(farm => (
-  //       <li key={farm.id}>
-  //         <div className="collapsible-header">
-  //           {/* <i className="material-icons">filter_drama</i> */}
-  //           {farm.name}
-  //         </div>
-  //         <div className="collapsible-body">
-  //           {farm.vehicles.map((vehicle, index) => (
-  //             <ModelItem key={index} vehicle={vehicle}/>
-  //           ))}
-  //         </div>
-  //       </li>
-  //     ))}
-  //   </ul>
-  // );
-
   return (
     <Modal
       name="machineryCatalogue"
@@ -63,16 +45,7 @@ function MachineryCatalogue({ vehicles, equipment }) {
             <Spinner />
           </SpinnerWrapper>
         )}
-        {/* <ul className="tabs tabs-fixed-width z-depth-1">
-          <li className="tab">
-            <a className="active" href="#vehicles">
-              Самоходная техника
-            </a>
-          </li>
-          <li className="tab">
-            <a href="#equipment">Прицепное оборудование</a>
-          </li>
-        </ul> */}
+
         <div id="vehicles" className="col s12 list">
           <ModelsTab models={vehicles} />
         </div>
@@ -81,9 +54,6 @@ function MachineryCatalogue({ vehicles, equipment }) {
         </div>
       </div>
       <div className="modal-footer">
-        {/* <Link to="/" className="modal-close waves-effect btn-flat">
-          Закрыть
-        </Link> */}
         <ul className="tabs tabs-fixed-width z-depth-1">
           <li className="tab">
             <a className="active" href="#vehicles">

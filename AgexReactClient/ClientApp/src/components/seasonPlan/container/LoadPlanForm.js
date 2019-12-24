@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import history from "../../../history";
 /** import components */
@@ -14,8 +14,23 @@ import { dateToString } from "../../../utils/dateHelper";
 function LoadPlanForm(props) {
   const [season, setSeason] = useState(null);
   const [type, setType] = useState(null);
+  const [versionList, setVersionList] = useState([]);
+  const [version, setVersion] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
+  // set type
+  useEffect(() => {
+    if (props.types.length) {
+      let _type = props.types[0];
+      setType(_type);
+    }
+  }, [props.types]);
+
+  useEffect(() => {
+    setVersion(null);
+    if (season) setVersionList(season.versions);
+  }, [season]);
 
   // discard previous seasons
   let seasons = props.seasons.filter(x => !x.isDelete);
@@ -26,8 +41,7 @@ function LoadPlanForm(props) {
     // const end = dateToString(endDate, "yyyy-mm-dd");
     const start = "2020-03-01";
     const end = "2021-03-01";
-
-    props.loadPlan({ season, type /*, start, end*/ });
+    props.loadPlan({ season, type, version: version.version });
   };
 
   return (
@@ -43,16 +57,19 @@ function LoadPlanForm(props) {
               options={seasons}
               defaultValue={season}
               onChange={setSeason}
+              placeholder="Выерите сезон"
             />
           </div>
           <div className="input-field col s12">
-            <h6>Тип</h6>
+            <h6>Версия</h6>
             <MySelect
-              name="type_plan_create"
-              label="Тип"
-              options={props.types}
-              defaultValue={type}
-              onChange={setType}
+              name="version_plan_create"
+              label="Версия"
+              options={versionList}
+              defaultValue={version}
+              onChange={setVersion}
+              getOptionLabel={opt => opt.value.version}
+              placeholder="Выберите версию"
             />
           </div>
         </div>

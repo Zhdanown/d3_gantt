@@ -4,7 +4,7 @@ import { Collapsible } from "materialize-css";
 function CollapsibleCard({ ...props }) {
   const collapsibleRef = useRef();
   useEffect(() => {
-    Collapsible.init(collapsibleRef.current, { accordion: false });
+    Collapsible.init(collapsibleRef.current, { accordion: props.isAccordion });
   }, []);
 
   return (
@@ -18,3 +18,7 @@ function CollapsibleCard({ ...props }) {
 }
 
 export default CollapsibleCard;
+
+CollapsibleCard.defaultProps = {
+  isAccordion: false
+};

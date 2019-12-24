@@ -22,13 +22,14 @@ const getTypes = types => ({
   payload: types
 });
 
-export const setLastUpdatedTime = (lastUpdated) => ({
+export const setLastUpdatedTime = lastUpdated => ({
   type: SET_LAST_UPDATED_PLAN_TIME,
   payload: lastUpdated
-})
+});
 
 export const getPlanSeasons = () => async dispatch => {
-  var response = await agex.get("/agrofield/season");
+  // var response = await agex.get("/agrofield/season");
+  var response = await agex.get("/seasonplan/seasons");
 
   if (response && response.status === 200) dispatch(getSeasons(response.data));
   else {
@@ -40,7 +41,7 @@ export const getPlanTypes = () => async dispatch => {
   if (response && response.status === 200) dispatch(getTypes(response.data));
 };
 
-export const createNewPlan = ({ season, type }) => async dispatch => {
+export const createNewPlan = ({ season, type, version }) => async dispatch => {
   try {
     var response = await agex.post("/seasonplan/create", {
       SeasonId: season.id,
@@ -55,9 +56,9 @@ export const createNewPlan = ({ season, type }) => async dispatch => {
   }
 };
 
-export const loadPlan = ({ season, type, start, end }) => async dispatch => {
+export const loadPlan = ({ season, type, version }) => async dispatch => {
   const response = await agex.get(
-    `/seasonplan/season-plan-list/${season.id}/${type.id}`
+    `/seasonplan/season-plan-list/${season.id}/${type.id}/${version}`
   );
   if (response && response.status === 200) {
     if (!response.data.length) alert.success("Сезонный план не найден");
@@ -68,7 +69,7 @@ export const loadPlan = ({ season, type, start, end }) => async dispatch => {
         selectedSeason: season
       }))
     });
-  } 
+  }
 };
 
 export const getAgrooperations = () => async dispatch => {
@@ -81,10 +82,18 @@ export const getAgrooperations = () => async dispatch => {
   }
 };
 
-export const checkUpdates = (season, lastUpdated) => async (dispatch, getState) => {
+export const checkUpdates = (season, lastUpdated) => async (
+  dispatch,
+  getState
+) => {
+  // get version of currently opened plan
+  const state = getState();
+  const plan = state.plan.plans[0];
+  if (!plan) return;
+
   const response = await agex.get("/seasonplan/check-events", {
     params: {
-      season: season.id, // seasonId
+      seasonPlanId: plan.id,
       start_date: lastUpdated
     }
   });
@@ -94,18 +103,18 @@ export const checkUpdates = (season, lastUpdated) => async (dispatch, getState) 
     dispatch({
       type: SET_LAST_UPDATED_PLAN_TIME,
       payload: newLastUpdatedTime
-    }); 
+    });
 
     const data = response.data.length ? response.data : null;
     dispatch({
       type: SET_UPDATED_DATA,
       payload: data
-    })
+    });
 
     if (data) {
       data.forEach(entry => {
-        alert.success(entry.user.fullName + "\n" + entry.comment)
-      })
+        alert.success(entry.user.fullName + "\n" + entry.comment);
+      });
       const state = getState();
       const type = state.plan.types[0];
       dispatch(loadPlan({ season, type }));
