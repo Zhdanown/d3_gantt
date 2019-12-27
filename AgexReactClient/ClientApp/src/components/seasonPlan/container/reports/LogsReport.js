@@ -9,99 +9,68 @@ import Modal from "../../../shared/Modal";
 import Spinner from "../../../shared/Spinner";
 import SpinnerWrapper from "../../../shared/SpinnerWrapper";
 import AsyncButton from "../../../shared/AsyncButton";
+import DatePicker from "../../../shared/DatePicker";
 
 /** import actions */
-import { loadDeficitReport } from "../../../../actions/seasonPlan/reports";
+import { loadLogsReport } from "../../../../actions/seasonPlan/reports";
 
 /** import utils */
 import { stringToDate, dateToString } from "../../../../utils/dateHelper";
-import { exportDeficitReport } from "../../../../utils/exportReports";
+import { exportLogsReport } from "../../../../utils/exportReports";
 
-function DeficitReport({ deficit, ...props }) {
+function LogsReport({ logs, ...props }) {
   const [isLoading, toggleLoadStatus] = useState(false);
   const [isExporting, toggleExportStatus] = useState(false);
 
+  let end = new Date();
+  let start = new Date(new Date().setDate(new Date().getDate() - 1));
+  const [startDate, setStartDate] = useState(start);
+  const [endDate, setEndDate] = useState(end);
+
   useEffect(() => {
-    if (!deficit) refresh();
+    if (!logs) refresh();
   }, []);
 
   useEffect(() => {
-    if (isLoading && deficit) toggleLoadStatus(false);
-  }, [deficit]);
+    if (isLoading && logs) toggleLoadStatus(false);
+  }, [logs]);
 
   const refresh = () => {
-    props.loadDeficitReport();
+    props.loadLogsReport(startDate, endDate);
     toggleLoadStatus(true);
   };
 
   const exportReport = () => {
     toggleExportStatus(true);
-    exportDeficitReport()
+    exportLogsReport()
       .then(res => toggleExportStatus(false))
       .catch(res => toggleExportStatus(false));
   };
 
-  const renderDeficit = () => {
-    if (!deficit) return null;
+  const renderLogs = () => {
+    if (!logs) return null;
 
     const columns = [
+      { title: "Пользователь", field: "user" },
+      { title: "Изменение", field: "comment" },
       { title: "Хозяйство", field: "farm" },
-      { title: "Дата дефицита", field: "deficit_date" },
-      {
-        title: "Самоходная техника",
-        field: "vehicles",
-        render: rowData => {
-          const { vehicles } = rowData;
-          if (!vehicles.length) return null;
-          return vehicles.map(v => (
-            <p>
-              {v.diffictCount} {v.modelName}
-            </p>
-          ));
-        },
-        customFilterAndSearch: (term, rowData) => {
-          const { vehicles } = rowData;
-          if (!vehicles.length) return false;
-          return vehicles.find(v => v.modelName.includes(term));
-        }
-      },
-      {
-        title: "Сельхозорудие",
-        field: "equipment",
-        render: rowData => {
-          const { equipment } = rowData;
-          if (!equipment.length) return null;
-          return equipment.map(e => (
-            <p>
-              {e.diffictCount} {e.modelName}
-            </p>
-          ));
-        },
-        customFilterAndSearch: (term, rowData) => {
-          const { equipment } = rowData;
-          if (!equipment.length) return false;
-          return equipment.find(e => e.modelName.includes(term));
-        }
-      }
+      { title: "Культура", field: "crop" },
+      { title: "Агрооперация", field: "agroOperation" },
+      { title: "Дата/время лога", field: "addDate" }
     ];
 
     const formatDate = dateString =>
-      dateToString(stringToDate(dateString), "dd.mm.yyyy");
+      dateToString(stringToDate(dateString), "dd.mm.yyyy hh:mm:ss");
 
-    const data = deficit.map(row => {
-      const { farm } = row;
-      const { difictDate: deficitDate, diffictList: deficitList } = row;
-      const vehiclesList = deficitList.filter(x => x.modelType == "Vehicle");
-
-      const equipmentList = deficitList.filter(
-        x => x.modelType == "WorkEquipment"
-      );
-
+    const data = logs.map(row => {
+      const { user, comment, farm, crop, addDate, agroOperation } = row;
       return {
-        farm: farm,
-        deficit_date: formatDate(deficitDate),
-        vehicles: vehiclesList,
-        equipment: equipmentList
+        user,
+        comment,
+        farm: farm.name,
+        crop: crop.name,
+        agroOperation: agroOperation.name,
+        addDate: formatDate(addDate)
       };
     });
 
@@ -122,7 +91,7 @@ function DeficitReport({ deficit, ...props }) {
 
   return (
     <Modal
-      name="deficitReport"
+      name="logsReport"
       className="full"
       onClose={() => history.push("/sp")}
     >
@@ -132,10 +101,28 @@ function DeficitReport({ deficit, ...props }) {
             <Spinner />
           </SpinnerWrapper>
         )}
-        {deficit && !isLoading && (
+        {logs && !isLoading && (
           <React.Fragment>
-            <h5>Дефицит техники</h5>
-            {renderDeficit()}
+            <h5>Логи</h5>
+            <div className="row">
+              <div className="input-field col s12 m6">
+                <DatePicker
+                  name="startLog"
+                  label="Дата начала"
+                  date={startDate}
+                  onSelect={date => setStartDate(date)}
+                />
+              </div>
+              <div className="input-field col s12 m6">
+                <DatePicker
+                  name="endLog"
+                  label="Дата завершения"
+                  date={endDate}
+                  onSelect={date => setEndDate(date)}
+                />
+              </div>
+            </div>
+            {renderLogs()}
           </React.Fragment>
         )}
       </div>
@@ -148,14 +135,14 @@ function DeficitReport({ deficit, ...props }) {
         >
           <i className="material-icons right">refresh</i>
         </AsyncButton>
-        <AsyncButton
+        {/* <AsyncButton
           label="Экспортировать в excel"
           className="btn left waves-effect waves-light"
           onClick={exportReport}
           isLoading={isExporting}
         >
           <i className="material-icons right">forward</i>
-        </AsyncButton>
+        </AsyncButton> */}
         <Link to="/" className="modal-close waves-effect btn-flat">
           Закрыть
         </Link>
@@ -166,8 +153,8 @@ function DeficitReport({ deficit, ...props }) {
 
 const mapStateToProps = state => {
   return {
-    deficit: state.reports.deficit
+    logs: state.reports.logs
   };
 };
 
-export default connect(mapStateToProps, { loadDeficitReport })(DeficitReport);
+export default connect(mapStateToProps, { loadLogsReport })(LogsReport);

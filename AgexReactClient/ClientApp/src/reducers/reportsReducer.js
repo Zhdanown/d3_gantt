@@ -2,14 +2,18 @@ import {
   LOAD_DEVIATION_REPORT,
   LOAD_DEFICIT_REPORT,
   LOAD_PROFICIT_REPORT,
-  LOAD_MIGRATION_REPORT
+  LOAD_MIGRATION_REPORT,
+  LOAD_TECHMAP_CHANGES_REPORT,
+  LOAD_LOGS_REPORT
 } from "../actions/seasonPlan/types";
 
 const initState = {
   deviation: null,
   deficit: null,
   proficit: null,
-  migration: null
+  migration: null,
+  logs: null,
+  techmap_changes: null
 };
 
 const reportsReducer = (state = initState, action) => {
@@ -34,6 +38,16 @@ const reportsReducer = (state = initState, action) => {
       return {
         ...state,
         migration: action.payload
+      };
+    case LOAD_TECHMAP_CHANGES_REPORT:
+      return {
+        ...state,
+        techmap_changes: action.payload
+      };
+    case LOAD_LOGS_REPORT:
+      return {
+        ...state,
+        logs: action.payload
       };
 
     default:

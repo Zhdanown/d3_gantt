@@ -11,7 +11,8 @@ import {
   DELETE_PERIOD,
   EDIT_PERIOD,
   SET_PERIOD_DATA,
-  APPLY_FILTER
+  APPLY_FILTER,
+  SET_OPERATIONAL_DIR_ID
 } from "../actions/seasonPlan/types";
 
 // helper
@@ -56,6 +57,15 @@ function filterReducer(
     default:
       return state;
   }
+}
+
+function planRoleReducer(state = { operationalDirectorId: null }, action) {
+  if (action.type === SET_OPERATIONAL_DIR_ID)
+    return {
+      ...state,
+      operationalDirectorId: action.payload
+    };
+  else return state;
 }
 
 function addNewOperation(plansState, action) {
@@ -141,6 +151,7 @@ const planReducer = combineReducers({
   periodData: periodDataReducer,
   agrooperations: agrooperationsReducer,
   plans: plansReducer,
+  roles: planRoleReducer,
   filter: filterReducer
 });
 

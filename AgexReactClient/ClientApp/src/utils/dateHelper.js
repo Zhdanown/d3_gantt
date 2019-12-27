@@ -81,6 +81,9 @@ export const dateToString = function(dateObj, format) {
     let year = dateObj.getFullYear();
     let month = dateObj.getMonth() + 1;
     let date = dateObj.getDate();
+    let hour = dateObj.getHours();
+    let minutes = dateObj.getMinutes();
+    let seconds = dateObj.getSeconds();
 
     switch (format) {
       case "dd.mm.yyyy":
@@ -98,6 +101,14 @@ export const dateToString = function(dateObj, format) {
         date = `0${date}`.slice(-2);
         month = `0${month}`.slice(-2);
         return `${year}-${month}-${date}`;
+
+      case "dd.mm.yyyy hh:mm:ss":
+        date = `0${date}`.slice(-2);
+        month = `0${month}`.slice(-2);
+        hour = `0${hour}`.slice(-2);
+        minutes = `0${minutes}`.slice(-2);
+        seconds = `0${seconds}`.slice(-2);
+        return `${year}-${month}-${date} ${hour}:${minutes}:${seconds}`;
 
       case "ISO":
         // compensate timezone

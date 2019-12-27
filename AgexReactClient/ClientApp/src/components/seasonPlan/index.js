@@ -17,6 +17,8 @@ import DeviationReport from "./container/reports/DeviationReport";
 import DeficitReport from "./container/reports/DeficitReport";
 import ProficitReport from "./container/reports/ProficitReport";
 import MigrationReport from "./container/reports/MigrationReport";
+import TechMapChangesReport from "./container/reports/TechMapChangesReport";
+import LogsReport from "./container/reports/LogsReport";
 
 /** import actions */
 import {
@@ -24,8 +26,8 @@ import {
   getPlanTypes,
   getAgrooperations,
   loadPlan,
-  checkUpdates
-  // showDeficit
+  checkUpdates,
+  getOperationalDirectorRoleId
 } from "../../actions/seasonPlan/plans";
 import {
   deleteOperation,
@@ -58,6 +60,7 @@ function SeasonPlan(props) {
     if (!props.isAgroOperations) props.getAgrooperations();
     if (!props.isVehicles) props.getVehicles();
     if (!props.isEquipment) props.getEquipment();
+    props.getOperationalDirectorRoleId(); // get roleId of operational director
     // init default plan load
     loadDefaultPlan();
     initUpdateChecks();
@@ -116,6 +119,11 @@ function SeasonPlan(props) {
       <Route path="/sp/deficit_report" component={DeficitReport} />
       <Route path="/sp/proficit_report" component={ProficitReport} />
       <Route path="/sp/migration_report" component={MigrationReport} />
+      <Route
+        path="/sp/techmap_changes_report"
+        component={TechMapChangesReport}
+      />
+      <Route path="/sp/logs_report" component={LogsReport} />
     </div>
   );
 }
@@ -142,5 +150,6 @@ export default connect(mapStateToProps, {
   getVehicles,
   getEquipment,
   loadPlan,
-  checkUpdates
+  checkUpdates,
+  getOperationalDirectorRoleId
 })(SeasonPlan);

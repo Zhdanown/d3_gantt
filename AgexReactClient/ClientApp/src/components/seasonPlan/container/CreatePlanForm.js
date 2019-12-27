@@ -61,7 +61,14 @@ function CreatePlanForm(props) {
   };
 
   const createCopy = () => {
-    console.log("create copy");
+    if (!props.planToCloneFrom.id) return;
+    props.createNewPlan({
+      season: props.planToCloneFrom.selectedSeason,
+      type: planType,
+      version: props.currentPlanLastVersion + 1,
+      clone: true,
+      cloneId: props.planToCloneFrom.id
+    });
   };
 
   const renderCopyCurrentMode = () => {
@@ -69,7 +76,10 @@ function CreatePlanForm(props) {
       <React.Fragment>
         <div className="row center">
           <div className="col s12">
-            <label htmlFor="">Будет создана копия текущего плана</label>
+            <label htmlFor="">
+              Новая версия ({props.currentPlanLastVersion + 1}) будет создана
+              путем копирования текущего плана
+            </label>
           </div>
         </div>
         <div className="row center">
@@ -160,16 +170,20 @@ function CreatePlanForm(props) {
   return (
     <Modal name="createPlan" onClose={() => history.push("/sp")}>
       <div className="modal-content">
-        <ul className="collapsible" ref={collapsibleRef}>
-          <li className="active">
-            <div className="collapsible-header">Создать новый план</div>
-            <div className="collapsible-body">{renderNewMode()}</div>
-          </li>
-          <li>
-            <div className="collapsible-header">Создать копию текущего</div>
-            <div className="collapsible-body">{renderCopyCurrentMode()}</div>
-          </li>
-        </ul>
+        {props.isOperationalDirector ? (
+          <ul className="collapsible" ref={collapsibleRef}>
+            <li className="active">
+              <div className="collapsible-header">Создать новый план</div>
+              <div className="collapsible-body">{renderNewMode()}</div>
+            </li>
+            <li>
+              <div className="collapsible-header">Создать копию текущего</div>
+              <div className="collapsible-body">{renderCopyCurrentMode()}</div>
+            </li>
+          </ul>
+        ) : (
+          <p className="center">Недостаточно прав!</p>
+        )}
       </div>
       <div className="modal-footer">
         <Link to="/" className="modal-close waves-effect btn-flat">
@@ -180,10 +194,23 @@ function CreatePlanForm(props) {
   );
 }
 
-const mapStateToProps = store => {
+const mapStateToProps = state => {
+  // get last version of currently opened plan
+  const seasonId =
+    !!state.plan.plans.length && state.plan.plans[0].selectedSeason.id;
+  const season = seasonId && state.plan.seasons.find(x => x.id === seasonId);
+  const lastVersion =
+    season && Math.max(...season.versions.flatMap(x => x.version));
+
+  const opDirId = state.plan.roles.operationalDirectorId;
+  const isOpDir = !!state.auth.user.userRoles.find(x => x.id === opDirId);
+
   return {
-    seasons: store.plan.seasons,
-    types: store.plan.types
+    seasons: state.plan.seasons,
+    types: state.plan.types,
+    currentPlanLastVersion: lastVersion,
+    planToCloneFrom: !!state.plan.plans.length && state.plan.plans[0],
+    isOperationalDirector: isOpDir
   };
 };
 

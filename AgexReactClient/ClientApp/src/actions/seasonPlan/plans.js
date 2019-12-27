@@ -5,7 +5,8 @@ import {
   LOAD_PLAN,
   GET_AGROOPERATIONS,
   SET_LAST_UPDATED_PLAN_TIME,
-  SET_UPDATED_DATA
+  SET_UPDATED_DATA,
+  SET_OPERATIONAL_DIR_ID
 } from "./types";
 import agex from "../../apis/agex";
 import alert from "../../utils/Alert";
@@ -41,16 +42,25 @@ export const getPlanTypes = () => async dispatch => {
   if (response && response.status === 200) dispatch(getTypes(response.data));
 };
 
-export const createNewPlan = ({ season, type, version }) => async dispatch => {
+export const createNewPlan = ({
+  season,
+  type,
+  version,
+  clone = false,
+  cloneId = null
+}) => async dispatch => {
   try {
     var response = await agex.post("/seasonplan/create", {
-      SeasonId: season.id,
-      SeasonPlanTypeId: type.id
+      seasonId: season.id,
+      seasonPlanTypeId: type.id,
+      version: version,
+      clone: clone,
+      cloneId: cloneId
     });
   } catch (error) {}
 
   if (response && response.status === 201) {
-    dispatch(loadPlan({ season, type }));
+    dispatch(loadPlan({ season, type, version }));
   } else {
     // alert.error(response.statusText);
   }
@@ -119,5 +129,16 @@ export const checkUpdates = (season, lastUpdated) => async (
       const type = state.plan.types[0];
       dispatch(loadPlan({ season, type }));
     }
+  }
+};
+
+export const getOperationalDirectorRoleId = () => async dispatch => {
+  const response = await agex.get("/seasonplan/header-role");
+
+  if (response && response.status === 200) {
+    dispatch({
+      type: SET_OPERATIONAL_DIR_ID,
+      payload: response.data.roleId
+    });
   }
 };

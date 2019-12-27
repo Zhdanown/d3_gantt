@@ -2737,7 +2737,7 @@ a {
 blockquote {
   margin: 20px 0;
   padding-left: 1.5rem;
-  border-left: 5px solid #829aab;
+  border-left: 5px solid #cead6c;
 }
 
 i {
@@ -2788,7 +2788,7 @@ video.responsive-video {
   color: #fff;
 }
 .pagination li.active {
-  background-color: #829aab;
+  background-color: #cead6c;
 }
 .pagination li.disabled a {
   cursor: default;
@@ -2974,7 +2974,7 @@ ul.staggered-list li {
 .page-footer {
   padding-top: 20px;
   color: #fff;
-  background-color: #829aab;
+  background-color: #cead6c;
 }
 .page-footer .footer-copyright {
   overflow: hidden;
@@ -4155,7 +4155,7 @@ table span.badge {
 
 nav {
   color: #fff;
-  background-color: #829aab;
+  background-color: #cead6c;
   width: 100%;
   height: 56px;
   line-height: 56px;
@@ -4815,7 +4815,7 @@ small {
   transition: color 0.28s ease, background-color 0.28s ease;
 }
 .tabs .tab a:focus, .tabs .tab a:focus.active {
-  background-color: rgba(176, 191, 202, 0.2);
+  background-color: rgba(225, 205, 165, 0.2);
   outline: none;
 }
 .tabs .tab a:hover, .tabs .tab a.active {
@@ -4830,7 +4830,7 @@ small {
   position: absolute;
   bottom: 0;
   height: 2px;
-  background-color: #b0bfca;
+  background-color: #e1cda5;
   will-change: left, right;
 }
 
@@ -6876,12 +6876,12 @@ input[type=range]::-ms-thumb {
 .table-of-contents a:hover {
   color: #a8a8a8;
   padding-left: 15px;
-  border-left: 1px solid #829aab;
+  border-left: 1px solid #cead6c;
 }
 .table-of-contents a.active {
   font-weight: 500;
   padding-left: 14px;
-  border-left: 2px solid #829aab;
+  border-left: 2px solid #cead6c;
 }
 
 .sidenav {
@@ -7046,7 +7046,7 @@ input[type=range]::-ms-thumb {
 }
 .sidenav .collapsible-body > ul:not(.collapsible) > li.active,
 .sidenav.sidenav-fixed .collapsible-body > ul:not(.collapsible) > li.active {
-  background-color: #829aab;
+  background-color: #cead6c;
 }
 .sidenav .collapsible-body > ul:not(.collapsible) > li.active a,
 .sidenav.sidenav-fixed .collapsible-body > ul:not(.collapsible) > li.active a {
@@ -7731,7 +7731,7 @@ input[type=range]::-ms-thumb {
   position: absolute;
   font-size: 1rem;
   border-radius: 50%;
-  background-color: #829aab;
+  background-color: #cead6c;
   box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.14), 0 10px 50px 0 rgba(0, 0, 0, 0.12), 0 30px 10px -20px rgba(0, 0, 0, 0.2);
   width: 100%;
   height: 100%;

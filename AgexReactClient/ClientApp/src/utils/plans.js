@@ -23,6 +23,24 @@ export async function getSeasonId() {
   return seasonId;
 }
 
+export async function getPlanId() {
+  const state = store.getState();
+
+  const planId = !!state.plan.plans.length
+    ? state.plan.plans[0].id
+    : await new Promise(resolve => {
+        store.subscribe(() => {
+          const state = store.getState();
+          if (!!state.plan.plans.length) {
+            const { id } = state.plan.plans[0];
+            resolve(id);
+          }
+        });
+      });
+
+  return planId;
+}
+
 export const updatePlan = async () => {
   const state = store.getState();
   // get current seson

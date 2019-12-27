@@ -1,12 +1,12 @@
 import reportsAPI from "../apis/reportsAPI";
 import { saveAs } from "file-saver";
-import { getSeasonId } from "./plans";
+import { getPlanId } from "./plans";
 
 export const exportMigrationReport = async () => {
-  const seasonId = await getSeasonId();
+  const planId = await getPlanId();
 
   await reportsAPI
-    .get(`/seasonplan/movement-report-export/${seasonId}`)
+    .get(`/seasonplan/movement-report-export/${planId}`)
     .then(response => {
       let url = window.URL.createObjectURL(response.data);
       saveAs(url, `migration-report.xlsx`);
@@ -15,10 +15,10 @@ export const exportMigrationReport = async () => {
 };
 
 export const exportDeviationReport = async () => {
-  const seasonId = await getSeasonId();
+  const planId = await getPlanId();
 
   await reportsAPI
-    .get(`/seasonplan/tech-map-deviation-report-export/${seasonId}`)
+    .get(`/seasonplan/tech-map-deviation-report-export/${planId}`)
     .then(response => {
       let url = window.URL.createObjectURL(response.data);
       saveAs(url, `deviation-report.xlsx`);
@@ -27,10 +27,10 @@ export const exportDeviationReport = async () => {
 };
 
 export const exportProficitReport = async () => {
-  const seasonId = await getSeasonId();
+  const planId = await getPlanId();
 
   await reportsAPI
-    .get(`/seasonplan/profit-report-export/${seasonId}`)
+    .get(`/seasonplan/profit-report-export/${planId}`)
     .then(response => {
       let url = window.URL.createObjectURL(response.data);
       saveAs(url, `proficit-report.xlsx`);
@@ -39,13 +39,37 @@ export const exportProficitReport = async () => {
 };
 
 export const exportDeficitReport = async () => {
-  const seasonId = await getSeasonId();
+  const planId = await getPlanId();
 
   await reportsAPI
-    .get(`/seasonplan/difict-report-export/${seasonId}`)
+    .get(`/seasonplan/difict-report-export/${planId}`)
     .then(response => {
       let url = window.URL.createObjectURL(response.data);
       saveAs(url, `deficit-report.xlsx`);
+    });
+  return true;
+};
+
+export const exportLogsReport = async () => {
+  const planId = await getPlanId();
+
+  await reportsAPI
+    .get(`/seasonplan/difict-report-export/${planId}`)
+    .then(response => {
+      let url = window.URL.createObjectURL(response.data);
+      saveAs(url, `logs-report.xlsx`);
+    });
+  return true;
+};
+
+export const exportTechmapChangesReport = async () => {
+  const planId = await getPlanId();
+
+  await reportsAPI
+    .get(`/seasonplan/difict-report-export/${planId}`)
+    .then(response => {
+      let url = window.URL.createObjectURL(response.data);
+      saveAs(url, `techmap-changes-report.xlsx`);
     });
   return true;
 };

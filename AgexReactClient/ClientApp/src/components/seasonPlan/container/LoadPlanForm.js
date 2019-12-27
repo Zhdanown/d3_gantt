@@ -53,6 +53,7 @@ function LoadPlanForm(props) {
             <h6>Сезон</h6>
             <MySelect
               name="season_plan_load"
+              classPrefix="rs"
               label="Сезон"
               options={seasons}
               defaultValue={season}
@@ -64,6 +65,7 @@ function LoadPlanForm(props) {
             <h6>Версия</h6>
             <MySelect
               name="version_plan_create"
+              classPrefix="rs"
               label="Версия"
               options={versionList}
               defaultValue={version}
