@@ -85,7 +85,9 @@ const NavbarSeasonPlan = ({ selectedSeason, updated, version, ...props }) => {
 
 const mapStateToProps = state => {
   const opDirId = state.plan.roles.operationalDirectorId;
-  const isOpDir = !!state.auth.user.userRoles.find(x => x.id === opDirId);
+  const isOpDir =
+    !!state.auth.user &&
+    !!state.auth.user.userRoles.find(x => x.id === opDirId);
 
   return {
     selectedSeason:
